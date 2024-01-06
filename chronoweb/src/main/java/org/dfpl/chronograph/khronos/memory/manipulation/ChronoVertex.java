@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.json.JsonObject;
+
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -121,6 +123,14 @@ public class ChronoVertex implements Vertex {
 		properties.put(key, value);
 	}
 
+	public void setProperties(JsonObject properties, boolean isSet) {
+		if (!isSet)
+			this.properties.clear();
+		properties.stream().forEach(e -> {
+			this.properties.put(e.getKey(), e.getValue());
+		});
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T removeProperty(String key) {
@@ -142,5 +152,12 @@ public class ChronoVertex implements Vertex {
 	@Override
 	public String toString() {
 		return id;
+	}
+
+	public JsonObject toJsonObject() {
+		JsonObject object = new JsonObject();
+		object.put("_id", id);
+		object.put("properties", new JsonObject(properties));
+		return object;
 	}
 }
