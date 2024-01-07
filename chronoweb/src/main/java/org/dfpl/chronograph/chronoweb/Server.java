@@ -1,11 +1,13 @@
 package org.dfpl.chronograph.chronoweb;
 
 import java.net.Inet4Address;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
+import org.dfpl.chronograph.chronoweb.khronos.memory.StaticRouter;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 
 import io.vertx.core.AbstractVerticle;
@@ -21,6 +23,11 @@ public class Server extends AbstractVerticle {
 	public static int port = 80;
 	public ChronoGraph graph;
 
+	public static Pattern resourcePattern = Pattern.compile(
+			"(^[^\\|\\(\\)_]+$)|(^[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+$)|(^[^\\|\\(\\)_]+_[0-9]+$)|(^[^\\|\\(\\)_]+_\\([0-9]+,[0-9]+\\)$)|(^[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+_[0-9]+$)|(^[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+_\\([0-9]+,[0-9]+\\)$)");
+	public static Pattern vPattern = Pattern.compile("^[^\\|\\(\\)_]+$");
+	public static Pattern ePattern = Pattern.compile("^[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+$");
+
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		super.start(startPromise);
@@ -31,7 +38,8 @@ public class Server extends AbstractVerticle {
 
 		graph = new ChronoGraph();
 
-		StaticRouter.registerAddVertexRouter(router, graph);
+		StaticRouter.registerAddElementRouter(router, graph);
+		StaticRouter.registerGetElementRouter(router, graph);
 
 		server.requestHandler(router).listen(80);
 		logger.info(

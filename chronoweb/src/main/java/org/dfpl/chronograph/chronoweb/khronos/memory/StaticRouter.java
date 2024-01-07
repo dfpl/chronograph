@@ -1,14 +1,16 @@
-package org.dfpl.chronograph.chronoweb;
+package org.dfpl.chronograph.chronoweb.khronos.memory;
 
 import java.util.List;
 
+import org.dfpl.chronograph.chronoweb.Server;
+import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
 
-import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import static org.dfpl.chronograph.chronoweb.Server.*;
 
 public class StaticRouter {
 
@@ -25,7 +27,6 @@ public class StaticRouter {
 		routingContext.response().setStatusCode(code).end();
 	}
 
-	@SuppressWarnings("unused")
 	private static Boolean getBooleanURLParameter(RoutingContext routingContext, String key) {
 		List<String> list = routingContext.queryParam(key);
 		if (list.isEmpty())
@@ -48,33 +49,90 @@ public class StaticRouter {
 		}
 	}
 
-	static void registerAddVertexRouter(Router router, ChronoGraph graph) {
-		router.post("/chronoweb/:vertexID").consumes("application/json").handler(routingContext -> {
-			String vertexID = routingContext.pathParam("vertexID");
+	public static void registerAddElementRouter(Router router, ChronoGraph graph) {
+		router.post("/chronoweb/:resource").consumes("application/json").handler(routingContext -> {
+			String resource = routingContext.pathParam("resource");
 			String propertiesParameter = getStringURLParameter(routingContext, "properties");
 			boolean isSet = propertiesParameter == null || propertiesParameter.equals("set") ? true : false;
+			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
 			JsonObject properties = null;
 			try {
 				properties = routingContext.body().asJsonObject();
 			} catch (Exception e) {
 				sendResult(routingContext, "text/plain", e.getMessage(), 400);
+				return;
 			}
 			if (properties == null)
 				properties = new JsonObject();
-			try {
-				ChronoVertex v = (ChronoVertex) graph.addVertex(vertexID);
-				v.setProperties(properties, isSet);
-				sendResult(routingContext, "application/json", v.toJsonObject().toString(), 200);
-			} catch (IllegalArgumentException e) {
+
+			if (Server.vPattern.matcher(resource).matches()) {
+				try {
+					ChronoVertex v = (ChronoVertex) graph.addVertex(resource);
+					v.setProperties(properties, isSet);
+					sendResult(routingContext, "application/json",
+							v.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else if (ePattern.matcher(resource).matches()) {
+				try {
+					String[] arr = resource.split("\\|");
+					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[2]), arr[1]);
+					e.setProperties(properties, isSet);
+					sendResult(routingContext, "application/json",
+							e.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+
+			} else {
 				sendResult(routingContext, 406);
+				return;
+			}
+
+		});
+
+		Server.logger.info("POST /chronoweb/:resource router added");
+	}
+
+	public static void registerGetElementRouter(Router router, ChronoGraph graph) {
+		router.get("/chronoweb/:resource").handler(routingContext -> {
+			String resource = routingContext.pathParam("resource");
+			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
+			if (Server.vPattern.matcher(resource).matches()) {
+				ChronoVertex v = (ChronoVertex) graph.getVertex(resource);
+				if (v != null)
+					sendResult(routingContext, "application/json",
+							v.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
+				else
+					sendResult(routingContext, 404);
+				return;
+			} else if (ePattern.matcher(resource).matches()) {
+				try {
+					ChronoEdge e = (ChronoEdge) graph.getEdge(resource);
+					if (e != null)
+						sendResult(routingContext, "application/json",
+								e.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
+					else
+						sendResult(routingContext, 404);
+					return;
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else {
+				sendResult(routingContext, 406);
+				return;
 			}
 		});
 
-		Server.logger.info("POST /chronoweb/:vertexID router added");
+		Server.logger.info("GET /chronoweb/:resource router added");
 	}
 
 //	static void registerPutElementRouter(Router router) {
-	// put == replace
+// put == replace
 
 //	router.put("chronoweb/:resource").handler(routingContext -> {
 //		HttpServerResponse response = routingContext.response().setChunked(true);
@@ -101,32 +159,6 @@ public class StaticRouter {
 //	});
 //
 //}
-
-	@SuppressWarnings("unused")
-	static void registerGetElementsRouter(Router router) {
-		router.get("chronoweb").handler(routingContext -> {
-			HttpServerResponse response = routingContext.response().setChunked(true);
-			String body = routingContext.body().asString();
-			List<String> targetList = routingContext.queryParam("target");
-			if (targetList.isEmpty()) {
-				routingContext.response().setStatusCode(400).end("target is mandatory field: vertices|edges");
-			} else {
-				String target = targetList.get(0);
-				if (target.equals("vertices")) {
-					// khronos.sendVertices(routingContext.response(), body);
-				} else if (target.equals("edges")) {
-					// khronos.sendEdges(routingContext.response(), routingContext.queryParams(),
-					// body);
-				} else if (target.equals("ping")) {
-					routingContext.response().setStatusCode(200).end();
-				} else {
-					// Server.logger.error("PUT / unsupported target type: vertices|edges");
-					response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
-							.end(new JsonObject().put("error", "unsupported target type: vertices|edge").toString());
-				}
-			}
-		});
-	}
 
 //	static void registerDeleteGraphRouter(Router router) {
 //		router.delete("chronoweb").handler(routingContext -> {

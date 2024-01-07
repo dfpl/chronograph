@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.json.JsonObject;
+
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -116,5 +118,24 @@ public class ChronoEdge implements Edge {
 	@Override
 	public <T> T removeProperty(String key) {
 		return (T) properties.remove(key);
+	}
+
+	public void setProperties(JsonObject properties, boolean isSet) {
+		if (!isSet)
+			this.properties.clear();
+		properties.stream().forEach(e -> {
+			this.properties.put(e.getKey(), e.getValue());
+		});
+	}
+
+	public JsonObject toJsonObject(boolean includeProperties) {
+		JsonObject object = new JsonObject();
+		object.put("_id", id);
+		object.put("_o", out.getId());
+		object.put("_l", label);
+		object.put("_i", in.getId());
+		if (includeProperties)
+			object.put("properties", new JsonObject(properties));
+		return object;
 	}
 }

@@ -154,10 +154,11 @@ public class ChronoVertex implements Vertex {
 		return id;
 	}
 
-	public JsonObject toJsonObject() {
+	public JsonObject toJsonObject(boolean includeProperties) {
 		JsonObject object = new JsonObject();
 		object.put("_id", id);
-		object.put("properties", new JsonObject(properties));
+		if (includeProperties)
+			object.put("properties", new JsonObject(properties));
 		return object;
 	}
 }
