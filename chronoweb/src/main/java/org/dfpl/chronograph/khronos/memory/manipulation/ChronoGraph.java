@@ -308,8 +308,10 @@ public class ChronoGraph implements Graph {
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-
+		vertices.clear();
+		edges.clear();
+		outEdges.clear();
+		inEdges.clear();
 	}
 
 }

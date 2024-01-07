@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.chronoweb.khronos.memory;
+package org.dfpl.chronograph.chronoweb.khronos.memory.manipulation;
 
 import java.util.List;
 
@@ -125,6 +125,19 @@ public class StaticRouter {
 			} else {
 				sendResult(routingContext, 406);
 				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/:resource router added");
+	}
+
+	public static void registerGetElementsRouter(Router router, ChronoGraph graph) {
+		router.get("/chronoweb").handler(routingContext -> {
+			String target = getStringURLParameter(routingContext, "target");
+			if (target.equals("vertices")) {
+				// TODO
+			} else {
+
 			}
 		});
 

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.dfpl.chronograph.chronoweb.khronos.memory.StaticRouter;
+import org.dfpl.chronograph.chronoweb.khronos.memory.manipulation.StaticRouter;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 
 import io.vertx.core.AbstractVerticle;
