@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.chronoweb.khronos.memory.manipulation;
+package org.dfpl.chronograph.chronoweb.router.memory;
 
 import java.util.List;
 
@@ -7,12 +7,13 @@ import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import static org.dfpl.chronograph.chronoweb.Server.*;
 
-public class StaticRouter {
+public class StaticManipulationRouter {
 
 	private static void sendResult(RoutingContext routingContext, String contentType, String message, int code) {
 		routingContext.response().putHeader("content-type", contentType).setStatusCode(code).end(message);
@@ -134,14 +135,19 @@ public class StaticRouter {
 	public static void registerGetElementsRouter(Router router, ChronoGraph graph) {
 		router.get("/chronoweb").handler(routingContext -> {
 			String target = getStringURLParameter(routingContext, "target");
+			target = target == null ? "vertices" : target;
 			if (target.equals("vertices")) {
-				// TODO
+				JsonArray result = new JsonArray(graph.getVertices().parallelStream().map(v -> v.getId()).toList());
+				sendResult(routingContext, "application/json", result.toString(), 200);
+				return;
 			} else {
-
+				JsonArray result = new JsonArray(graph.getEdges().parallelStream().map(e -> e.getId()).toList());
+				sendResult(routingContext, "application/json", result.toString(), 200);
+				return;
 			}
 		});
 
-		Server.logger.info("GET /chronoweb/:resource router added");
+		Server.logger.info("GET /chronoweb router added");
 	}
 
 //	static void registerPutElementRouter(Router router) {
