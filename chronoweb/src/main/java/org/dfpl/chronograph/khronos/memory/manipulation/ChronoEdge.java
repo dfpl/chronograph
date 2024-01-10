@@ -3,6 +3,7 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 import java.util.*;
 
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.TimeInstant;
 
 import com.tinkerpop.blueprints.*;
 
@@ -39,6 +40,7 @@ public class ChronoEdge implements Edge {
 	private String label;
 	private Vertex in;
 	private HashMap<String, Object> properties;
+	private NavigableSet<EdgeEvent> events;
 
 	public ChronoEdge(Graph g, Vertex out, String label, Vertex in) {
 		this.g = g;
@@ -47,6 +49,7 @@ public class ChronoEdge implements Edge {
 		this.in = in;
 		this.id = getEdgeID(out, in, label);
 		this.properties = new HashMap<>();
+		this.events = new TreeSet<EdgeEvent>();
 	}
 
 	public static String getEdgeID(Vertex out, Vertex in, String label) {
@@ -150,37 +153,53 @@ public class ChronoEdge implements Edge {
 
 	@Override
 	public EdgeEvent addEvent(long time) {
-		// TODO Auto-generated method stub
-		return null;
+		EdgeEvent newEvent = new ChronoEdgeEvent(this, time);
+		this.events.add(newEvent);
+		return newEvent;
 	}
 
 	@Override
 	public EdgeEvent getEvent(long time) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public NavigableSet<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation) {
-		// TODO Auto-generated method stub
-		return null;
+		EdgeEvent event = events.floor(new ChronoEdgeEvent(this, time));
+		if (event == null)
+			return null;
+		else if (event.getTime() != time)
+			return null;
+		else
+			return event;
 	}
 
 	@Override
 	public NavigableSet<EdgeEvent> getEvents() {
-		// TODO Auto-generated method stub
-		return null;
+		return events;
+	}
+
+	@Override
+	public NavigableSet<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation) {
+		NavigableSet<EdgeEvent> validEvents = new TreeSet<>();
+		if (temporalRelation == null)
+			return validEvents;
+
+		for (EdgeEvent event : this.events) {
+			if (TimeInstant.getTemporalRelation(time, event.getTime()).equals(temporalRelation))
+				validEvents.add(event);
+		}
+		return validEvents;
 	}
 
 	@Override
 	public EdgeEvent getEvent(long time, TemporalRelation temporalRelation) {
-		// TODO Auto-generated method stub
-		return null;
+		if (temporalRelation.equals(TemporalRelation.isAfter)) {
+			return events.higher(new ChronoEdgeEvent(this, time));
+		} else if (temporalRelation.equals(TemporalRelation.isBefore)) {
+			return events.lower(new ChronoEdgeEvent(this, time));
+		} else {
+			return getEvent(time);
+		}
 	}
 
 	@Override
 	public void removeEvents(long time, TemporalRelation temporalRelation) {
-		// TODO Auto-generated method stub
-		
+		this.events.removeIf(event -> TimeInstant.getTemporalRelation(time, event.getTime()).equals(temporalRelation));
 	}
 }

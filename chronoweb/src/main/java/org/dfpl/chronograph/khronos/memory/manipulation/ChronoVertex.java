@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.TimeInstant;
 
 import com.tinkerpop.blueprints.*;
 
@@ -37,7 +38,7 @@ public class ChronoVertex implements Vertex {
 	private ChronoGraph g;
 	private String id;
 	private HashMap<String, Object> properties;
-	private NavigableSet<VertexEvent> events;	
+	private NavigableSet<VertexEvent> events;
 
 	ChronoVertex(ChronoGraph g, String id) {
 		this.id = id;
@@ -185,20 +186,60 @@ public class ChronoVertex implements Vertex {
 
 	@Override
 	public VertexEvent getEvent(long time) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ChronoVertexEvent(this, time);
 	}
 
 	@Override
 	public NavigableSet<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
 			boolean awareInEvents) {
-		// TODO Auto-generated method stub
-		return null;
+		NavigableSet<VertexEvent> resultSet = new TreeSet<>();
+
+		resultSet.addAll(this.getEvents(time, tr));
+
+		List<Direction> directions = new LinkedList<>();
+		if (awareOutEvents)
+			directions.add(Direction.OUT);
+		if (awareInEvents)
+			directions.add(Direction.IN);
+
+		for (Direction direction : directions) {
+			for (Edge e : this.getEdges(direction, null)) {
+				e.getEvents(time, tr).stream().map(Event::getTime).forEach(t -> {
+					resultSet.add(new ChronoVertexEvent(this, t));
+				});
+			}
+		}
+		return resultSet;
 	}
 
 	@Override
 	public void removeEvents(long time, TemporalRelation tr) {
-		// TODO Auto-generated method stub
-		
+		this.events.removeIf(event -> TimeInstant.getTemporalRelation(event.getTime(), time).equals(tr));
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Event> NavigableSet<T> getEvents(long time, TemporalRelation... temporalRelations) {
+		NavigableSet<Event> validEvents = new TreeSet<>();
+		if (temporalRelations == null)
+			return (NavigableSet<T>) validEvents;
+
+		for (Event event : this.events) {
+			for (TemporalRelation tr : temporalRelations) {
+				if (TimeInstant.checkTemporalRelation(event.getTime(), time, tr))
+					validEvents.add(event);
+			}
+
+		}
+		return (NavigableSet<T>) validEvents;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Event> T getEvent(long time, TemporalRelation tr) {
+		for (Event event : this.events) {
+			if (TimeInstant.getTemporalRelation(event.getTime(), time).equals(tr))
+				return (T) event;
+		}
+
+		return null;
 	}
 }

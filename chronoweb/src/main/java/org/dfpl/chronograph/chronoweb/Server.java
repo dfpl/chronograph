@@ -43,6 +43,14 @@ public class Server extends AbstractVerticle {
 
 		graph = new ChronoGraph();
 
+		registerStaticManipulationRouter(router);
+					
+		server.requestHandler(router).listen(80);
+		logger.info(
+				"Chronoweb runs at http://" + Inet4Address.getLocalHost().getHostAddress() + ":" + port + "/chronoweb");
+	}
+	
+	public void registerStaticManipulationRouter(Router router) {
 		staticManipulationRouter = new StaticManipulationRouter(graph);
 		staticManipulationRouter.registerAddElementRouter(router);
 		staticManipulationRouter.registerGetElementRouter(router);
@@ -54,9 +62,6 @@ public class Server extends AbstractVerticle {
 		staticManipulationRouter.registerGetDatasetsRouter(router);
 		staticManipulationRouter.registerLoadDatasetRouter(router);
 
-		server.requestHandler(router).listen(80);
-		logger.info(
-				"Chronoweb runs at http://" + Inet4Address.getLocalHost().getHostAddress() + ":" + port + "/chronoweb");
 	}
 
 	public static void setLogger() {

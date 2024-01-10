@@ -1,8 +1,7 @@
 package org.dfpl.chronograph.khronos.memory.manipulation;
 
-import java.util.*;
-
-import org.dfpl.chronograph.common.TemporalRelation;
+import java.util.Map;
+import java.util.Set;
 
 import com.tinkerpop.blueprints.*;
 
@@ -28,44 +27,29 @@ import com.tinkerpop.blueprints.*;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEvent> {
-
-	private final Vertex vertex;
+public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
+	private final Edge edge;
 	private final Long time;
 
-	public ChronoVertexEvent(Vertex v, Long time) {
-		this.vertex = v;
+	public ChronoEdgeEvent(Edge e, Long time) {
+		this.edge = e;
 		this.time = time;
 	}
 
-
-
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Event))
-			return false;
-		return this.vertex.equals(((Event) obj).getElement()) && this.getTime().equals(((Event) obj).getTime());
-	}
-
-	@Override
-	public String toString() {
-		return vertex.getId() + "_" + time;
-	}
-
-	@Override
-	public int hashCode() {
-		return this.toString().hashCode();
+	public VertexEvent getVertexEvent(Direction direction) {
+		return edge.getVertex(direction).getEvent(time);
 	}
 
 	/**
 	 * Checks the difference of two events by comparing the element, and then the
 	 * element
-	 * 
+	 *
 	 * @param event the event to be compared
 	 * @return Integer difference
 	 */
 	@Override
-	public int compareTo(ChronoVertexEvent event) {
+	public int compareTo(ChronoEdgeEvent event) {
 		int elementComparison = this.getElement().getId().compareTo(event.getElement().getId());
 
 		if (elementComparison != 0)
@@ -75,60 +59,69 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 	}
 
 	@Override
-	public String getId() {
-		return vertex.getId() + "_" + time;
-	}
-
-	@Override
-	public String getElementId() {
-		return vertex.getId();
-	}
-
-	@Override
-	public Map<String, Object> getProperties() {
-		return vertex.getProperties();
-	}
-
-	@Override
-	public <T> T getProperty(String key) {
-		return vertex.getProperty(key);
-	}
-
-	@Override
-	public Set<String> getPropertyKeys() {
-		return vertex.getPropertyKeys();
-	}
-
-	@Override
-	public void setProperty(String key, Object value) {
-		vertex.setProperty(key, value);
-
-	}
-
-	@Override
-	public <T> T removeProperty(String key) {
-		return vertex.removeProperty(key);
-	}
-
-	@Override
 	public Long getTime() {
 		return time;
 	}
 
 	@Override
 	public Element getElement() {
-		return vertex;
+		return edge;
 	}
 
 	@Override
-	public Collection<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label) {
-		return vertex.getEdges(direction, List.of(label)).parallelStream().map(e -> e.getEvent(time, tr)).toList();
+	public String getId() {
+		return edge.getId() + "_" + time;
 	}
 
 	@Override
-	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
-		return vertex.getEdges(direction, List.of(label)).parallelStream()
-				.map(e -> e.getEvent(time, tr).getVertexEvent(direction.opposite())).toList();
+	public Map<String, Object> getProperties() {
+		return edge.getProperties();
+	}
+
+	@Override
+	public <T> T getProperty(String key) {
+		return edge.getProperty(key);
+	}
+
+	@Override
+	public Set<String> getPropertyKeys() {
+		return edge.getPropertyKeys();
+	}
+
+	@Override
+	public void setProperty(String key, Object value) {
+		edge.setProperty(key, value);
+	}
+
+	@Override
+	public <T> T removeProperty(String key) {
+		return edge.removeProperty(key);
+	}
+
+	@Override
+	public Vertex getVertex(Direction direction) {
+		return edge.getVertex(direction);
+	}
+
+	@Override
+	public String getLabel() {
+		return edge.getLabel();
+	}
+
+	@Override
+	public String getElementId() {
+		return edge.getId();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof EdgeEvent))
+			return false;
+		return this.edge.equals(((Event) obj).getElement()) && this.getTime().equals(((Event) obj).getTime());
+	}
+
+	@Override
+	public String toString() {
+		return edge.getId() + "_" + time;
 	}
 }
-

@@ -281,14 +281,6 @@ public class ChronoGraph implements Graph {
 		this.inEdges.values().forEach(set -> set.remove(edge));
 	}
 
-	/**
-	 * Do Nothing in an in-memory graph
-	 */
-	@Override
-	public void shutdown() {
-		// Do Nothing
-	}
-
 	HashMap<String, HashSet<Edge>> getOutEdges() {
 		return outEdges;
 	}
@@ -313,4 +305,11 @@ public class ChronoGraph implements Graph {
 		inEdges.clear();
 	}
 
+	/**
+	 * Do Nothing in an in-memory graph
+	 */
+	@Override
+	public void shutdown() {
+		// Do Nothing
+	}
 }
