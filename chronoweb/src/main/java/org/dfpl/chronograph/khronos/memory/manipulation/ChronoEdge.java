@@ -2,6 +2,8 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 
 import java.util.*;
 
+import org.dfpl.chronograph.common.TemporalRelation;
+
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
@@ -144,5 +146,41 @@ public class ChronoEdge implements Edge {
 		JsonArray array = new JsonArray();
 		edges.parallelStream().forEach(e -> array.add(e.getId()));
 		return array;
+	}
+
+	@Override
+	public EdgeEvent addEvent(long time) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EdgeEvent getEvent(long time) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NavigableSet<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NavigableSet<EdgeEvent> getEvents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EdgeEvent getEvent(long time, TemporalRelation temporalRelation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeEvents(long time, TemporalRelation temporalRelation) {
+		// TODO Auto-generated method stub
+		
 	}
 }

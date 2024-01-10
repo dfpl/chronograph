@@ -3,6 +3,8 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.dfpl.chronograph.common.TemporalRelation;
+
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
@@ -35,11 +37,13 @@ public class ChronoVertex implements Vertex {
 	private ChronoGraph g;
 	private String id;
 	private HashMap<String, Object> properties;
+	private NavigableSet<VertexEvent> events;	
 
 	ChronoVertex(ChronoGraph g, String id) {
 		this.id = id;
 		this.g = g;
 		this.properties = new HashMap<>();
+		this.events = new TreeSet<VertexEvent>();
 	}
 
 	@Override
@@ -170,5 +174,31 @@ public class ChronoVertex implements Vertex {
 		JsonArray array = new JsonArray();
 		edges.parallelStream().forEach(v -> array.add(v.getId()));
 		return array;
+	}
+
+	@Override
+	public VertexEvent addEvent(long time) {
+		VertexEvent newVertexEvent = new ChronoVertexEvent(this, time);
+		events.add(newVertexEvent);
+		return newVertexEvent;
+	}
+
+	@Override
+	public VertexEvent getEvent(long time) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NavigableSet<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
+			boolean awareInEvents) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeEvents(long time, TemporalRelation tr) {
+		// TODO Auto-generated method stub
+		
 	}
 }

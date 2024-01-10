@@ -123,7 +123,7 @@ public interface Graph {
 	 * @return an iterable of edges with provided key and value
 	 */
 	public Collection<Edge> getEdges(String key, Object value);
-
+	
 	/**
 	 * A shutdown function is required to properly close the graph. This is
 	 * important for implementations that utilize disk-based serializations.
