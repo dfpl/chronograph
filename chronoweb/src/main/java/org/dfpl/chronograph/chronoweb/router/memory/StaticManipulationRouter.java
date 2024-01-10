@@ -150,97 +150,69 @@ public class StaticManipulationRouter {
 		Server.logger.info("GET /chronoweb router added");
 	}
 
-//	static void registerPutElementRouter(Router router) {
-// put == replace
+	public static void registerRemoveElementRouter(Router router, ChronoGraph graph) {
+		router.delete("/chronoweb/:resource").handler(routingContext -> {
+			String resource = routingContext.pathParam("resource");
 
-//	router.put("chronoweb/:resource").handler(routingContext -> {
-//		HttpServerResponse response = routingContext.response().setChunked(true);
-//		String body = routingContext.getBodyAsString();
-//		String resource = routingContext.pathParam("resource");
-//		if (vPattern.matcher(resource).matches()) {
-//			khronos.putVertex(response, resource, body);
-//		} else if (ePattern.matcher(resource).matches()) {
-//			khronos.putEdge(response, resource, body);
-//		} else if (vtPattern.matcher(resource).matches()) {
-//			khronos.putTimestampVertexEvent(response, resource, body);
-//		} else if (vpPattern.matcher(resource).matches()) {
-//			khronos.putTimeperiodVertexEvent(response, resource, body);
-//		} else if (etPattern.matcher(resource).matches()) {
-//			khronos.putTimestampEdgeEvent(response, resource, body);
-//		} else if (epPattern.matcher(resource).matches()) {
-//			khronos.putTimeperiodEdgeEvent(response, resource, body);
-//		} else {
-//			Server.logger.error("PUT /:resource: no resource pattern matched");
-//			response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
-//					.end(new JsonObject().put("error", "no resource pattern matched").toString());
-//		}
-//
-//	});
-//
-//}
+			if (Server.vPattern.matcher(resource).matches()) {
+				try {
+					ChronoVertex v = (ChronoVertex) graph.getVertex(resource);
+					if (v == null) {
+						sendResult(routingContext, 404);
+						return;
+					}
+					graph.removeVertex(v);
+					sendResult(routingContext, 200);
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else if (ePattern.matcher(resource).matches()) {
+				try {					
+					ChronoEdge e = (ChronoEdge) graph.getEdge(resource);
+					if (e == null) {
+						sendResult(routingContext, 404);
+						return;
+					}
+					graph.removeEdge(e);
+					sendResult(routingContext, 200);
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
 
-//	static void registerDeleteGraphRouter(Router router) {
-//		router.delete("chronoweb").handler(routingContext -> {
-//			//khronos.dropGraph(routingContext.response());
-//		});
-//	}
+		Server.logger.info("DELETE /chronoweb/:resource router added");
+	}
+	
+	/**
+	 * v -> e
+	 * 
+	 * @param router
+	 */
+	private void registerGetIncidentEdgesRouter(Router router) {
+		router.get("/chronoweb/:resource/incidentEdges").handler(routingContext -> {
+			HttpServerResponse response = routingContext.response().setChunked(true);
+			String body = routingContext.getBodyAsString();
+			String resource = routingContext.pathParam("resource");
 
-//	static void registerGetElementRouter(Router router) {
-//		router.get("chronoweb/:resource").handler(routingContext -> {
-//			HttpServerResponse response = routingContext.response().setChunked(true);
-//			String body = routingContext.body().asString();
-//			String resource = routingContext.pathParam("resource");
-//
-//			if (vPattern.matcher(resource).matches()) {
-//				khronos.sendVertex(routingContext.response(), resource, includeEvents, body);
-//			} else if (ePattern.matcher(resource).matches()) {
-//				khronos.sendEdge(routingContext.response(), resource, includeEvents, body);
-//			} else if (vtPattern.matcher(resource).matches()) {
-//				khronos.sendVertexEvent(routingContext.response(), resource, body);
-//			} else if (vpPattern.matcher(resource).matches()) {
-//				khronos.sendVertexEvent(routingContext.response(), resource, body);
-//			} else if (etPattern.matcher(resource).matches()) {
-//				khronos.sendEdgeEvent(routingContext.response(), resource, body);
-//			} else if (epPattern.matcher(resource).matches()) {
-//				khronos.sendEdgeEvent(routingContext.response(), resource, body);
-//			} else {
-//				Server.logger.error("GET /:resource: no resource pattern matched");
-//				response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
-//						.end(new JsonObject().put("error", "no resource pattern matched").toString());
-//			}
-//		});
-//
-//	}
-//
+			if (vPattern.matcher(resource).matches()) {
+				khronos.sendIncidentEdges(response, resource, routingContext.queryParams(), body);
+			} else {
+				Server.logger.error("GET /:resource/adjacentVertices: resource should be a vertex id");
+				response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
+						.end(new JsonObject().put("error", "resource should be a vertex id").toString());
+			}
+		});
 
-//
-//	static void registerPatchElementRouter(Router router) {
-//		// patch == update
-//		router.patch("chronoweb/:resource").handler(routingContext -> {
-//			HttpServerResponse response = routingContext.response().setChunked(true);
-//			String body = routingContext.getBodyAsString();
-//			String resource = routingContext.pathParam("resource");
-//			if (vPattern.matcher(resource).matches()) {
-//				khronos.patchVertex(response, resource, body);
-//			} else if (ePattern.matcher(resource).matches()) {
-//				khronos.patchEdge(response, resource, body);
-//			} else if (vtPattern.matcher(resource).matches()) {
-//				khronos.patchTimestampVertexEvent(response, resource, body);
-//			} else if (vpPattern.matcher(resource).matches()) {
-//				khronos.patchTimeperiodVertexEvent(response, resource, body);
-//			} else if (etPattern.matcher(resource).matches()) {
-//				khronos.patchTimestampEdgeEvent(response, resource, body);
-//			} else if (epPattern.matcher(resource).matches()) {
-//				khronos.patchTimeperiodEdgeEvent(response, resource, body);
-//			} else {
-//				Server.logger.error("PATCH /:resource: no resource pattern matched");
-//				response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
-//						.end(new JsonObject().put("error", "no resource pattern matched").toString());
-//			}
-//
-//		});
-//	}
-//
+	}
+
+
+
 //	/**
 //	 * v -> v
 //	 * 
@@ -263,25 +235,5 @@ public class StaticManipulationRouter {
 //
 //	}
 //
-//	/**
-//	 * v -> e
-//	 * 
-//	 * @param router
-//	 */
-//	private void registerGetIncidentEdgesRouter(Router router) {
-//		router.get("chronoweb/:resource/incidentEdges").handler(routingContext -> {
-//			HttpServerResponse response = routingContext.response().setChunked(true);
-//			String body = routingContext.getBodyAsString();
-//			String resource = routingContext.pathParam("resource");
-//
-//			if (vPattern.matcher(resource).matches()) {
-//				khronos.sendIncidentEdges(response, resource, routingContext.queryParams(), body);
-//			} else {
-//				Server.logger.error("GET /:resource/adjacentVertices: resource should be a vertex id");
-//				response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
-//						.end(new JsonObject().put("error", "resource should be a vertex id").toString());
-//			}
-//		});
-//
-//	}
+
 }

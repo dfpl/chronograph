@@ -76,7 +76,6 @@ public class ChronoGraph implements Graph {
 	public Vertex addVertex(String id) {
 		if (id.contains("|"))
 			throw new IllegalArgumentException("Vertex ID cannot contains '|'");
-
 		return vertices.compute(id, (String identifier, Vertex existingVertex) -> {
 			if (existingVertex == null)
 				return new ChronoVertex(ChronoGraph.this, identifier);
