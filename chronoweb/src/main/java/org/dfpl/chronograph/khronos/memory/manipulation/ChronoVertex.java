@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -52,16 +53,17 @@ public class ChronoVertex implements Vertex {
 		if (edgeSet == null || !edgeSet.containsKey(id))
 			return new HashSet<>();
 
-		return edgeSet.get(id).parallelStream().filter(e -> {
-			if (labels == null)
-				return true;
-
-			for (String label : labels) {
-				if (e.getLabel().equals(label))
-					return true;
-			}
-			return false;
-		}).collect(Collectors.toSet());
+		if (labels == null || labels.isEmpty()) {
+			return edgeSet.get(id);
+		} else {
+			return edgeSet.get(id).parallelStream().filter(e -> {
+				for (String label : labels) {
+					if (e.getLabel().equals(label))
+						return true;
+				}
+				return false;
+			}).collect(Collectors.toSet());
+		}
 	}
 
 	@Override
@@ -75,16 +77,18 @@ public class ChronoVertex implements Vertex {
 		if (edgeSet == null || !edgeSet.containsKey(id))
 			return new HashSet<>();
 
-		return edgeSet.get(id).parallelStream().filter(e -> {
-			if (labels == null)
-				return true;
-
-			for (String label : labels) {
-				if (e.getLabel().equals(label))
-					return true;
-			}
-			return false;
-		}).map(e -> e.getVertex(direction.opposite())).collect(Collectors.toSet());
+		if (labels == null || labels.isEmpty()) {
+			return edgeSet.get(id).parallelStream().map(e -> e.getVertex(direction.opposite()))
+					.collect(Collectors.toSet());
+		} else {
+			return edgeSet.get(id).parallelStream().filter(e -> {
+				for (String label : labels) {
+					if (e.getLabel().equals(label))
+						return true;
+				}
+				return false;
+			}).map(e -> e.getVertex(direction.opposite())).collect(Collectors.toSet());
+		}
 	}
 
 	@Override
@@ -160,5 +164,11 @@ public class ChronoVertex implements Vertex {
 		if (includeProperties)
 			object.put("properties", new JsonObject(properties));
 		return object;
+	}
+
+	public static JsonArray toJsonArrayOfIDs(Collection<Vertex> edges) {
+		JsonArray array = new JsonArray();
+		edges.parallelStream().forEach(v -> array.add(v.getId()));
+		return array;
 	}
 }

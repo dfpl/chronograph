@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -137,5 +138,11 @@ public class ChronoEdge implements Edge {
 		if (includeProperties)
 			object.put("properties", new JsonObject(properties));
 		return object;
+	}
+
+	public static JsonArray toJsonArrayOfIDs(Collection<Edge> edges) {
+		JsonArray array = new JsonArray();
+		edges.parallelStream().forEach(e -> array.add(e.getId()));
+		return array;
 	}
 }

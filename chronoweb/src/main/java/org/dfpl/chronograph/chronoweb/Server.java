@@ -41,8 +41,14 @@ public class Server extends AbstractVerticle {
 		StaticManipulationRouter.registerAddElementRouter(router, graph);
 		StaticManipulationRouter.registerGetElementRouter(router, graph);
 		StaticManipulationRouter.registerGetElementsRouter(router, graph);
+<<<<<<< HEAD
 		StaticManipulationRouter.registerRemoveElementRouter(router, graph);
 		StaticManipulationRouter.registerGetIncidentEdgesRouter(router, graph);
+=======
+		StaticManipulationRouter.registerGetIncidentEdgesRouter(router, graph);
+		StaticManipulationRouter.registerGetAdjacentVerticesRouter(router, graph);
+		StaticManipulationRouter.registerDeleteGraphRouter(router, graph);
+>>>>>>> 00407e387c50c3f932bf1f9ac6529d6d27e43606
 
 		server.requestHandler(router).listen(80);
 		logger.info(

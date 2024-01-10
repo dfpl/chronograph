@@ -7,6 +7,8 @@ import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
 
+import com.tinkerpop.blueprints.Direction;
+
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -150,9 +152,103 @@ public class StaticManipulationRouter {
 		Server.logger.info("GET /chronoweb router added");
 	}
 
+<<<<<<< HEAD
 	public static void registerRemoveElementRouter(Router router, ChronoGraph graph) {
 		router.delete("/chronoweb/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
+=======
+	public static void registerGetIncidentEdgesRouter(Router router, ChronoGraph graph) {
+		router.get("/chronoweb/:vertexID/outE").handler(routingContext -> {
+			String vertexID = routingContext.pathParam("vertexID");
+			List<String> labels = routingContext.queryParam("label");
+			if (Server.vPattern.matcher(vertexID).matches()) {
+				ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+				if (v != null) {
+					sendResult(routingContext, "application/json",
+							ChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.OUT, labels)).toString(), 200);
+				} else
+					sendResult(routingContext, 404);
+				return;
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/:vertexID/outE router added");
+
+		router.get("/chronoweb/:vertexID/inE").handler(routingContext -> {
+			String vertexID = routingContext.pathParam("vertexID");
+			List<String> labels = routingContext.queryParam("label");
+			if (Server.vPattern.matcher(vertexID).matches()) {
+				ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+				if (v != null) {
+					sendResult(routingContext, "application/json",
+							ChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.IN, labels)).toString(), 200);
+				} else
+					sendResult(routingContext, 404);
+				return;
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/:vertexID/inE router added");
+	}
+
+	public static void registerGetAdjacentVerticesRouter(Router router, ChronoGraph graph) {
+		router.get("/chronoweb/:vertexID/out").handler(routingContext -> {
+			String vertexID = routingContext.pathParam("vertexID");
+			List<String> labels = routingContext.queryParam("label");
+			if (Server.vPattern.matcher(vertexID).matches()) {
+				ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+				if (v != null) {
+					sendResult(routingContext, "application/json",
+							ChronoVertex.toJsonArrayOfIDs(v.getVertices(Direction.OUT, labels)).toString(), 200);
+				} else
+					sendResult(routingContext, 404);
+				return;
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/:vertexID/out router added");
+
+		router.get("/chronoweb/:vertexID/in").handler(routingContext -> {
+			String vertexID = routingContext.pathParam("vertexID");
+			List<String> labels = routingContext.queryParam("label");
+			if (Server.vPattern.matcher(vertexID).matches()) {
+				ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+				if (v != null) {
+					sendResult(routingContext, "application/json",
+							ChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.IN, labels)).toString(), 200);
+				} else
+					sendResult(routingContext, 404);
+				return;
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/:vertexID/in router added");
+	}
+	
+	public static void registerDeleteGraphRouter(Router router, ChronoGraph graph) {
+		router.delete("/chronoweb").handler(routingContext -> {
+			graph.clear();
+			sendResult(routingContext, 200);
+		});
+
+		Server.logger.info("DELETE /chronoweb router added");
+	}
+
+//	static void registerPutElementRouter(Router router) {
+// put == replace
+>>>>>>> 00407e387c50c3f932bf1f9ac6529d6d27e43606
 
 			if (Server.vPattern.matcher(resource).matches()) {
 				try {
