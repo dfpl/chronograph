@@ -1,13 +1,16 @@
 package org.dfpl.chronograph.chronoweb.router.memory;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.dfpl.chronograph.chronoweb.Server;
+import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
 
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Graph;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -16,6 +19,12 @@ import io.vertx.ext.web.RoutingContext;
 import static org.dfpl.chronograph.chronoweb.Server.*;
 
 public class StaticManipulationRouter {
+
+	private Graph graph;
+
+	public StaticManipulationRouter(Graph graph) {
+		this.graph = graph;
+	}
 
 	private static void sendResult(RoutingContext routingContext, String contentType, String message, int code) {
 		routingContext.response().putHeader("content-type", contentType).setStatusCode(code).end(message);
@@ -52,8 +61,8 @@ public class StaticManipulationRouter {
 		}
 	}
 
-	public static void registerAddElementRouter(Router router, ChronoGraph graph) {
-		router.post("/chronoweb/:resource").consumes("application/json").handler(routingContext -> {
+	public void registerAddElementRouter(Router router) {
+		router.post("/chronoweb/graph/:resource").consumes("application/json").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			String propertiesParameter = getStringURLParameter(routingContext, "properties");
 			boolean isSet = propertiesParameter == null || propertiesParameter.equals("set") ? true : false;
@@ -97,11 +106,11 @@ public class StaticManipulationRouter {
 
 		});
 
-		Server.logger.info("POST /chronoweb/:resource router added");
+		Server.logger.info("POST /chronoweb/graph/:resource router added");
 	}
 
-	public static void registerGetElementRouter(Router router, ChronoGraph graph) {
-		router.get("/chronoweb/:resource").handler(routingContext -> {
+	public void registerGetElementRouter(Router router) {
+		router.get("/chronoweb/graph/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
 			if (Server.vPattern.matcher(resource).matches()) {
@@ -131,11 +140,11 @@ public class StaticManipulationRouter {
 			}
 		});
 
-		Server.logger.info("GET /chronoweb/:resource router added");
+		Server.logger.info("GET /chronoweb/graph/:resource router added");
 	}
 
-	public static void registerGetElementsRouter(Router router, ChronoGraph graph) {
-		router.get("/chronoweb").handler(routingContext -> {
+	public void registerGetElementsRouter(Router router) {
+		router.get("/chronoweb/graph").handler(routingContext -> {
 			String target = getStringURLParameter(routingContext, "target");
 			target = target == null ? "vertices" : target;
 			if (target.equals("vertices")) {
@@ -149,16 +158,11 @@ public class StaticManipulationRouter {
 			}
 		});
 
-		Server.logger.info("GET /chronoweb router added");
+		Server.logger.info("GET /chronoweb/graph router added");
 	}
 
-<<<<<<< HEAD
-	public static void registerRemoveElementRouter(Router router, ChronoGraph graph) {
-		router.delete("/chronoweb/:resource").handler(routingContext -> {
-			String resource = routingContext.pathParam("resource");
-=======
-	public static void registerGetIncidentEdgesRouter(Router router, ChronoGraph graph) {
-		router.get("/chronoweb/:vertexID/outE").handler(routingContext -> {
+	public void registerGetIncidentEdgesRouter(Router router) {
+		router.get("/chronoweb/graph/:vertexID/outE").handler(routingContext -> {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
@@ -175,9 +179,9 @@ public class StaticManipulationRouter {
 			}
 		});
 
-		Server.logger.info("GET /chronoweb/:vertexID/outE router added");
+		Server.logger.info("GET /chronoweb/graph/:vertexID/outE router added");
 
-		router.get("/chronoweb/:vertexID/inE").handler(routingContext -> {
+		router.get("/chronoweb/graph/:vertexID/inE").handler(routingContext -> {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
@@ -194,11 +198,11 @@ public class StaticManipulationRouter {
 			}
 		});
 
-		Server.logger.info("GET /chronoweb/:vertexID/inE router added");
+		Server.logger.info("GET /chronoweb/graph/:vertexID/inE router added");
 	}
 
-	public static void registerGetAdjacentVerticesRouter(Router router, ChronoGraph graph) {
-		router.get("/chronoweb/:vertexID/out").handler(routingContext -> {
+	public void registerGetAdjacentVerticesRouter(Router router) {
+		router.get("/chronoweb/graph/:vertexID/out").handler(routingContext -> {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
@@ -215,9 +219,9 @@ public class StaticManipulationRouter {
 			}
 		});
 
-		Server.logger.info("GET /chronoweb/:vertexID/out router added");
+		Server.logger.info("GET /chronoweb/graph/:vertexID/out router added");
 
-		router.get("/chronoweb/:vertexID/in").handler(routingContext -> {
+		router.get("/chronoweb/graph/:vertexID/in").handler(routingContext -> {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
@@ -234,22 +238,21 @@ public class StaticManipulationRouter {
 			}
 		});
 
-		Server.logger.info("GET /chronoweb/:vertexID/in router added");
+		Server.logger.info("GET /chronoweb/graph/:vertexID/in router added");
 	}
-	
-	public static void registerDeleteGraphRouter(Router router, ChronoGraph graph) {
-		router.delete("/chronoweb").handler(routingContext -> {
+
+	public void registerDeleteGraphRouter(Router router) {
+		router.delete("/chronoweb/graph").handler(routingContext -> {
 			graph.clear();
 			sendResult(routingContext, 200);
 		});
 
-		Server.logger.info("DELETE /chronoweb router added");
+		Server.logger.info("DELETE /chronoweb/graph router added");
 	}
 
-//	static void registerPutElementRouter(Router router) {
-// put == replace
->>>>>>> 00407e387c50c3f932bf1f9ac6529d6d27e43606
-
+	public void registerRemoveElementRouter(Router router) {
+		router.delete("/chronoweb/graph/:resource").handler(routingContext -> {
+			String resource = routingContext.pathParam("resource");
 			if (Server.vPattern.matcher(resource).matches()) {
 				try {
 					ChronoVertex v = (ChronoVertex) graph.getVertex(resource);
@@ -264,7 +267,7 @@ public class StaticManipulationRouter {
 				}
 				return;
 			} else if (ePattern.matcher(resource).matches()) {
-				try {					
+				try {
 					ChronoEdge e = (ChronoEdge) graph.getEdge(resource);
 					if (e == null) {
 						sendResult(routingContext, 404);
@@ -282,54 +285,53 @@ public class StaticManipulationRouter {
 			}
 		});
 
-		Server.logger.info("DELETE /chronoweb/:resource router added");
+		Server.logger.info("DELETE /chronoweb/graph/:resource router added");
 	}
-	
-	/**
-	 * v -> e
-	 * 
-	 * @param router
-	 */
-	private void registerGetIncidentEdgesRouter(Router router) {
-		router.get("/chronoweb/:resource/incidentEdges").handler(routingContext -> {
-			HttpServerResponse response = routingContext.response().setChunked(true);
-			String body = routingContext.getBodyAsString();
-			String resource = routingContext.pathParam("resource");
 
-			if (vPattern.matcher(resource).matches()) {
-				khronos.sendIncidentEdges(response, resource, routingContext.queryParams(), body);
+	public void registerGetDatasetsRouter(Router router) {
+		router.get("/chronoweb/datasets").handler(routingContext -> {
+			sendResult(routingContext, "application/json", new JsonArray(Server.datasetList).toString(), 200);
+		});
+
+		Server.logger.info("GET /chronoweb/datasets router added");
+	}
+
+	public void registerLoadDatasetRouter(Router router) {
+		router.post("/chronoweb/datasets/:dataset").handler(routingContext -> {
+			String dataset = routingContext.pathParam("dataset");
+			if (dataset.equals("EgoFacebook")) {
+				try {
+					ChronoGraph newGraph = new ChronoGraph();
+					DataLoader.EgoFacebook("d:\\dataset", newGraph, "hasFriend");
+					synchronized (graph) {
+						graph = newGraph;
+					}
+					sendResult(routingContext, 200);
+					return;
+				} catch (IOException e) {
+					sendResult(routingContext, 500);
+					return;
+				}
+			} else if (dataset.equals("EUEmailCommunicationNetwork")) {
+
+				try {
+					ChronoGraph newGraph = new ChronoGraph();
+					DataLoader.EUEmailCommunicationNetwork("d:\\dataset", newGraph, "sendEmail");
+					synchronized (graph) {
+						graph = newGraph;
+					}
+					sendResult(routingContext, 200);
+					return;
+				} catch (IOException e) {
+					sendResult(routingContext, 500);
+					return;
+				}
 			} else {
-				Server.logger.error("GET /:resource/adjacentVertices: resource should be a vertex id");
-				response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
-						.end(new JsonObject().put("error", "resource should be a vertex id").toString());
+				sendResult(routingContext, 406);
+				return;
 			}
 		});
 
+		Server.logger.info("POST /chronoweb/datasets/:dataset router added");
 	}
-
-
-
-//	/**
-//	 * v -> v
-//	 * 
-//	 * @param router
-//	 */
-//	private void registerGetAdjacentVerticesRouter(Router router) {
-//		router.get("chronoweb/:resource/adjacentVertices").handler(routingContext -> {
-//			HttpServerResponse response = routingContext.response().setChunked(true);
-//			String body = routingContext.getBodyAsString();
-//			String resource = routingContext.pathParam("resource");
-//
-//			if (vPattern.matcher(resource).matches()) {
-//				khronos.sendAdjacentVertices(response, resource, routingContext.queryParams(), body);
-//			} else {
-//				Server.logger.error("GET /:resource/adjacentVertices: resource should be a vertex id");
-//				response.putHeader("content-type", "*/json; charset=utf-8").setStatusCode(400)
-//						.end(new JsonObject().put("error", "resource should be a vertex id").toString());
-//			}
-//		});
-//
-//	}
-//
-
 }

@@ -1,6 +1,7 @@
 package org.dfpl.chronograph.chronoweb;
 
 import java.net.Inet4Address;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.Level;
@@ -28,6 +29,10 @@ public class Server extends AbstractVerticle {
 	public static Pattern vPattern = Pattern.compile("^[^\\|\\(\\)_]+$");
 	public static Pattern ePattern = Pattern.compile("^[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+\\|[^\\|\\(\\)_]+$");
 
+	public static List<String> datasetList = List.of("EgoFacebook", "EUEmailCommunicationNetwork");
+
+	private StaticManipulationRouter staticManipulationRouter;
+
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		super.start(startPromise);
@@ -38,17 +43,16 @@ public class Server extends AbstractVerticle {
 
 		graph = new ChronoGraph();
 
-		StaticManipulationRouter.registerAddElementRouter(router, graph);
-		StaticManipulationRouter.registerGetElementRouter(router, graph);
-		StaticManipulationRouter.registerGetElementsRouter(router, graph);
-<<<<<<< HEAD
-		StaticManipulationRouter.registerRemoveElementRouter(router, graph);
-		StaticManipulationRouter.registerGetIncidentEdgesRouter(router, graph);
-=======
-		StaticManipulationRouter.registerGetIncidentEdgesRouter(router, graph);
-		StaticManipulationRouter.registerGetAdjacentVerticesRouter(router, graph);
-		StaticManipulationRouter.registerDeleteGraphRouter(router, graph);
->>>>>>> 00407e387c50c3f932bf1f9ac6529d6d27e43606
+		staticManipulationRouter = new StaticManipulationRouter(graph);
+		staticManipulationRouter.registerAddElementRouter(router);
+		staticManipulationRouter.registerGetElementRouter(router);
+		staticManipulationRouter.registerGetElementsRouter(router);
+		staticManipulationRouter.registerRemoveElementRouter(router);
+		staticManipulationRouter.registerGetIncidentEdgesRouter(router);
+		staticManipulationRouter.registerGetAdjacentVerticesRouter(router);
+		staticManipulationRouter.registerDeleteGraphRouter(router);
+		staticManipulationRouter.registerGetDatasetsRouter(router);
+		staticManipulationRouter.registerLoadDatasetRouter(router);
 
 		server.requestHandler(router).listen(80);
 		logger.info(
