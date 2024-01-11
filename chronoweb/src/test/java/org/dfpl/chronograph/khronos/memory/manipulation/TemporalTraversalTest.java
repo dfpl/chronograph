@@ -96,7 +96,12 @@ public class TemporalTraversalTest {
 			int preSize = gamma.size();
 
 			cc = cc.stream().flatMap(ve -> ve.getEdgeEvents(Direction.OUT, TemporalRelation.isAfter, label).stream())
-					.filter(ee -> ee != null).map(ee -> ee.getVertexEvent(Direction.IN)).toList();
+					.filter(ee -> {
+						System.out.println(ee);
+						if (ee != null)
+							return true;
+						return false;
+					}).map(ee -> ee.getVertexEvent(Direction.IN)).toList();
 			gamma.addAll(cc);
 			int aftSize = gamma.size();
 			System.out.println(preSize + " -> " + aftSize);

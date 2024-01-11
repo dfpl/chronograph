@@ -62,18 +62,41 @@ public interface Vertex extends Element {
 	/**
 	 * Explicitly add a vertex event of this graph element valid at time.
 	 * 
-	 * @param time TimeInstant or TimePeriod
+	 * @param time long
 	 * @return the created vertex event
 	 */
 	public VertexEvent addEvent(long time);
 
 	/**
-	 * Return a vertex event of this graph element valid at time.
+	 * Return a vertex event of this graph element valid at time. Difference from
+	 * pickEvent(long time): always return the event even if the vertex has no such
+	 * event in events
 	 * 
-	 * @param time TimeInstant or TimePeriod
+	 * @param time long
 	 * @return VertexEvent valid at time
 	 */
 	public VertexEvent getEvent(long time);
+
+	/**
+	 * Return events of this element. In addition, the method includes in-going
+	 * vertex event for out-going edge events if aware out events and out-going
+	 * vertex event for in-going edge events if aware in events.
+	 * 
+	 * @param awareOutEvents include in-going vertex events for out-going edge
+	 *                       events
+	 * @param awareInEvents  include out-going vertex events for in-going edge
+	 *                       events
+	 * @return NavigableSet of VertexEvent or EdgeEvent
+	 */
+	public NavigableSet<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents);
+
+	/**
+	 * Return an event of this element that are matched with tr for time
+	 *
+	 * @param time the time to check in the events
+	 * @return EdgeEvent
+	 */
+	public VertexEvent getEvent(long time, TemporalRelation temporalRelation);
 
 	/**
 	 * Return events of this element that are matched with tr for time. In addition

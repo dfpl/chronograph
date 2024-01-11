@@ -179,14 +179,44 @@ public class ChronoVertex implements Vertex {
 
 	@Override
 	public VertexEvent addEvent(long time) {
-		VertexEvent newVertexEvent = new ChronoVertexEvent(this, time);
-		events.add(newVertexEvent);
-		return newVertexEvent;
+		VertexEvent event =  getEvent(time, TemporalRelation.cotemporal);
+		if(event == null) {
+			VertexEvent newVe = new ChronoVertexEvent(this, time);
+			this.events.add(newVe);
+			return newVe;
+		}else
+			return event;
 	}
 
 	@Override
 	public VertexEvent getEvent(long time) {
-		return new ChronoVertexEvent(this, time);
+		VertexEvent event =  getEvent(time, TemporalRelation.cotemporal);
+		if(event == null)
+			return new ChronoVertexEvent(this, time);
+		else
+			return event;
+	}
+
+	@Override
+	public NavigableSet<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents) {
+		NavigableSet<VertexEvent> resultSet = new TreeSet<>();
+
+		resultSet.addAll(events);
+
+		List<Direction> directions = new LinkedList<>();
+		if (awareOutEvents)
+			directions.add(Direction.OUT);
+		if (awareInEvents)
+			directions.add(Direction.IN);
+
+		for (Direction direction : directions) {
+			for (Edge e : this.getEdges(direction, null)) {
+				e.getEvents().stream().map(Event::getTime).forEach(t -> {
+					resultSet.add(new ChronoVertexEvent(this, t));
+				});
+			}
+		}
+		return resultSet;
 	}
 
 	@Override
@@ -233,13 +263,21 @@ public class ChronoVertex implements Vertex {
 		return (NavigableSet<T>) validEvents;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends Event> T getEvent(long time, TemporalRelation tr) {
-		for (Event event : this.events) {
-			if (TimeInstant.getTemporalRelation(event.getTime(), time).equals(tr))
-				return (T) event;
+	@Override
+	public VertexEvent getEvent(long time, TemporalRelation tr) {
+		ChronoVertexEvent tve = new ChronoVertexEvent(this, time);
+		if (tr.equals(TemporalRelation.isAfter)) {
+			return events.higher(tve);
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			return events.lower(tve);
+		} else {
+			VertexEvent ve = events.floor(tve);
+			if (ve == null)
+				return null;
+			else if (ve.equals(tve))
+				return ve;
+			else
+				return null;
 		}
-
-		return null;
 	}
 }

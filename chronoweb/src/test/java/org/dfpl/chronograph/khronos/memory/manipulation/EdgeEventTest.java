@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.regex.Pattern;
+
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.junit.*;
 
@@ -18,6 +20,11 @@ public class EdgeEventTest {
 	Long time;
 	EdgeEvent expectedEvent;
 
+	public static Pattern vPattern = Pattern.compile("^[^|_]+$");
+	public static Pattern ePattern = Pattern.compile("^[^|_]+\\|[^|_]+\\|[^|_]+$");
+	public static Pattern vtPattern = Pattern.compile("^[^|_]+_[0-9]+$");
+	public static Pattern etPattern = Pattern.compile("^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$");
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -41,6 +48,19 @@ public class EdgeEventTest {
 		g.removeVertex(a);
 		g.removeVertex(b);
 		g = null;
+	}
+	
+	@Test
+	public void patternTest() {
+		boolean b = etPattern.matcher("1|_3|5_3").matches();
+		System.out.println("PATTERN " + b);
+		assertEquals(b, false);
+		b = etPattern.matcher("|||||_3").matches();
+		System.out.println("PATTERN " + b);
+		assertEquals(b, false);
+		b = etPattern.matcher("a|b|c_3").matches();
+		System.out.println("PATTERN " + b);
+		assertEquals(b, true);
 	}
 
 	@Test

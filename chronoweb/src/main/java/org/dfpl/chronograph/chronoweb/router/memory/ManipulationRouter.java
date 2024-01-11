@@ -8,6 +8,7 @@ import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
+import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertexEvent;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Graph;
@@ -18,11 +19,11 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import static org.dfpl.chronograph.chronoweb.Server.*;
 
-public class StaticManipulationRouter {
+public class ManipulationRouter {
 
 	private Graph graph;
 
-	public StaticManipulationRouter(Graph graph) {
+	public ManipulationRouter(Graph graph) {
 		this.graph = graph;
 	}
 
@@ -99,6 +100,19 @@ public class StaticManipulationRouter {
 				}
 				return;
 
+			} else if(vtPattern.matcher(resource).matches()) {
+				try {
+					String[] arr = resource.split("\\_");
+					String vertexID = arr[0];
+					long time = Long.parseLong(arr[1]);
+					ChronoVertex v = (ChronoVertex) graph.addVertex(vertexID);
+					ChronoVertexEvent ve = (ChronoVertexEvent) v.addEvent(time);
+					ve.setProperties(properties, isSet);
+					sendResult(routingContext, "application/json",
+							ve.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
 			} else {
 				sendResult(routingContext, 406);
 				return;

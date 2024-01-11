@@ -6,6 +6,8 @@ import org.dfpl.chronograph.common.TemporalRelation;
 
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.json.JsonObject;
+
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -32,13 +34,13 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 
 	private final Vertex vertex;
 	private final Long time;
+	private HashMap<String, Object> properties;
 
 	public ChronoVertexEvent(Vertex v, Long time) {
 		this.vertex = v;
 		this.time = time;
+		this.properties = new HashMap<String, Object>();
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -86,28 +88,37 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 
 	@Override
 	public Map<String, Object> getProperties() {
-		return vertex.getProperties();
+		return properties;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getProperty(String key) {
-		return vertex.getProperty(key);
+		return (T) properties.get(key);
 	}
 
 	@Override
 	public Set<String> getPropertyKeys() {
-		return vertex.getPropertyKeys();
+		return properties.keySet();
 	}
 
 	@Override
 	public void setProperty(String key, Object value) {
-		vertex.setProperty(key, value);
-
+		properties.put(key, value);
 	}
 
+	public void setProperties(JsonObject properties, boolean isSet) {
+		if (!isSet)
+			this.properties.clear();
+		properties.stream().forEach(e -> {
+			this.properties.put(e.getKey(), e.getValue());
+		});
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T removeProperty(String key) {
-		return vertex.removeProperty(key);
+		return (T) properties.remove(key);
 	}
 
 	@Override
@@ -130,5 +141,14 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 		return vertex.getEdges(direction, List.of(label)).parallelStream()
 				.map(e -> e.getEvent(time, tr).getVertexEvent(direction.opposite())).toList();
 	}
-}
+	
+	public JsonObject toJsonObject(boolean includeProperties) {
+		JsonObject object = new JsonObject();
+		object.put("_id", vertex.getId());
+		object.put("_t", time);
+		if (includeProperties)
+			object.put("properties", new JsonObject(properties));
+		return object;
+	}
 
+}
