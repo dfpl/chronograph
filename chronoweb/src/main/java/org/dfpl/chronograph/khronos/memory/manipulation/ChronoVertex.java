@@ -3,8 +3,10 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.TimeInstant;
+import org.dfpl.chronograph.common.VertexEvent;
 
 import com.tinkerpop.blueprints.*;
 

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import java.util.regex.Pattern;
 
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.VertexEvent;
 import org.junit.*;
 
 import com.tinkerpop.blueprints.*;

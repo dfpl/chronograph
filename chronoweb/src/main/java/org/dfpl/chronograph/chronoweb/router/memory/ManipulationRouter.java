@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdgeEvent;
@@ -14,7 +15,6 @@ import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertexEvent;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.VertexEvent;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;

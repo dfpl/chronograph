@@ -1,5 +1,9 @@
 package org.dfpl.chronograph.common;
 
+import java.util.Collection;
+
+import com.tinkerpop.blueprints.Direction;
+
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -22,6 +26,29 @@ package org.dfpl.chronograph.common;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public enum TemporalRelation {
-	isBefore, isAfter, cotemporal
+public interface VertexEvent extends Event {
+
+	/**
+	 * Return chronologically closest neighbor edge events per a pair (out vertex,
+	 * label, in vertex)
+	 * 
+	 * @param direction
+	 * @param tr
+	 * @param label
+	 * @return
+	 */
+	public Collection<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label);
+
+	/**
+	 * Return chronologically closest neighbor vertex events per a pair (out vertex,
+	 * label, in vertex)
+	 * 
+	 * @param direction
+	 * @param tr
+	 * @param label
+	 * @param criteria
+	 * @return
+	 */
+	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label);
+
 }

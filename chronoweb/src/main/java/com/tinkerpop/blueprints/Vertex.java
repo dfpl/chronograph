@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NavigableSet;
 
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.VertexEvent;
 
 /**
  * A vertex maintains pointers to both a set of incoming and outgoing edges. The

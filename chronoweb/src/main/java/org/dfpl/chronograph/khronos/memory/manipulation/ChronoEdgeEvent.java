@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.dfpl.chronograph.common.EdgeEvent;
+import org.dfpl.chronograph.common.Event;
+import org.dfpl.chronograph.common.VertexEvent;
+
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;

@@ -7,15 +7,15 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
+import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.VertexEvent;
 import org.junit.*;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.EdgeEvent;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.VertexEvent;
 
 public class TemporalTraversalTest {
 	Graph g;

@@ -2,6 +2,7 @@ package com.tinkerpop.blueprints;
 
 import java.util.NavigableSet;
 
+import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 
 /**

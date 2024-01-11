@@ -1,5 +1,10 @@
 package org.dfpl.chronograph.common;
 
+import java.util.Map;
+import java.util.Set;
+
+import com.tinkerpop.blueprints.Element;
+
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -22,6 +27,24 @@ package org.dfpl.chronograph.common;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public enum TemporalRelation {
-	isBefore, isAfter, cotemporal
+public interface Event {
+
+	public String getId();
+	
+	public String getElementId();
+	
+	Map<String, Object> getProperties();
+	
+	public <T> T getProperty(String key);
+	
+	public Set<String> getPropertyKeys();
+	
+	public void setProperty(String key, Object value);
+	
+	public <T> T removeProperty(String key);
+	
+	public Long getTime();
+
+	public Element getElement();
+
 }

@@ -2,6 +2,7 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 
 import java.util.*;
 
+import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.TimeInstant;
 

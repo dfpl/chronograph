@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.regex.Pattern;
 
+import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.junit.*;
 

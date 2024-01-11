@@ -1,5 +1,8 @@
 package org.dfpl.chronograph.common;
 
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Vertex;
+
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -22,6 +25,17 @@ package org.dfpl.chronograph.common;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public enum TemporalRelation {
-	isBefore, isAfter, cotemporal
+public interface EdgeEvent extends Event {
+
+	/**
+	 * Get a vertex event
+	 * 
+	 * @param direction
+	 * @return the vertex event
+	 */
+	public VertexEvent getVertexEvent(Direction direction);
+
+	public Vertex getVertex(Direction direction);
+
+	public String getLabel();
 }
