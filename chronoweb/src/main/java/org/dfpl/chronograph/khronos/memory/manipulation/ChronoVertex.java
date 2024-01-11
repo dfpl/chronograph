@@ -179,19 +179,19 @@ public class ChronoVertex implements Vertex {
 
 	@Override
 	public VertexEvent addEvent(long time) {
-		VertexEvent event =  getEvent(time, TemporalRelation.cotemporal);
-		if(event == null) {
+		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
+		if (event == null) {
 			VertexEvent newVe = new ChronoVertexEvent(this, time);
 			this.events.add(newVe);
 			return newVe;
-		}else
+		} else
 			return event;
 	}
 
 	@Override
 	public VertexEvent getEvent(long time) {
-		VertexEvent event =  getEvent(time, TemporalRelation.cotemporal);
-		if(event == null)
+		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
+		if (event == null)
 			return new ChronoVertexEvent(this, time);
 		else
 			return event;
@@ -244,7 +244,12 @@ public class ChronoVertex implements Vertex {
 
 	@Override
 	public void removeEvents(long time, TemporalRelation tr) {
-		this.events.removeIf(event -> TimeInstant.getTemporalRelation(event.getTime(), time).equals(tr));
+		this.events.removeIf(event -> {
+			if (TimeInstant.getTemporalRelation(time, event.getTime()).equals(tr))
+				return true;
+			else
+				return false;
+		});
 	}
 
 	@SuppressWarnings("unchecked")

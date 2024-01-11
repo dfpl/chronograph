@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.dfpl.chronograph.chronoweb.Server;
+import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdgeEvent;
@@ -165,6 +166,43 @@ public class ManipulationRouter {
 					sendResult(routingContext, 406);
 				}
 				return;
+			} else if (Server.vtPattern.matcher(resource).matches()) {
+				String[] arr = resource.split("\\_");
+				String vertexID = arr[0];
+				long time = Long.parseLong(arr[1]);
+				ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+				if (v != null) {
+					ChronoVertexEvent ve = (ChronoVertexEvent) v.getEvent(time, TemporalRelation.cotemporal);
+					if (ve != null) {
+						sendResult(routingContext, "application/json",
+								ve.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
+						return;
+					}
+				}
+				sendResult(routingContext, 404);
+				return;
+			} else if (etPattern.matcher(resource).matches()) {
+				try {
+					String[] arr = resource.split("\\_");
+					long time = Long.parseLong(arr[1]);
+					String[] arr2 = arr[0].split("\\|");
+					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
+							arr2[1]);
+					if (e != null) {
+						ChronoEdgeEvent ee = (ChronoEdgeEvent) e.getEvent(time);
+						if (ee != null) {
+							sendResult(routingContext, "application/json",
+									ee.toJsonObject(includeProperties == null ? true : includeProperties).toString(),
+									200);
+							return;
+						}
+					}
+					sendResult(routingContext, 404);
+					return;
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+					return;
+				}
 			} else {
 				sendResult(routingContext, 406);
 				return;
@@ -306,6 +344,47 @@ public class ManipulationRouter {
 					}
 					graph.removeEdge(e);
 					sendResult(routingContext, 200);
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else if (Server.vtPattern.matcher(resource).matches()) {
+				try {
+					String[] arr = resource.split("\\_");
+					String vertexID = arr[0];
+					long time = Long.parseLong(arr[1]);
+					ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+					if (v != null) {
+						ChronoVertexEvent ve = (ChronoVertexEvent) v.getEvent(time, TemporalRelation.cotemporal);
+						if (ve != null) {
+							v.removeEvents(time, TemporalRelation.cotemporal);
+							sendResult(routingContext, 200);
+							return;
+						}
+					}
+					sendResult(routingContext, 404);
+					return;
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else if (etPattern.matcher(resource).matches()) {
+				try {
+					String[] arr = resource.split("\\_");
+					long time = Long.parseLong(arr[1]);
+					String[] arr2 = arr[0].split("\\|");
+					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
+							arr2[1]);
+					if (e != null) {
+						ChronoEdgeEvent ee = (ChronoEdgeEvent) e.getEvent(time);
+						if (ee != null) {
+							e.removeEvents(time, TemporalRelation.cotemporal);
+							sendResult(routingContext, 200);
+							return;
+						}
+					}
+					sendResult(routingContext, 404);
+					return;
 				} catch (IllegalArgumentException e) {
 					sendResult(routingContext, 406);
 				}
