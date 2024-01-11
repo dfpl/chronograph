@@ -1,9 +1,12 @@
 package org.dfpl.chronograph.khronos.memory.manipulation;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import com.tinkerpop.blueprints.*;
+
+import io.vertx.core.json.JsonObject;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -30,10 +33,12 @@ import com.tinkerpop.blueprints.*;
 public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 	private final Edge edge;
 	private final Long time;
+	private HashMap<String, Object> properties;
 
 	public ChronoEdgeEvent(Edge e, Long time) {
 		this.edge = e;
 		this.time = time;
+		this.properties = new HashMap<String, Object>();
 	}
 
 	@Override
@@ -75,27 +80,37 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 
 	@Override
 	public Map<String, Object> getProperties() {
-		return edge.getProperties();
+		return properties;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getProperty(String key) {
-		return edge.getProperty(key);
+		return (T) properties.get(key);
 	}
 
 	@Override
 	public Set<String> getPropertyKeys() {
-		return edge.getPropertyKeys();
+		return properties.keySet();
 	}
 
 	@Override
 	public void setProperty(String key, Object value) {
-		edge.setProperty(key, value);
+		properties.put(key, value);
 	}
 
+	public void setProperties(JsonObject properties, boolean isSet) {
+		if (!isSet)
+			this.properties.clear();
+		properties.stream().forEach(e -> {
+			this.properties.put(e.getKey(), e.getValue());
+		});
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T removeProperty(String key) {
-		return edge.removeProperty(key);
+		return (T) properties.remove(key);
 	}
 
 	@Override
@@ -123,5 +138,12 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 	@Override
 	public String toString() {
 		return edge.getId() + "_" + time;
+	}
+	
+	public JsonObject toJsonObject(boolean includeProperties) {
+		JsonObject object = ((ChronoEdge) edge).toJsonObject(false);
+		if (includeProperties)
+			object.put("properties", new JsonObject(properties));
+		return object;
 	}
 }

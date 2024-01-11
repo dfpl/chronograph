@@ -145,4 +145,12 @@ public class VertexEventTest {
 		assertEquals(d.getEvents(true, true).size(), 5);
 		System.out.println();
 	}
+
+	@Test
+	public void outVe() {
+		Vertex x = g.addVertex("x");
+		Vertex y = g.addVertex("y");
+		g.addEdge(x, y, "label");
+		System.out.println("outVe " + x.getEvent(0l).getVertexEvents(Direction.OUT, TemporalRelation.isAfter, "label"));
+	}
 }

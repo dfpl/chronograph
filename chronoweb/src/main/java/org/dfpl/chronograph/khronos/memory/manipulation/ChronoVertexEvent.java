@@ -139,7 +139,13 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 	@Override
 	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
 		return vertex.getEdges(direction, List.of(label)).parallelStream()
-				.map(e -> e.getEvent(time, tr).getVertexEvent(direction.opposite())).toList();
+				.map(e -> {
+					EdgeEvent neighborEe = e.getEvent(time, tr);
+					if(neighborEe == null)
+						return null;
+					else
+						return neighborEe.getVertexEvent(direction.opposite());
+				} ).toList();
 	}
 	
 	public JsonObject toJsonObject(boolean includeProperties) {

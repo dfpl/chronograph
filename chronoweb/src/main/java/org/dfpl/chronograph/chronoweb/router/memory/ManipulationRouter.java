@@ -6,6 +6,7 @@ import java.util.List;
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
+import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdgeEvent;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertexEvent;
@@ -100,7 +101,7 @@ public class ManipulationRouter {
 				}
 				return;
 
-			} else if(vtPattern.matcher(resource).matches()) {
+			} else if (vtPattern.matcher(resource).matches()) {
 				try {
 					String[] arr = resource.split("\\_");
 					String vertexID = arr[0];
@@ -113,6 +114,22 @@ public class ManipulationRouter {
 				} catch (IllegalArgumentException e) {
 					sendResult(routingContext, 406);
 				}
+			} else if (etPattern.matcher(resource).matches()) {
+				try {
+					String[] arr = resource.split("\\_");
+					long time = Long.parseLong(arr[1]);
+					String[] arr2 = arr[0].split("\\|");
+					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
+							arr2[1]);
+					ChronoEdgeEvent ee = (ChronoEdgeEvent) e.addEvent(time);
+					ee.setProperties(properties, isSet);
+					sendResult(routingContext, "application/json",
+							ee.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+
 			} else {
 				sendResult(routingContext, 406);
 				return;
