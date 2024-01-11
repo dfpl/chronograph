@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.dfpl.chronograph.chronoweb.Server;
 
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 
 public class DataLoader {
@@ -43,6 +44,24 @@ public class DataLoader {
 				Server.logger.debug("[Email-EuAll] read lines " + cnt + " ... ");
 		}
 		Server.logger.debug("[Email-EuAll] read lines " + cnt + " completed ");
+		r.close();
+	}
+
+	public static void SxMathOverflow(String baseURL, Graph graph, String label) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(baseURL + "\\temporal\\sx-mathoverflow.txt"));
+
+		int cnt = 0;
+		while (true) {
+			String line = r.readLine();
+			if (line == null)
+				break;
+			String[] arr = line.split("\\s");
+			Edge e = graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[1]), label);
+			e.addEvent(Long.parseLong(arr[2]));
+			if (++cnt % 1000 == 0)
+				Server.logger.debug("[sx-mathoverflow] read lines " + cnt + " ... ");
+		}
+		Server.logger.debug("[sx-mathoverflow] read lines " + cnt + " completed ");
 		r.close();
 	}
 }

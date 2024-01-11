@@ -29,7 +29,7 @@ public class Server extends AbstractVerticle {
 	public static Pattern vtPattern = Pattern.compile("^[^|_]+_[0-9]+$");
 	public static Pattern etPattern = Pattern.compile("^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$");
 
-	public static List<String> datasetList = List.of("EgoFacebook", "EUEmailCommunicationNetwork");
+	public static List<String> datasetList = List.of("EgoFacebook", "EUEmailCommunicationNetwork", "sx-mathoverflow");
 
 	private ManipulationRouter manipulationRouter;
 
@@ -59,8 +59,12 @@ public class Server extends AbstractVerticle {
 		manipulationRouter.registerGetIncidentEdgesRouter(router);
 		manipulationRouter.registerGetAdjacentVerticesRouter(router);
 		manipulationRouter.registerDeleteGraphRouter(router);
+		manipulationRouter.registerGetEventsRouter(router);
+		manipulationRouter.registerGetIncidentEdgeEventsRouter(router);
+		manipulationRouter.registerGetAdjacentVertexEventsRouter(router);
 		manipulationRouter.registerGetDatasetsRouter(router);
 		manipulationRouter.registerLoadDatasetRouter(router);
+
 	}
 
 	public static void setLogger() {

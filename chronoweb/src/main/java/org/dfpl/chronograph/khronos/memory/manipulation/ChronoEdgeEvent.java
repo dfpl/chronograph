@@ -1,11 +1,13 @@
 package org.dfpl.chronograph.khronos.memory.manipulation;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -139,11 +141,19 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 	public String toString() {
 		return edge.getId() + "_" + time;
 	}
-	
+
 	public JsonObject toJsonObject(boolean includeProperties) {
 		JsonObject object = ((ChronoEdge) edge).toJsonObject(false);
 		if (includeProperties)
 			object.put("properties", new JsonObject(properties));
 		return object;
+	}
+
+	public static JsonArray toJsonArray(Collection<EdgeEvent> edgeSet) {
+		JsonArray result = new JsonArray();
+		for (EdgeEvent ee : edgeSet) {
+			result.add(ee.getId());
+		}
+		return result;
 	}
 }

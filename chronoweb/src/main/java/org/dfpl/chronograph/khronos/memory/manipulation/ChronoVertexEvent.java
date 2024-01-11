@@ -6,6 +6,7 @@ import org.dfpl.chronograph.common.TemporalRelation;
 
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -138,16 +139,15 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 
 	@Override
 	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
-		return vertex.getEdges(direction, List.of(label)).parallelStream()
-				.map(e -> {
-					EdgeEvent neighborEe = e.getEvent(time, tr);
-					if(neighborEe == null)
-						return null;
-					else
-						return neighborEe.getVertexEvent(direction.opposite());
-				} ).toList();
+		return vertex.getEdges(direction, List.of(label)).parallelStream().map(e -> {
+			EdgeEvent neighborEe = e.getEvent(time, tr);
+			if (neighborEe == null)
+				return null;
+			else
+				return neighborEe.getVertexEvent(direction.opposite());
+		}).toList();
 	}
-	
+
 	public JsonObject toJsonObject(boolean includeProperties) {
 		JsonObject object = new JsonObject();
 		object.put("_id", vertex.getId());
@@ -157,4 +157,11 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 		return object;
 	}
 
+	public static JsonArray toJsonArray(Collection<VertexEvent> vertexSet) {
+		JsonArray result = new JsonArray();
+		for (VertexEvent ve : vertexSet) {
+			result.add(ve.getId());
+		}
+		return result;
+	}
 }

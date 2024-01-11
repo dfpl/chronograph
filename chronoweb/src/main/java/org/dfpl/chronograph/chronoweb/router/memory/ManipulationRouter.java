@@ -14,6 +14,7 @@ import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertexEvent;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.VertexEvent;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -33,7 +34,6 @@ public class ManipulationRouter {
 		routingContext.response().putHeader("content-type", contentType).setStatusCode(code).end(message);
 	}
 
-	@SuppressWarnings("unused")
 	private static void sendResult(RoutingContext routingContext, String message, int code) {
 		routingContext.response().setStatusCode(code).end(message);
 	}
@@ -52,6 +52,36 @@ public class ManipulationRouter {
 			} catch (Exception e) {
 				return null;
 			}
+		}
+	}
+
+	private static Long getLongURLParameter(RoutingContext routingContext, String key) {
+		List<String> list = routingContext.queryParam(key);
+		if (list.isEmpty())
+			return null;
+		else {
+			try {
+				return Long.parseLong(list.get(0));
+			} catch (Exception e) {
+				return null;
+			}
+		}
+	}
+
+	private static TemporalRelation getTemporalRelationURLParameter(RoutingContext routingContext, String key) {
+		List<String> list = routingContext.queryParam(key);
+		if (list.isEmpty())
+			return null;
+		else {
+			String tr = list.get(0);
+			if (tr.equals("isAfter"))
+				return TemporalRelation.isAfter;
+			else if (tr.equals("isBefore"))
+				return TemporalRelation.isBefore;
+			else if (tr.equals("cotemporal"))
+				return TemporalRelation.cotemporal;
+			else
+				throw new IllegalArgumentException(key + " should be one of 'isAfter', 'isBefore', 'cotemporal'");
 		}
 	}
 
@@ -398,6 +428,195 @@ public class ManipulationRouter {
 		Server.logger.info("DELETE /chronoweb/graph/:resource router added");
 	}
 
+	public void registerGetEventsRouter(Router router) {
+		router.get("/chronoweb/graph/:resource/events").handler(routingContext -> {
+			String resource = routingContext.pathParam("resource");
+			Long time = null;
+			TemporalRelation tr = null;
+			try {
+				time = getLongURLParameter(routingContext, "time");
+				tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
+			} catch (Exception e) {
+				sendResult(routingContext, e.getMessage(), 404);
+				return;
+			}
+			if (Server.vPattern.matcher(resource).matches()) {
+				try {
+					Boolean awareOutEvents = false;
+					Boolean awareInEvents = false;
+					try {
+						Boolean b1 = getBooleanURLParameter(routingContext, "awareOutEvents");
+						awareOutEvents = b1 == null ? false : b1;
+						Boolean b2 = getBooleanURLParameter(routingContext, "awareInEvents");
+						awareInEvents = b2 == null ? false : b2;
+					} catch (Exception e) {
+						sendResult(routingContext, e.getMessage(), 404);
+						return;
+					}
+					ChronoVertex v = (ChronoVertex) graph.getVertex(resource);
+					if (time == null || tr == null) {
+						sendResult(routingContext, "application/json",
+								ChronoVertexEvent.toJsonArray(
+										v.getEvents(awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
+										.toString(),
+								200);
+						return;
+					} else {
+						sendResult(routingContext, "application/json", ChronoVertexEvent.toJsonArray(
+								v.getEvents(time, tr, awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
+								.toString(), 200);
+						return;
+					}
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else if (ePattern.matcher(resource).matches()) {
+				try {
+					ChronoEdge e = (ChronoEdge) graph.getEdge(resource);
+					if (time == null || tr == null) {
+						sendResult(routingContext, "application/json",
+								ChronoEdgeEvent.toJsonArray(e.getEvents()).toString(), 200);
+						return;
+					} else {
+						sendResult(routingContext, "application/json",
+								ChronoEdgeEvent.toJsonArray(e.getEvents(time, tr)).toString(), 200);
+						return;
+					}
+				} catch (IllegalArgumentException e) {
+					sendResult(routingContext, 406);
+				}
+				return;
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/graph/:resource/events router added");
+	}
+
+	public void registerGetIncidentEdgeEventsRouter(Router router) {
+		router.get("/chronoweb/graph/:vertexEventID/outEe").handler(routingContext -> {
+			String vertexEventID = routingContext.pathParam("vertexEventID");
+			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
+			String label = getStringURLParameter(routingContext, "label");
+			if (tr == null || label == null) {
+				sendResult(routingContext, 406);
+				return;
+			}
+			if (Server.vtPattern.matcher(vertexEventID).matches()) {
+				String[] arr = vertexEventID.split("\\_");
+				try {
+					Long time = Long.parseLong(arr[1]);
+					ChronoVertex v = (ChronoVertex) graph.getVertex(arr[0]);
+					VertexEvent ve = v.getEvent(time);
+					sendResult(routingContext, "application/json",
+							ChronoEdgeEvent.toJsonArray(ve.getEdgeEvents(Direction.OUT, tr, label)).toString(), 200);
+					return;
+				} catch (Exception e) {
+					sendResult(routingContext, 404);
+					return;
+				}
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/graph/:vertexEventID/outEe router added");
+
+		router.get("/chronoweb/graph/:vertexEventID/inEe").handler(routingContext -> {
+			String vertexEventID = routingContext.pathParam("vertexEventID");
+			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
+			String label = getStringURLParameter(routingContext, "label");
+			if (tr == null || label == null) {
+				sendResult(routingContext, 406);
+				return;
+			}
+			if (Server.vtPattern.matcher(vertexEventID).matches()) {
+				String[] arr = vertexEventID.split("\\_");
+				try {
+					Long time = Long.parseLong(arr[1]);
+					ChronoVertex v = (ChronoVertex) graph.getVertex(arr[0]);
+					VertexEvent ve = v.getEvent(time);
+					sendResult(routingContext, "application/json",
+							ChronoEdgeEvent.toJsonArray(ve.getEdgeEvents(Direction.IN, tr, label)).toString(), 200);
+					return;
+				} catch (Exception e) {
+					sendResult(routingContext, 404);
+					return;
+				}
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/graph/:vertexEventID/inEe router added");
+	}
+
+	public void registerGetAdjacentVertexEventsRouter(Router router) {
+		router.get("/chronoweb/graph/:vertexEventID/oute").handler(routingContext -> {
+			String vertexEventID = routingContext.pathParam("vertexEventID");
+			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
+			String label = getStringURLParameter(routingContext, "label");
+			if (tr == null || label == null) {
+				sendResult(routingContext, 406);
+				return;
+			}
+			if (Server.vtPattern.matcher(vertexEventID).matches()) {
+				String[] arr = vertexEventID.split("\\_");
+				try {
+					Long time = Long.parseLong(arr[1]);
+					ChronoVertex v = (ChronoVertex) graph.getVertex(arr[0]);
+					VertexEvent ve = v.getEvent(time);
+					sendResult(routingContext, "application/json",
+							ChronoVertexEvent.toJsonArray(ve.getVertexEvents(Direction.OUT, tr, label)).toString(),
+							200);
+					return;
+				} catch (Exception e) {
+					sendResult(routingContext, 404);
+					return;
+				}
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/graph/:vertexEventID/oute router added");
+
+		router.get("/chronoweb/graph/:vertexEventID/ine").handler(routingContext -> {
+			String vertexEventID = routingContext.pathParam("vertexEventID");
+			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
+			String label = getStringURLParameter(routingContext, "label");
+			if (tr == null || label == null) {
+				sendResult(routingContext, 406);
+				return;
+			}
+			if (Server.vtPattern.matcher(vertexEventID).matches()) {
+				String[] arr = vertexEventID.split("\\_");
+				try {
+					Long time = Long.parseLong(arr[1]);
+					ChronoVertex v = (ChronoVertex) graph.getVertex(arr[0]);
+					VertexEvent ve = v.getEvent(time);
+					sendResult(routingContext, "application/json",
+							ChronoVertexEvent.toJsonArray(ve.getVertexEvents(Direction.IN, tr, label)).toString(), 200);
+					return;
+				} catch (Exception e) {
+					sendResult(routingContext, 404);
+					return;
+				}
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+		});
+
+		Server.logger.info("GET /chronoweb/graph/:vertexEventID/ine router added");
+	}
+
 	public void registerGetDatasetsRouter(Router router) {
 		router.get("/chronoweb/datasets").handler(routingContext -> {
 			sendResult(routingContext, "application/json", new JsonArray(Server.datasetList).toString(), 200);
@@ -423,10 +642,22 @@ public class ManipulationRouter {
 					return;
 				}
 			} else if (dataset.equals("EUEmailCommunicationNetwork")) {
-
 				try {
 					ChronoGraph newGraph = new ChronoGraph();
 					DataLoader.EUEmailCommunicationNetwork("d:\\dataset", newGraph, "sendEmail");
+					synchronized (graph) {
+						graph = newGraph;
+					}
+					sendResult(routingContext, 200);
+					return;
+				} catch (IOException e) {
+					sendResult(routingContext, 500);
+					return;
+				}
+			} else if (dataset.equals("sx-mathoverflow")) {
+				try {
+					ChronoGraph newGraph = new ChronoGraph();
+					DataLoader.SxMathOverflow("c:\\dataset", newGraph, "c");
 					synchronized (graph) {
 						graph = newGraph;
 					}
