@@ -16,6 +16,7 @@ import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertexEvent;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Graph;
 
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -94,7 +95,7 @@ public class ManipulationRouter {
 		}
 	}
 
-	public void registerAddElementRouter(Router router) {
+	public void registerAddElementRouter(Router router, EventBus eventBus) {
 		router.post("/chronoweb/graph/:resource").consumes("application/json").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			String propertiesParameter = getStringURLParameter(routingContext, "properties");
@@ -112,7 +113,13 @@ public class ManipulationRouter {
 
 			if (Server.vPattern.matcher(resource).matches()) {
 				try {
-					ChronoVertex v = (ChronoVertex) graph.addVertex(resource);
+					ChronoVertex v = null;
+					if (graph.getVertex(resource) == null) {
+						v = (ChronoVertex) graph.addVertex(resource);
+						eventBus.send("addVertex", v.toJsonObject(false));
+					} else {
+						v = (ChronoVertex) graph.addVertex(resource);
+					}
 					v.setProperties(properties, isSet);
 					sendResult(routingContext, "application/json",
 							v.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
@@ -171,7 +178,7 @@ public class ManipulationRouter {
 		Server.logger.info("POST /chronoweb/graph/:resource router added");
 	}
 
-	public void registerGetElementRouter(Router router) {
+	public void registerGetElementRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/graph/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
@@ -242,7 +249,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/graph/:resource router added");
 	}
 
-	public void registerGetElementsRouter(Router router) {
+	public void registerGetElementsRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/graph").handler(routingContext -> {
 			String target = getStringURLParameter(routingContext, "target");
 			target = target == null ? "vertices" : target;
@@ -260,7 +267,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/graph router added");
 	}
 
-	public void registerGetIncidentEdgesRouter(Router router) {
+	public void registerGetIncidentEdgesRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/graph/:vertexID/outE").handler(routingContext -> {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
@@ -300,7 +307,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/graph/:vertexID/inE router added");
 	}
 
-	public void registerGetAdjacentVerticesRouter(Router router) {
+	public void registerGetAdjacentVerticesRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/graph/:vertexID/out").handler(routingContext -> {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
@@ -340,7 +347,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/graph/:vertexID/in router added");
 	}
 
-	public void registerDeleteGraphRouter(Router router) {
+	public void registerDeleteGraphRouter(Router router, EventBus eventBus) {
 		router.delete("/chronoweb/graph").handler(routingContext -> {
 			graph.clear();
 			sendResult(routingContext, 200);
@@ -349,7 +356,7 @@ public class ManipulationRouter {
 		Server.logger.info("DELETE /chronoweb/graph router added");
 	}
 
-	public void registerRemoveElementRouter(Router router) {
+	public void registerRemoveElementRouter(Router router, EventBus eventBus) {
 		router.delete("/chronoweb/graph/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			if (Server.vPattern.matcher(resource).matches()) {
@@ -428,7 +435,7 @@ public class ManipulationRouter {
 		Server.logger.info("DELETE /chronoweb/graph/:resource router added");
 	}
 
-	public void registerGetEventsRouter(Router router) {
+	public void registerGetEventsRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/graph/:resource/events").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			Long time = null;
@@ -496,7 +503,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/graph/:resource/events router added");
 	}
 
-	public void registerGetIncidentEdgeEventsRouter(Router router) {
+	public void registerGetIncidentEdgeEventsRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/graph/:vertexEventID/outEe").handler(routingContext -> {
 			String vertexEventID = routingContext.pathParam("vertexEventID");
 			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
@@ -556,7 +563,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/graph/:vertexEventID/inEe router added");
 	}
 
-	public void registerGetAdjacentVertexEventsRouter(Router router) {
+	public void registerGetAdjacentVertexEventsRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/graph/:vertexEventID/oute").handler(routingContext -> {
 			String vertexEventID = routingContext.pathParam("vertexEventID");
 			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
@@ -617,7 +624,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/graph/:vertexEventID/ine router added");
 	}
 
-	public void registerGetDatasetsRouter(Router router) {
+	public void registerGetDatasetsRouter(Router router, EventBus eventBus) {
 		router.get("/chronoweb/datasets").handler(routingContext -> {
 			sendResult(routingContext, "application/json", new JsonArray(Server.datasetList).toString(), 200);
 		});
@@ -625,7 +632,7 @@ public class ManipulationRouter {
 		Server.logger.info("GET /chronoweb/datasets router added");
 	}
 
-	public void registerLoadDatasetRouter(Router router) {
+	public void registerLoadDatasetRouter(Router router, EventBus eventBus) {
 		router.post("/chronoweb/datasets/:dataset").handler(routingContext -> {
 			String dataset = routingContext.pathParam("dataset");
 			if (dataset.equals("EgoFacebook")) {
