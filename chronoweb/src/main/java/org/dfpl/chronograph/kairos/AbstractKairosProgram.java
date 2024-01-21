@@ -1,17 +1,21 @@
 package org.dfpl.chronograph.kairos;
 
 import org.dfpl.chronograph.common.EdgeEvent;
+import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
 import com.tinkerpop.blueprints.Graph;
 
+@SuppressWarnings("rawtypes")
 public abstract class AbstractKairosProgram {
 	// Data Abstraction
 	private Graph graph;
+
 	private GammaTable gammaTable;
 
 	public AbstractKairosProgram(Graph graph, GammaTable gammaTable) {
 		this.graph = graph;
 		this.gammaTable = gammaTable;
+
 	}
 
 	public Graph getGraph() {
