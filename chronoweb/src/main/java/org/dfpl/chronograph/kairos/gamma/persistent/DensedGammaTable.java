@@ -9,12 +9,13 @@ import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+import java.util.function.BiPredicate;
 
 import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaElement;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
-public class PersistentGammaTable<K, E> implements GammaTable<K, E> {
+public class DensedGammaTable<K, E> implements GammaTable<K, E> {
 
 	private RandomAccessFile gammaTable;
 	private HashMap<K, Integer> idToIdx = new HashMap<K, Integer>();
@@ -29,7 +30,7 @@ public class PersistentGammaTable<K, E> implements GammaTable<K, E> {
 	private Class<? extends GammaElement<E>> gammaElementClass;
 	private int expandFactor;
 
-	public PersistentGammaTable(String fileName, Class<? extends GammaElement<E>> gammaElementClass)
+	public DensedGammaTable(String fileName, Class<? extends GammaElement<E>> gammaElementClass)
 			throws FileNotFoundException {
 		gammaTable = new RandomAccessFile(fileName, "rws");
 		try {
@@ -47,8 +48,8 @@ public class PersistentGammaTable<K, E> implements GammaTable<K, E> {
 		gammaReadLock = lock.readLock();
 	}
 
-	public PersistentGammaTable(String fileName, Class<? extends GammaElement<E>> gammaElementClass,
-			int initialCapacity, int expandFactor) throws FileNotFoundException {
+	public DensedGammaTable(String fileName, Class<? extends GammaElement<E>> gammaElementClass, int initialCapacity,
+			int expandFactor) throws FileNotFoundException {
 		gammaTable = new RandomAccessFile(fileName, "rws");
 		try {
 			this.gammaElementConverter = gammaElementClass.getConstructor().newInstance();
@@ -180,6 +181,17 @@ public class PersistentGammaTable<K, E> implements GammaTable<K, E> {
 
 	@Override
 	public void setGamma(K from, Gamma<K, GammaElement<E>> gamma) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void clear() {
+		new File(fileName).delete();
+	}
+
+	@Override
+	public void setIfExists(K ifExists, K newValue, GammaElement<E> element, BiPredicate<E, E> setNew) {
 		// TODO Auto-generated method stub
 
 	}

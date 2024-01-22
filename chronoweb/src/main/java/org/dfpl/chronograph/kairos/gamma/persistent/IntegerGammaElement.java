@@ -36,4 +36,9 @@ public class IntegerGammaElement implements GammaElement<Integer> {
 		return Integer.class;
 	}
 
+	@Override
+	public Integer getElement() {
+		return element;
+	}
+
 }
