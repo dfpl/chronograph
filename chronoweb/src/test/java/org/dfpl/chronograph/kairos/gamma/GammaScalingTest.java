@@ -18,7 +18,7 @@ public class GammaScalingTest {
 
 	@Before
 	public void setUp() throws Exception {
-		gammaTable = new PersistentGammaTable<String, Integer>("d:\\g1", IntegerGammaElement.class);
+		gammaTable = new PersistentGammaTable<String, Integer>("d:\\g1", IntegerGammaElement.class, 1000000, 2);
 	}
 
 	@After
@@ -27,7 +27,11 @@ public class GammaScalingTest {
 
 	@Test
 	public void baseTest() {
-		for(int i = 0 ; i < 100; i ++) {
+		for(int i = 0 ; i < 1000; i ++) {
+			
+			if(i == 536) {
+				System.out.println();
+			}
 			gammaTable.set(String.valueOf(i), String.valueOf(i+1), new IntegerGammaElement(i+2));
 			System.out.println(gammaTable.get(String.valueOf(i), String.valueOf(i+1)));
 		}
