@@ -12,8 +12,6 @@ public interface GammaTable<K, E> {
 
 	public Gamma<K, E> getGamma(K from);
 
-	public void setGamma(K from, Gamma<K, GammaElement<E>> gamma);
-
 	public void clear();
 
 }

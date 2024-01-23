@@ -33,6 +33,11 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 
 	public SparseGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass)
 			throws FileNotFoundException, NotDirectoryException {
+		this(directoryName, gammaElementClass, 4, 2);
+	}
+
+	public SparseGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass,
+			int initialCapacity, int expandFactor) throws FileNotFoundException, NotDirectoryException {
 		gammaMap = new HashMap<Integer, RandomAccessFile>();
 		try {
 			this.gammaElementConverter = gammaElementClass.getConstructor().newInstance();
@@ -46,15 +51,15 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 		gammaWriteLock = lock.writeLock();
 		gammaReadLock = lock.readLock();
-		capacity = 4;
-		expandFactor = 2;
+		this.capacity = initialCapacity;
+		this.expandFactor = expandFactor;
 	}
 
 	private void expand() {
 		gammaMap.values().forEach(gamma -> {
 			try {
 				gamma.seek(getSeekPos(capacity));
-				byte[] fill = new byte[capacity * elementByteSize];
+				byte[] fill = new byte[capacity * elementByteSize * (expandFactor - 1)];
 				Arrays.fill(fill, gammaElementConverter.getDefaultByteValue());
 				gamma.write(fill);
 			} catch (IOException e) {
@@ -149,22 +154,24 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 	@Override
 	public Gamma<K, E> getGamma(K from) {
 		Integer idx = idToIdx.get(from);
-		if(idx == null)
+		if (idx == null)
 			return null;
 		return new SparseGamma<K, E>(this, gammaMap.get(idx));
 	}
 
 	@Override
-	public void setGamma(K from, Gamma<K, GammaElement<E>> gamma) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void clear() {
 		String directoryName = directory.getAbsolutePath();
-		directory.delete();
-		new File(directoryName).mkdirs();
+		gammaMap.values().forEach(raf -> {
+			try {
+				raf.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		for (File f : new File(directoryName).listFiles()) {
+			f.delete();
+		}
 	}
 
 	@Override
@@ -178,8 +185,8 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		}
 		gammaMap.values().forEach(gamma -> {
 			try {
-				Integer exists = (Integer) getElement(ifExistsPos, gamma);
-				if (exists.intValue() != Integer.MAX_VALUE) {
+				E exists = getElement(ifExistsPos, gamma);
+				if (!exists.equals(gammaElementConverter.getDefaultValue())) {
 					if (setNew.test(getElement(setPos, gamma), newElement.getElement())) {
 						setElement(setPos, gamma, newElement);
 					}

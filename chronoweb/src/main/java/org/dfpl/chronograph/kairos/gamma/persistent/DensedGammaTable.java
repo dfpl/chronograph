@@ -180,12 +180,6 @@ public class DensedGammaTable<K, E> implements GammaTable<K, E> {
 	}
 
 	@Override
-	public void setGamma(K from, Gamma<K, GammaElement<E>> gamma) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void clear() {
 		new File(fileName).delete();
 	}

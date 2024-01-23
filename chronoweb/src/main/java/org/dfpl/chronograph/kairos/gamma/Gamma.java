@@ -7,5 +7,5 @@ public interface Gamma<K, E> {
 
 	public void setElement(K to, GammaElement<E> element);
 
-	public List<E> toList();
+	public List<E> toList(boolean setDefaultToNull);
 }

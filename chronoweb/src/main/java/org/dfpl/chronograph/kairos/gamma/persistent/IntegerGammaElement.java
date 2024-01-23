@@ -13,7 +13,7 @@ public class IntegerGammaElement implements GammaElement<Integer> {
 	}
 
 	public IntegerGammaElement(Integer element) {
-		if(element.equals(2139062143))
+		if (element.equals(2139062143))
 			throw new IllegalArgumentException();
 		this.element = element;
 	}

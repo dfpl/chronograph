@@ -45,12 +45,13 @@ public class SparseGamma<K, E> implements Gamma<K, E> {
 	}
 
 	@Override
-	public List<E> toList() {
+	public List<E> toList(boolean setDefaultToNull) {
 		List<E> list = new ArrayList<E>();
 		try {
 			for (int i = 0; i < gammaTable.cnt; i++) {
 				E elem = gammaTable.getElement(i * gammaTable.elementByteSize, gamma);
-				if (elem.equals(gammaTable.gammaElementConverter.getDefaultValue()))
+
+				if (setDefaultToNull && elem.equals(gammaTable.gammaElementConverter.getDefaultValue()))
 					list.add(null);
 				else
 					list.add(elem);
