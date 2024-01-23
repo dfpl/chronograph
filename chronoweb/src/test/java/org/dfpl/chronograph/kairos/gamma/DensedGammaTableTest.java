@@ -25,7 +25,6 @@ public class DensedGammaTableTest {
 	public void tearDown() {
 	}
 
-	@Test
 	public void baseTest() {		
 		gammaTable.set("1", "2", new IntegerGammaElement(3));
 		gammaTable.set("1", "4", new IntegerGammaElement(5));

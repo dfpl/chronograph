@@ -13,6 +13,8 @@ public class IntegerGammaElement implements GammaElement<Integer> {
 	}
 
 	public IntegerGammaElement(Integer element) {
+		if(element.equals(2139062143))
+			throw new IllegalArgumentException();
 		this.element = element;
 	}
 
@@ -39,6 +41,16 @@ public class IntegerGammaElement implements GammaElement<Integer> {
 	@Override
 	public Integer getElement() {
 		return element;
+	}
+
+	@Override
+	public byte getDefaultByteValue() {
+		return Byte.MAX_VALUE;
+	}
+
+	@Override
+	public Integer getDefaultValue() {
+		return 2139062143;
 	}
 
 }

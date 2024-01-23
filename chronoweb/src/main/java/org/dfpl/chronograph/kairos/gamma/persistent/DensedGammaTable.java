@@ -174,7 +174,7 @@ public class DensedGammaTable<K, E> implements GammaTable<K, E> {
 	}
 
 	@Override
-	public Gamma<K, GammaElement<E>> getGamma(K from) {
+	public Gamma<K, E> getGamma(K from) {
 		// TODO Auto-generated method stub
 		return null;
 	}

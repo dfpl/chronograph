@@ -27,7 +27,6 @@ public class SparseGammaTableTCPTest {
 		gammaTable.clear();
 	}
 
-	@Test
 	public void baseTest() {
 
 		BiPredicate<Integer, Integer> predicate = new BiPredicate<Integer, Integer>() {

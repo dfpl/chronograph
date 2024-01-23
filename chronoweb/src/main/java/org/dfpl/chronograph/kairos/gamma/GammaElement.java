@@ -11,4 +11,8 @@ public interface GammaElement<E> {
 	public Class<E> getElementClass();
 
 	public E getElement();
+	
+	public byte getDefaultByteValue();
+	
+	public E getDefaultValue();
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.NotDirectoryException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
@@ -19,14 +20,16 @@ import org.dfpl.chronograph.kairos.gamma.GammaTable;
 public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 
 	private HashMap<Integer, RandomAccessFile> gammaMap;
-	private HashMap<K, Integer> idToIdx = new HashMap<K, Integer>();
+	HashMap<K, Integer> idToIdx = new HashMap<K, Integer>();
 	private ArrayList<K> idList = new ArrayList<K>();
-	private int cnt = 0;
-	private int elementByteSize;
-	private GammaElement<E> gammaElementConverter;
+	int cnt = 0;
+	int elementByteSize;
+	GammaElement<E> gammaElementConverter;
 	private File directory;
 	private WriteLock gammaWriteLock;
 	private ReadLock gammaReadLock;
+	private int capacity;
+	private int expandFactor;
 
 	public SparseGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass)
 			throws FileNotFoundException, NotDirectoryException {
@@ -43,6 +46,23 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 		gammaWriteLock = lock.writeLock();
 		gammaReadLock = lock.readLock();
+		capacity = 4;
+		expandFactor = 2;
+	}
+
+	private void expand() {
+		gammaMap.values().forEach(gamma -> {
+			try {
+				gamma.seek(getSeekPos(capacity));
+				byte[] fill = new byte[capacity * elementByteSize];
+				Arrays.fill(fill, gammaElementConverter.getDefaultByteValue());
+				gamma.write(fill);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		});
+		capacity *= expandFactor;
 	}
 
 	private int getID(K id) {
@@ -50,6 +70,9 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		if (idx != null)
 			return idx;
 		else {
+			if (cnt + 1 > capacity) {
+				expand();
+			}
 			idList.add(id);
 			idToIdx.put(id, cnt++);
 			return cnt - 1;
@@ -68,9 +91,11 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		try {
 			if (gamma == null) {
 				gamma = new RandomAccessFile(directory.getAbsolutePath() + "\\" + fromIdx, "rws");
+				byte[] fill = new byte[capacity * elementByteSize];
+				Arrays.fill(fill, gammaElementConverter.getDefaultByteValue());
+				gamma.write(fill);
 				gammaMap.put(fromIdx, gamma);
 			}
-
 			long s = getSeekPos(toIdx);
 			setElement(s, gamma, element);
 		} catch (Exception e) {
@@ -79,11 +104,11 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		gammaWriteLock.unlock();
 	}
 
-	private long getSeekPos(int to) {
+	long getSeekPos(int to) {
 		return to * elementByteSize;
 	}
 
-	public void setElement(long pos, RandomAccessFile gamma, GammaElement<E> element) throws IOException {
+	void setElement(long pos, RandomAccessFile gamma, GammaElement<E> element) throws IOException {
 		gamma.seek(pos);
 		gamma.write(element.getBytes());
 	}
@@ -122,9 +147,11 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 	}
 
 	@Override
-	public Gamma<K, GammaElement<E>> getGamma(K from) {
-		// TODO Auto-generated method stub
-		return null;
+	public Gamma<K, E> getGamma(K from) {
+		Integer idx = idToIdx.get(from);
+		if(idx == null)
+			return null;
+		return new SparseGamma<K, E>(this, gammaMap.get(idx));
 	}
 
 	@Override

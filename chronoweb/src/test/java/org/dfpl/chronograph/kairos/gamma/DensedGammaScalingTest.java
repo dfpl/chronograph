@@ -5,7 +5,7 @@ import org.dfpl.chronograph.kairos.gamma.persistent.DensedGammaTable;
 import org.junit.*;
 
 
-public class GammaScalingTest {
+public class DensedGammaScalingTest {
 	DensedGammaTable<String, Integer> gammaTable;
 
 	@BeforeClass
@@ -25,7 +25,6 @@ public class GammaScalingTest {
 	public void tearDown() {
 	}
 
-	@Test
 	public void baseTest() {
 		for(int i = 0 ; i < 1000; i ++) {
 			

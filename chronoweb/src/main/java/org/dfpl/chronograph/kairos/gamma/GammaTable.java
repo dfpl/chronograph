@@ -10,7 +10,7 @@ public interface GammaTable<K, E> {
 
 	public void setIfExists(K ifExists, K set, GammaElement<E> newElement, BiPredicate<E, E> setNew);
 
-	public Gamma<K, GammaElement<E>> getGamma(K from);
+	public Gamma<K, E> getGamma(K from);
 
 	public void setGamma(K from, Gamma<K, GammaElement<E>> gamma);
 
