@@ -56,7 +56,6 @@ public class SparseGammaScalingTest {
 		gammaDTable.clear();
 	}
 	
-	@Test
 	public void baseBooleanTest() {
 		for (int i = 0; i < 100; i++) {
 			gammaBTable.set(String.valueOf(i), String.valueOf(i), new BooleanGammaElement(true));

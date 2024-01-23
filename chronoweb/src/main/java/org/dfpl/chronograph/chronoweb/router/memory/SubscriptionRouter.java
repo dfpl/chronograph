@@ -1,11 +1,18 @@
 package org.dfpl.chronograph.chronoweb.router.memory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.NotDirectoryException;
 import java.util.List;
 
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
+import org.dfpl.chronograph.kairos.KairosEngine;
+import org.dfpl.chronograph.kairos.gamma.persistent.IntegerGammaElement;
+import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
+import org.dfpl.chronograph.kairos.recipe.IsAfterReachability;
 import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdgeEvent;
@@ -18,89 +25,50 @@ import com.tinkerpop.blueprints.Graph;
 
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import static org.dfpl.chronograph.chronoweb.Server.*;
 
-public class ManipulationRouter extends BaseRouter {
+public class SubscriptionRouter extends BaseRouter {
 
-	public ManipulationRouter(Graph graph) {
+	private KairosEngine kairos;
+
+	public SubscriptionRouter(Graph graph, KairosEngine kairos) {
 		super(graph);
+		this.kairos = kairos;
 	}
 
-	public void registerAddElementRouter(Router router, EventBus eventBus) {
-		router.post("/chronoweb/graph/:resource").consumes("application/json").handler(routingContext -> {
+	public void registerSubscribeVertexEventRouter(Router router, EventBus eventBus) {
+		router.post("/chronoweb/subscribe/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
-			String propertiesParameter = getStringURLParameter(routingContext, "properties");
-			boolean isSet = propertiesParameter == null || propertiesParameter.equals("set") ? true : false;
-			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
-			JsonObject properties = null;
-			try {
-				properties = routingContext.body().asJsonObject();
-			} catch (Exception e) {
-				sendResult(routingContext, "text/plain", e.getMessage(), 400);
-				return;
-			}
-			if (properties == null)
-				properties = new JsonObject();
+			String recipeParameter = getStringURLParameter(routingContext, "recipe");
 
-			if (Server.vPattern.matcher(resource).matches()) {
-				try {
-					ChronoVertex v = null;
-					if (graph.getVertex(resource) == null) {
-						v = (ChronoVertex) graph.addVertex(resource);
-						eventBus.send("addVertex", v.toJsonObject(false));
-					} else {
-						v = (ChronoVertex) graph.addVertex(resource);
-					}
-					v.setProperties(properties, isSet);
-					sendResult(routingContext, "application/json",
-							v.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
-				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
-				}
-				return;
-			} else if (ePattern.matcher(resource).matches()) {
-				try {
-					String[] arr = resource.split("\\|");
-					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[2]), arr[1]);
-					e.setProperties(properties, isSet);
-					sendResult(routingContext, "application/json",
-							e.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
-				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
-				}
-				return;
-
-			} else if (vtPattern.matcher(resource).matches()) {
+			if (vtPattern.matcher(resource).matches()) {
 				try {
 					String[] arr = resource.split("\\_");
 					String vertexID = arr[0];
 					long time = Long.parseLong(arr[1]);
 					ChronoVertex v = (ChronoVertex) graph.addVertex(vertexID);
 					ChronoVertexEvent ve = (ChronoVertexEvent) v.addEvent(time);
-					ve.setProperties(properties, isSet);
-					sendResult(routingContext, "application/json",
-							ve.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
-				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
-				}
-			} else if (etPattern.matcher(resource).matches()) {
-				try {
-					String[] arr = resource.split("\\_");
-					long time = Long.parseLong(arr[1]);
-					String[] arr2 = arr[0].split("\\|");
-					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
-							arr2[1]);
-					ChronoEdgeEvent ee = (ChronoEdgeEvent) e.addEvent(time);
-					ee.setProperties(properties, isSet);
-					sendResult(routingContext, "application/json",
-							ee.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
-				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
-				}
-				return;
 
+					String subDirectoryName = Server.baseDirectory + "\\" + ve.getTime() + "_" + recipeParameter;
+					File subDirectory = new File(subDirectoryName);
+					if (!subDirectory.exists())
+						subDirectory.mkdirs();
+
+					if (recipeParameter.equals("IsAfterReachability")) {
+						kairos.addSubscriptionBase(ve.getTime(), new IsAfterReachability(graph,
+								new SparseGammaTable<String, Integer>(subDirectoryName, IntegerGammaElement.class)));
+						sendResult(routingContext, 200);
+						return;
+					} else {
+						sendResult(routingContext, 406);
+						return;
+					}
+
+				} catch (IllegalArgumentException | NotDirectoryException | FileNotFoundException e) {
+					sendResult(routingContext, 406);
+					return;
+				}
 			} else {
 				sendResult(routingContext, 406);
 				return;

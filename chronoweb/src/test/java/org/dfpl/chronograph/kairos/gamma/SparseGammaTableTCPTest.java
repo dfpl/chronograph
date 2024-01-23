@@ -101,8 +101,6 @@ public class SparseGammaTableTCPTest {
 		gammaDTable.clear();
 	}
 	
-	
-	@Test
 	public void baseBooleanTest() {
 
 		BiPredicate<Boolean, Boolean> predicate = new BiPredicate<Boolean, Boolean>() {

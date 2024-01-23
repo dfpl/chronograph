@@ -1,19 +1,27 @@
 package org.dfpl.chronograph.kairos;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+
 import org.dfpl.chronograph.chronoweb.Server;
+import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
 import com.tinkerpop.blueprints.Graph;
 
 import io.vertx.core.eventbus.EventBus;
 
+@SuppressWarnings("unused")
 public class KairosEngine {
-	@SuppressWarnings("unused")
+
 	private Graph graph;
 	private EventBus mainEventBus;
+	private HashMap<Long, HashSet<AbstractKairosProgram<?>>> kairosPrograms;
 
 	public KairosEngine(Graph graph, EventBus mainEventBus) {
 		this.graph = graph;
 		this.mainEventBus = mainEventBus;
+		this.kairosPrograms = new HashMap<Long, HashSet<AbstractKairosProgram<?>>>();
 
 		this.mainEventBus.consumer("addVertex", v -> {
 			Server.logger.debug("kairos addVertex: " + v.body());
@@ -33,6 +41,13 @@ public class KairosEngine {
 
 		this.mainEventBus.consumer("addVertexEvent", ve -> {
 			Server.logger.debug("kairos addVertexEvent: " + ve.body());
+
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					//
+				});
+			});
+
 		});
 
 		this.mainEventBus.consumer("addEdgeEvent", ee -> {
@@ -51,6 +66,17 @@ public class KairosEngine {
 			Server.logger.debug("kairos cleared");
 		});
 
+	}
+
+	public void addSubscriptionBase(Long startTime, AbstractKairosProgram<?> program) {
+		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
+		if (programs == null) {
+			programs = new HashSet<AbstractKairosProgram<?>>();
+			programs.add(program);
+			kairosPrograms.put(startTime, programs);
+		} else {
+			programs.add(program);
+		}
 	}
 
 }

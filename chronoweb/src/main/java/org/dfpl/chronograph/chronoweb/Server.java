@@ -60,6 +60,8 @@ public class Server extends AbstractVerticle {
 	public static List<String> datasetList = List.of("EgoFacebook", "EUEmailCommunicationNetwork", "sx-mathoverflow");
 
 	private ManipulationRouter manipulationRouter;
+	
+	public static String baseDirectory = "d:\\kairos";
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
@@ -96,6 +98,10 @@ public class Server extends AbstractVerticle {
 		manipulationRouter.registerGetDatasetsRouter(router, eventBus);
 		manipulationRouter.registerLoadDatasetRouter(router, eventBus);
 
+	}
+	
+	public void registerSubscriptionRouter() {
+		
 	}
 
 	public static void setLogger() {

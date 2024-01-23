@@ -6,16 +6,15 @@ import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import com.tinkerpop.blueprints.Graph;
 
 @SuppressWarnings("rawtypes")
-public abstract class AbstractKairosProgram {
-	// Data Abstraction
-	private Graph graph;
+public abstract class AbstractKairosProgram<E> {
+	protected Graph graph;
+	protected GammaTable<String, E> gammaTable;
+	protected String name;
 
-	private GammaTable gammaTable;
-
-	public AbstractKairosProgram(Graph graph, GammaTable gammaTable) {
+	public AbstractKairosProgram(Graph graph, GammaTable<String, E> gammaTable, String name) {
 		this.graph = graph;
 		this.gammaTable = gammaTable;
-
+		this.name = name;
 	}
 
 	public Graph getGraph() {
@@ -30,8 +29,8 @@ public abstract class AbstractKairosProgram {
 		return gammaTable;
 	}
 
-	public void setGammaMap(GammaTable gammaTable) {
-		this.gammaTable = gammaTable;
+	public String getName() {
+		return name;
 	}
 
 	public abstract void onInitialization();
