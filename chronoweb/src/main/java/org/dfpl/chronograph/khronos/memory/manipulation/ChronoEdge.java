@@ -154,12 +154,14 @@ public class ChronoEdge implements Edge {
 
 	@Override
 	public EdgeEvent addEvent(long time) {
-		EdgeEvent event =  getEvent(time);
-		if(event == null) {
+		EdgeEvent event = getEvent(time);
+		if (event == null) {
 			EdgeEvent newEe = new ChronoEdgeEvent(this, time);
 			this.events.add(newEe);
+			if (((ChronoGraph) g).getEventBus() != null)
+				((ChronoGraph) g).getEventBus().send("addEdgeEvent", newEe.getId());
 			return newEe;
-		}else
+		} else
 			return event;
 	}
 

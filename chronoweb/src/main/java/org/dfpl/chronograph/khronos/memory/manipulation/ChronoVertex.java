@@ -185,6 +185,8 @@ public class ChronoVertex implements Vertex {
 		if (event == null) {
 			VertexEvent newVe = new ChronoVertexEvent(this, time);
 			this.events.add(newVe);
+			if (g.getEventBus() != null)
+				g.getEventBus().send("addVertexEvent", newVe.getId());
 			return newVe;
 		} else
 			return event;

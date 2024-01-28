@@ -77,6 +77,7 @@ public class KairosEngine {
 		} else {
 			programs.add(program);
 		}
+		program.onInitialization();
 	}
 
 }

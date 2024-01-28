@@ -41,6 +41,11 @@ public class SubscriptionRouter extends BaseRouter {
 		router.post("/chronoweb/subscribe/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			String recipeParameter = getStringURLParameter(routingContext, "recipe");
+			
+			if(recipeParameter == null) {
+				sendResult(routingContext, 406);
+				return;
+			}
 
 			if (vtPattern.matcher(resource).matches()) {
 				try {
@@ -538,7 +543,7 @@ public class SubscriptionRouter extends BaseRouter {
 			String dataset = routingContext.pathParam("dataset");
 			if (dataset.equals("EgoFacebook")) {
 				try {
-					ChronoGraph newGraph = new ChronoGraph();
+					ChronoGraph newGraph = new ChronoGraph(eventBus);
 					DataLoader.EgoFacebook("d:\\dataset", newGraph, "hasFriend");
 					synchronized (graph) {
 						graph = newGraph;
@@ -551,7 +556,7 @@ public class SubscriptionRouter extends BaseRouter {
 				}
 			} else if (dataset.equals("EUEmailCommunicationNetwork")) {
 				try {
-					ChronoGraph newGraph = new ChronoGraph();
+					ChronoGraph newGraph = new ChronoGraph(eventBus);
 					DataLoader.EUEmailCommunicationNetwork("d:\\dataset", newGraph, "sendEmail");
 					synchronized (graph) {
 						graph = newGraph;
@@ -564,7 +569,7 @@ public class SubscriptionRouter extends BaseRouter {
 				}
 			} else if (dataset.equals("sx-mathoverflow")) {
 				try {
-					ChronoGraph newGraph = new ChronoGraph();
+					ChronoGraph newGraph = new ChronoGraph(eventBus);
 					DataLoader.SxMathOverflow("c:\\dataset", newGraph, "c");
 					synchronized (graph) {
 						graph = newGraph;

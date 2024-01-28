@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.dfpl.chronograph.chronoweb.router.memory.ManipulationRouter;
+import org.dfpl.chronograph.chronoweb.router.memory.SubscriptionRouter;
 import org.dfpl.chronograph.kairos.KairosEngine;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 
@@ -47,7 +48,6 @@ public class Server extends AbstractVerticle {
 	public static Logger logger;
 	public static int port = 80;
 	private ChronoGraph graph;
-	@SuppressWarnings("unused")
 	private KairosEngine kairos;
 	private EventBus eventBus;
 	private Router router;
@@ -57,10 +57,12 @@ public class Server extends AbstractVerticle {
 	public static Pattern vtPattern = Pattern.compile("^[^|_]+_[0-9]+$");
 	public static Pattern etPattern = Pattern.compile("^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$");
 
-	public static List<String> datasetList = List.of("EgoFacebook", "EUEmailCommunicationNetwork", "sx-mathoverflow");
+	public static List<String> datasetList = List.of("EgoFacebook", "EUEmailCommunicationNetwork", "sx-mathoverflow",
+			"tcp_sample");
 
 	private ManipulationRouter manipulationRouter;
-	
+	private SubscriptionRouter subscriptionRouter;
+
 	public static String baseDirectory = "d:\\kairos";
 
 	@Override
@@ -71,11 +73,12 @@ public class Server extends AbstractVerticle {
 		this.router = Router.router(vertx);
 		router.route().handler(BodyHandler.create());
 
-		graph = new ChronoGraph();
+		graph = new ChronoGraph(eventBus);
 		this.eventBus = vertx.eventBus();
 		kairos = new KairosEngine(graph, eventBus);
 
 		registerManipulationRouter();
+		registerSubscriptionRouter();
 
 		server.requestHandler(router).listen(80);
 		logger.info(
@@ -99,9 +102,10 @@ public class Server extends AbstractVerticle {
 		manipulationRouter.registerLoadDatasetRouter(router, eventBus);
 
 	}
-	
+
 	public void registerSubscriptionRouter() {
-		
+		subscriptionRouter = new SubscriptionRouter(graph, kairos);
+		subscriptionRouter.registerSubscribeVertexEventRouter(router, eventBus);
 	}
 
 	public static void setLogger() {

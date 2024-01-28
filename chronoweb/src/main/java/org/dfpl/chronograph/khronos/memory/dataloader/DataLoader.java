@@ -86,4 +86,22 @@ public class DataLoader {
 		Server.logger.debug("[sx-mathoverflow] read lines " + cnt + " completed ");
 		r.close();
 	}
+	
+	public static void tcpSample(String baseURL, Graph graph, String label) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(baseURL + "\\temporal\\tcp_sample.txt"));
+
+		int cnt = 0;
+		while (true) {
+			String line = r.readLine();
+			if (line == null)
+				break;
+			String[] arr = line.split("\\t");
+			Edge e = graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[1]), label);
+			e.addEvent(Long.parseLong(arr[2]));
+			if (++cnt % 1000 == 0)
+				Server.logger.debug("[tcp_sample] read lines " + cnt + " ... ");
+		}
+		Server.logger.debug("[tcp_sample] read lines " + cnt + " completed ");
+		r.close();
+	}
 }

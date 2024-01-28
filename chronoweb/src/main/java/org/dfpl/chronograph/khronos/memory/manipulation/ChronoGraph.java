@@ -4,7 +4,11 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.dfpl.chronograph.common.EdgeEvent;
+
 import com.tinkerpop.blueprints.*;
+
+import io.vertx.core.eventbus.EventBus;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -54,14 +58,28 @@ public class ChronoGraph implements Graph {
 	 */
 	private HashMap<String, HashSet<Edge>> inEdges;
 
-	/**
-	 * Create an empty graph
-	 */
+	private EventBus eventBus;
+
+	public EventBus getEventBus() {
+		return eventBus;
+	}
+
 	public ChronoGraph() {
 		vertices = new HashMap<String, Vertex>();
 		edges = new HashMap<String, Edge>();
 		outEdges = new HashMap<String, HashSet<Edge>>();
 		inEdges = new HashMap<String, HashSet<Edge>>();
+	}
+
+	/**
+	 * Create an empty graph
+	 */
+	public ChronoGraph(EventBus eventBus) {
+		vertices = new HashMap<String, Vertex>();
+		edges = new HashMap<String, Edge>();
+		outEdges = new HashMap<String, HashSet<Edge>>();
+		inEdges = new HashMap<String, HashSet<Edge>>();
+		this.eventBus = eventBus;
 	}
 
 	/**
@@ -77,8 +95,12 @@ public class ChronoGraph implements Graph {
 		if (id.contains("|"))
 			throw new IllegalArgumentException("Vertex ID cannot contains '|'");
 		return vertices.compute(id, (String identifier, Vertex existingVertex) -> {
-			if (existingVertex == null)
-				return new ChronoVertex(ChronoGraph.this, identifier);
+			if (existingVertex == null) {
+				Vertex v = new ChronoVertex(ChronoGraph.this, identifier);
+				if (eventBus != null)
+					eventBus.send("addVertex", v.getId());
+				return v;
+			}
 			return existingVertex;
 		});
 	}
@@ -165,6 +187,8 @@ public class ChronoGraph implements Graph {
 			inEdges.add(edge);
 			return inEdges;
 		});
+		if (eventBus != null)
+			eventBus.send("addEdge", edge.getId());
 
 		return edge;
 	}
@@ -303,6 +327,21 @@ public class ChronoGraph implements Graph {
 		edges.clear();
 		outEdges.clear();
 		inEdges.clear();
+	}
+
+	public Iterator<Entry<Long, HashSet<EdgeEvent>>> getEdgeEventIterator() {
+		TreeMap<Long, HashSet<EdgeEvent>> eventMap = new TreeMap<Long, HashSet<EdgeEvent>>();
+		getEdges().parallelStream().flatMap(e -> e.getEvents().parallelStream()).forEach(ee -> {
+			Long t = ee.getTime();
+			if (eventMap.containsKey(t)) {
+				eventMap.get(t).add(ee);
+			} else {
+				HashSet<EdgeEvent> newSet = new HashSet<EdgeEvent>();
+				newSet.add(ee);
+				eventMap.put(t, newSet);
+			}
+		});
+		return eventMap.entrySet().iterator();
 	}
 
 	/**
