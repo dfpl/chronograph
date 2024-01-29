@@ -3,6 +3,7 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.dfpl.chronograph.common.EdgeEvent;
 
@@ -331,7 +332,11 @@ public class ChronoGraph implements Graph {
 
 	public Iterator<Entry<Long, HashSet<EdgeEvent>>> getEdgeEventIterator() {
 		TreeMap<Long, HashSet<EdgeEvent>> eventMap = new TreeMap<Long, HashSet<EdgeEvent>>();
-		getEdges().parallelStream().flatMap(e -> e.getEvents().parallelStream()).forEach(ee -> {
+		Collection<Edge> edges = getEdges();
+		edges.parallelStream().flatMap(e -> {
+			Stream<EdgeEvent> stream = e.getEvents().parallelStream();
+			return stream;
+		}).forEach(ee -> {
 			Long t = ee.getTime();
 			if (eventMap.containsKey(t)) {
 				eventMap.get(t).add(ee);

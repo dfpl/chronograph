@@ -8,10 +8,13 @@ import java.nio.file.NotDirectoryException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaElement;
@@ -85,8 +88,29 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		}
 	}
 
+	public void addSource(K source, GammaElement<E> element) {
+		gammaWriteLock.lock();
+		int fromIdx = getID(source);
+		RandomAccessFile gamma = gammaMap.get(fromIdx);
+		if (gamma != null) {
+			gammaWriteLock.unlock();
+			return;
+		}
+
+		try {
+			gamma = new RandomAccessFile(directory.getAbsolutePath() + "\\" + fromIdx, "rws");
+			byte[] fill = new byte[capacity * elementByteSize];
+			Arrays.fill(fill, gammaElementConverter.getDefaultByteValue());
+			gamma.write(fill);
+			gammaMap.put(fromIdx, gamma);
+		} catch (Exception e) {
+
+		}
+		gammaWriteLock.unlock();
+	}
+
 	@Override
-	public synchronized void set(K from, K to, GammaElement<E> element) {
+	public void set(K from, K to, GammaElement<E> element) {
 
 		gammaWriteLock.lock();
 		int fromIdx = getID(from);
@@ -175,27 +199,95 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 	}
 
 	@Override
-	public void setIfExists(K ifExists, K set, GammaElement<E> newElement, BiPredicate<E, E> setNew) {
-		Integer ifExistsIdx = idToIdx.get(ifExists);
-		Integer setIdx = idToIdx.get(set);
-		long ifExistsPos = getSeekPos(ifExistsIdx);
-		long setPos = getSeekPos(setIdx);
-		if (ifExistsIdx == null || setIdx == null) {
-			throw new NullPointerException();
-		}
+	public void update(K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate) {
+
+		gammaWriteLock.lock();
+		int checkIdx = getID(check);
+		int updateIdx = getID(update);
+		long checkPos = getSeekPos(checkIdx);
+		long updatePos = getSeekPos(updateIdx);
 		gammaMap.values().forEach(gamma -> {
 			try {
-				E exists = getElement(ifExistsPos, gamma);
-				if (!exists.equals(gammaElementConverter.getDefaultValue())) {
-					if (setNew.test(getElement(setPos, gamma), newElement.getElement())) {
-						setElement(setPos, gamma, newElement);
-					}
+				E checkValue = getElement(checkPos, gamma);
+				if (!testCheck.test(checkValue))
+					return;
+
+				if (testUpdate.test(getElement(updatePos, gamma), newValue.getElement())) {
+					setElement(updatePos, gamma, newValue);
 				}
 			} catch (IOException e) {
 
 				e.printStackTrace();
 			}
 		});
+		gammaWriteLock.unlock();
+	}
+
+	@Override
+	public void update(Set<K> sources, K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate) {
+
+		gammaWriteLock.lock();
+		int checkIdx = getID(check);
+		int updateIdx = getID(update);
+		long checkPos = getSeekPos(checkIdx);
+		long updatePos = getSeekPos(updateIdx);
+
+		Set<Integer> sourceIdxes = sources.parallelStream().map(s -> {
+			return idToIdx.get(s);
+		}).filter(s -> s != null).collect(Collectors.toSet());
+
+		gammaMap.entrySet().parallelStream().map(entry -> {
+			Integer key = entry.getKey();
+			if (sourceIdxes.contains(key)) {
+				return entry.getValue();
+			} else
+				return null;
+		}).filter(g -> g != null).forEach(gamma -> {
+			try {
+				E checkValue = getElement(checkPos, gamma);
+				if (!testCheck.test(checkValue))
+					return;
+
+				if (testUpdate.test(getElement(updatePos, gamma), newValue.getElement())) {
+					setElement(updatePos, gamma, newValue);
+				}
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+		});
+
+		gammaMap.values().forEach(gamma -> {
+			try {
+				E checkValue = getElement(checkPos, gamma);
+				if (!testCheck.test(checkValue))
+					return;
+
+				if (testUpdate.test(getElement(updatePos, gamma), newValue.getElement())) {
+					setElement(updatePos, gamma, newValue);
+				}
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+		});
+		gammaWriteLock.unlock();
+	}
+
+	@Override
+	public Set<K> getSources() {
+		return gammaMap.keySet().parallelStream().map(idx -> {
+			return idList.get(idx);
+		}).collect(Collectors.toSet());
+	}
+
+	@Override
+	public void print() {
+		for (K s : getSources()) {
+			System.out.println(s + " -> " + getGamma(s).toList(true));
+		}
 	}
 
 }

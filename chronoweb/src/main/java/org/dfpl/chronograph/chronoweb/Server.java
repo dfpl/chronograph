@@ -73,8 +73,9 @@ public class Server extends AbstractVerticle {
 		this.router = Router.router(vertx);
 		router.route().handler(BodyHandler.create());
 
-		graph = new ChronoGraph(eventBus);
+
 		this.eventBus = vertx.eventBus();
+		graph = new ChronoGraph(eventBus);
 		kairos = new KairosEngine(graph, eventBus);
 
 		registerManipulationRouter();

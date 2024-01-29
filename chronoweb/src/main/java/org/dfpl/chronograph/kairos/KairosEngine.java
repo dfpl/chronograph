@@ -3,11 +3,15 @@ package org.dfpl.chronograph.kairos;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.dfpl.chronograph.chronoweb.Server;
+import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
 
 import io.vertx.core.eventbus.EventBus;
 
@@ -41,17 +45,19 @@ public class KairosEngine {
 
 		this.mainEventBus.consumer("addVertexEvent", ve -> {
 			Server.logger.debug("kairos addVertexEvent: " + ve.body());
-
-			kairosPrograms.forEach((start, programs) -> {
-				programs.forEach(program -> {
-					//
-				});
-			});
-
 		});
 
 		this.mainEventBus.consumer("addEdgeEvent", ee -> {
 			Server.logger.debug("kairos addEdgeEvent: " + ee.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String eeString = ee.body().toString();
+					String[] arr = eeString.split("_");
+					Edge e = graph.getEdge(arr[0]);
+					EdgeEvent edgeEvent = e.getEvent(Long.parseLong(arr[1]));
+					program.onAddEdgeEvent(edgeEvent);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("removeVertexEvent", ve -> {
@@ -68,7 +74,19 @@ public class KairosEngine {
 
 	}
 
-	public void addSubscriptionBase(Long startTime, AbstractKairosProgram<?> program) {
+	public AbstractKairosProgram<?> getProgram(Long startTime, String name) {
+		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
+		if (programs == null)
+			return null;
+		for (AbstractKairosProgram<?> program : programs) {
+			if (program.getName().equals(name)) {
+				return program;
+			}
+		}
+		return null;
+	}
+
+	public void addSubscription(Vertex source, Long startTime, AbstractKairosProgram<?> program) {
 		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
 		if (programs == null) {
 			programs = new HashSet<AbstractKairosProgram<?>>();
@@ -77,7 +95,7 @@ public class KairosEngine {
 		} else {
 			programs.add(program);
 		}
-		program.onInitialization();
+		program.onInitialization(Set.of(source));
 	}
 
 }

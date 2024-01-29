@@ -1,11 +1,13 @@
 package org.dfpl.chronograph.kairos;
 
+import java.util.Set;
+
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
 
-@SuppressWarnings("rawtypes")
 public abstract class AbstractKairosProgram<E> {
 	protected Graph graph;
 	protected GammaTable<String, E> gammaTable;
@@ -25,15 +27,16 @@ public abstract class AbstractKairosProgram<E> {
 		this.graph = graph;
 	}
 
-	public GammaTable getGammaTable() {
-		return gammaTable;
+	@SuppressWarnings("unchecked")
+	public <T> GammaTable<String, T> getGammaTable() {
+		return (GammaTable<String, T>) gammaTable;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public abstract void onInitialization();
+	public abstract void onInitialization(Set<Vertex> sources);
 
 	public abstract void onAddEdgeEvent(EdgeEvent newEvent);
 

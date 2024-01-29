@@ -1,5 +1,7 @@
 package org.dfpl.chronograph.kairos.gamma;
 
+import java.nio.ByteBuffer;
+
 import org.junit.*;
 
 public class BitTest {
@@ -21,9 +23,18 @@ public class BitTest {
 	public void tearDown() {
 	}
 
-	@Test
 	public void baseTest() {
 		int b = 0b11111111111111111111111111111111;
 		System.out.println(b);
+	}
+	
+	@Test
+	public void longTest() {
+		byte[] bytes = new byte[16];
+		for(int i = 0 ; i < bytes.length ; i++) {
+			bytes[i] = Byte.MAX_VALUE;
+		}
+		long ttt =  ByteBuffer.wrap(bytes).getLong();
+		System.out.println(ttt);
 	}
 }

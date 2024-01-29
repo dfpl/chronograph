@@ -9,7 +9,6 @@ import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdge;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoEdgeEvent;
-import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
 import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertexEvent;
 
@@ -570,10 +569,8 @@ public class ManipulationRouter extends BaseRouter {
 			String dataset = routingContext.pathParam("dataset");
 			if (dataset.equals("EgoFacebook")) {
 				try {
-					ChronoGraph newGraph = new ChronoGraph(eventBus);
-					DataLoader.EgoFacebook("d:\\dataset", newGraph, "hasFriend");
 					synchronized (graph) {
-						graph = newGraph;
+						DataLoader.EgoFacebook("d:\\dataset", graph, "hasFriend");
 					}
 					sendResult(routingContext, 200);
 					return;
@@ -583,10 +580,8 @@ public class ManipulationRouter extends BaseRouter {
 				}
 			} else if (dataset.equals("EUEmailCommunicationNetwork")) {
 				try {
-					ChronoGraph newGraph = new ChronoGraph(eventBus);
-					DataLoader.EUEmailCommunicationNetwork("d:\\dataset", newGraph, "sendEmail");
 					synchronized (graph) {
-						graph = newGraph;
+						DataLoader.EUEmailCommunicationNetwork("d:\\dataset", graph, "sendEmail");
 					}
 					sendResult(routingContext, 200);
 					return;
@@ -596,10 +591,8 @@ public class ManipulationRouter extends BaseRouter {
 				}
 			} else if (dataset.equals("sx-mathoverflow")) {
 				try {
-					ChronoGraph newGraph = new ChronoGraph(eventBus);
-					DataLoader.SxMathOverflow("d:\\dataset", newGraph, "c");
 					synchronized (graph) {
-						graph = newGraph;
+						DataLoader.SxMathOverflow("d:\\dataset", graph, "c");
 					}
 					sendResult(routingContext, 200);
 					return;
@@ -609,10 +602,8 @@ public class ManipulationRouter extends BaseRouter {
 				}
 			} else if (dataset.equals("tcp_sample")) {
 				try {
-					ChronoGraph newGraph = new ChronoGraph(eventBus);
-					DataLoader.tcpSample("d:\\dataset", newGraph, "c");
 					synchronized (graph) {
-						graph = newGraph;
+						DataLoader.tcpSample("d:\\dataset", graph, "c");
 					}
 					sendResult(routingContext, 200);
 					return;

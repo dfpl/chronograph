@@ -1,6 +1,7 @@
 package org.dfpl.chronograph.kairos.gamma;
 
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import org.dfpl.chronograph.kairos.gamma.persistent.BooleanGammaElement;
 import org.dfpl.chronograph.kairos.gamma.persistent.DoubleGammaElement;
@@ -12,6 +13,17 @@ public class SparseGammaTableTCPTest {
 	SparseGammaTable<String, Integer> gammaTable;
 	SparseGammaTable<String, Double> gammaDTable;
 	SparseGammaTable<String, Boolean> gammaBTable;
+
+	BiPredicate<Double, Double> predicate = new BiPredicate<Double, Double>() {
+
+		@Override
+		public boolean test(Double t, Double u) {
+			if (u < t)
+				return true;
+
+			return false;
+		}
+	};
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -33,9 +45,19 @@ public class SparseGammaTableTCPTest {
 
 	}
 
+
 	public void baseTest() {
 
-		BiPredicate<Integer, Integer> predicate = new BiPredicate<Integer, Integer>() {
+		Predicate<Integer> predicate = new Predicate<Integer>() {
+			@Override
+			public boolean test(Integer t) {
+				if (t.intValue() == 2139062143)
+					return false;
+				return true;
+			}
+		};
+
+		BiPredicate<Integer, Integer> biPredicate = new BiPredicate<Integer, Integer>() {
 
 			@Override
 			public boolean test(Integer t, Integer u) {
@@ -52,13 +74,13 @@ public class SparseGammaTableTCPTest {
 		gammaTable.set("4", "4", new IntegerGammaElement(3));
 		gammaTable.set("5", "5", new IntegerGammaElement(3));
 
-		gammaTable.setIfExists("1", "4", new IntegerGammaElement(5), predicate);
-		gammaTable.setIfExists("2", "3", new IntegerGammaElement(8), predicate);
-		gammaTable.setIfExists("1", "2", new IntegerGammaElement(10), predicate);
-		gammaTable.setIfExists("4", "2", new IntegerGammaElement(12), predicate);
-		gammaTable.setIfExists("4", "3", new IntegerGammaElement(13), predicate);
-		gammaTable.setIfExists("3", "5", new IntegerGammaElement(14), predicate);
-		gammaTable.setIfExists("2", "3", new IntegerGammaElement(16), predicate);
+		gammaTable.update("1", predicate, "4", new IntegerGammaElement(5), biPredicate);
+		gammaTable.update("2", predicate, "3", new IntegerGammaElement(8), biPredicate);
+		gammaTable.update("1", predicate, "2", new IntegerGammaElement(10), biPredicate);
+		gammaTable.update("4", predicate, "2", new IntegerGammaElement(12), biPredicate);
+		gammaTable.update("4", predicate, "3", new IntegerGammaElement(13), biPredicate);
+		gammaTable.update("3", predicate, "5", new IntegerGammaElement(14), biPredicate);
+		gammaTable.update("2", predicate, "3", new IntegerGammaElement(16), biPredicate);
 
 		for (int i = 1; i <= 5; i++) {
 			System.out.println(gammaTable.getGamma(String.valueOf(i)).toList(true));
@@ -67,9 +89,19 @@ public class SparseGammaTableTCPTest {
 		gammaTable.clear();
 	}
 
+
 	public void baseDoubleTest() {
 
-		BiPredicate<Double, Double> predicate = new BiPredicate<Double, Double>() {
+		Predicate<Double> predicate = new Predicate<Double>() {
+			@Override
+			public boolean test(Double t) {
+				if (t.doubleValue() == 1.3824172084878715E306)
+					return false;
+				return true;
+			}
+		};
+
+		BiPredicate<Double, Double> biPredicate = new BiPredicate<Double, Double>() {
 
 			@Override
 			public boolean test(Double t, Double u) {
@@ -86,13 +118,13 @@ public class SparseGammaTableTCPTest {
 		gammaDTable.set("4", "4", new DoubleGammaElement(3d));
 		gammaDTable.set("5", "5", new DoubleGammaElement(3d));
 
-		gammaDTable.setIfExists("1", "4", new DoubleGammaElement(5d), predicate);
-		gammaDTable.setIfExists("2", "3", new DoubleGammaElement(8d), predicate);
-		gammaDTable.setIfExists("1", "2", new DoubleGammaElement(10d), predicate);
-		gammaDTable.setIfExists("4", "2", new DoubleGammaElement(12d), predicate);
-		gammaDTable.setIfExists("4", "3", new DoubleGammaElement(13d), predicate);
-		gammaDTable.setIfExists("3", "5", new DoubleGammaElement(14d), predicate);
-		gammaDTable.setIfExists("2", "3", new DoubleGammaElement(16d), predicate);
+		gammaDTable.update("1", predicate, "4", new DoubleGammaElement(5d), biPredicate);
+		gammaDTable.update("2", predicate, "3", new DoubleGammaElement(8d), biPredicate);
+		gammaDTable.update("1", predicate, "2", new DoubleGammaElement(10d), biPredicate);
+		gammaDTable.update("4", predicate, "2", new DoubleGammaElement(12d), biPredicate);
+		gammaDTable.update("4", predicate, "3", new DoubleGammaElement(13d), biPredicate);
+		gammaDTable.update("3", predicate, "5", new DoubleGammaElement(14d), biPredicate);
+		gammaDTable.update("2", predicate, "3", new DoubleGammaElement(16d), biPredicate);
 
 		for (int i = 1; i <= 5; i++) {
 			System.out.println(gammaDTable.getGamma(String.valueOf(i)).toList(true));
@@ -100,14 +132,22 @@ public class SparseGammaTableTCPTest {
 
 		gammaDTable.clear();
 	}
-	
+
+	@Test
 	public void baseBooleanTest() {
 
-		BiPredicate<Boolean, Boolean> predicate = new BiPredicate<Boolean, Boolean>() {
+		Predicate<Boolean> predicate = new Predicate<Boolean>() {
+			@Override
+			public boolean test(Boolean t) {
+				return t.booleanValue();
+			}
+		};
+
+		BiPredicate<Boolean, Boolean> biPredicate = new BiPredicate<Boolean, Boolean>() {
 
 			@Override
 			public boolean test(Boolean t, Boolean u) {
-				if(t == false && u == true)
+				if (t == false && u == true)
 					return true;
 				return false;
 			}
@@ -119,13 +159,13 @@ public class SparseGammaTableTCPTest {
 		gammaBTable.set("4", "4", new BooleanGammaElement(true));
 		gammaBTable.set("5", "5", new BooleanGammaElement(true));
 
-		gammaBTable.setIfExists("1", "4", new BooleanGammaElement(true), predicate);
-		gammaBTable.setIfExists("2", "3", new BooleanGammaElement(true), predicate);
-		gammaBTable.setIfExists("1", "2", new BooleanGammaElement(true), predicate);
-		gammaBTable.setIfExists("4", "2", new BooleanGammaElement(true), predicate);
-		gammaBTable.setIfExists("4", "3", new BooleanGammaElement(true), predicate);
-		gammaBTable.setIfExists("3", "5", new BooleanGammaElement(true), predicate);
-		gammaBTable.setIfExists("2", "3", new BooleanGammaElement(true), predicate);
+		gammaBTable.update("1", predicate, "4", new BooleanGammaElement(true), biPredicate);
+		gammaBTable.update("2", predicate, "3", new BooleanGammaElement(true), biPredicate);
+		gammaBTable.update("1", predicate, "2", new BooleanGammaElement(true), biPredicate);
+		gammaBTable.update("4", predicate, "2", new BooleanGammaElement(true), biPredicate);
+		gammaBTable.update("4", predicate, "3", new BooleanGammaElement(true), biPredicate);
+		gammaBTable.update("3", predicate, "5", new BooleanGammaElement(true), biPredicate);
+		gammaBTable.update("2", predicate, "3", new BooleanGammaElement(true), biPredicate);
 
 		for (int i = 1; i <= 5; i++) {
 			System.out.println(gammaBTable.getGamma(String.valueOf(i)).toList(false));
