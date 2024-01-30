@@ -3,10 +3,12 @@ package org.dfpl.chronograph.kairos;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.EdgeEvent;
+import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
 import com.tinkerpop.blueprints.Edge;
@@ -72,6 +74,20 @@ public class KairosEngine {
 			Server.logger.debug("kairos cleared");
 		});
 
+	}
+
+	public Set<VertexEvent> getSources() {
+		HashSet<VertexEvent> set = new HashSet<VertexEvent>();
+
+		for (Entry<Long, HashSet<AbstractKairosProgram<?>>> entry : kairosPrograms.entrySet()) {
+			Long t = entry.getKey();
+			for (AbstractKairosProgram<?> program : entry.getValue()) {
+				for (String s : program.gammaTable.getSources()) {
+					set.add(graph.getVertex(s).getEvent(t));
+				}
+			}
+		}
+		return set;
 	}
 
 	public AbstractKairosProgram<?> getProgram(Long startTime, String name) {
