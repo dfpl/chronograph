@@ -2,8 +2,8 @@ package org.dfpl.chronograph.kairos.gamma.persistent;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaElement;
@@ -45,20 +45,17 @@ public class SparseGamma<K, E> implements Gamma<K, E> {
 	}
 
 	@Override
-	public List<E> toList(boolean setDefaultToNull) {
-		List<E> list = new ArrayList<E>();
+	public Map<K, E> toMap(boolean setDefaultToNull) {
+		Map<K, E> result = new HashMap<K, E>();
 		try {
 			for (int i = 0; i < gammaTable.cnt; i++) {
 				E elem = gammaTable.getElement(i * gammaTable.elementByteSize, gamma);
-
-				if (setDefaultToNull && elem.equals(gammaTable.gammaElementConverter.getDefaultValue()))
-					list.add(null);
-				else
-					list.add(elem);
+				K key = gammaTable.idList.get(i);
+				result.put(key, elem);
 			}
 		} catch (Exception e) {
 			return null;
 		}
-		return list;
+		return result;
 	}
 }

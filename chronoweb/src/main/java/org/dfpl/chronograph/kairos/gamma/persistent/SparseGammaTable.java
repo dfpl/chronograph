@@ -24,7 +24,7 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 
 	private HashMap<Integer, RandomAccessFile> gammaMap;
 	HashMap<K, Integer> idToIdx = new HashMap<K, Integer>();
-	private ArrayList<K> idList = new ArrayList<K>();
+	ArrayList<K> idList = new ArrayList<K>();
 	int cnt = 0;
 	int elementByteSize;
 	GammaElement<E> gammaElementConverter;
@@ -286,7 +286,7 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 	@Override
 	public void print() {
 		for (K s : getSources()) {
-			System.out.println(s + " -> " + getGamma(s).toList(true));
+			System.out.println(s + " -> " + getGamma(s).toMap(true));
 		}
 	}
 

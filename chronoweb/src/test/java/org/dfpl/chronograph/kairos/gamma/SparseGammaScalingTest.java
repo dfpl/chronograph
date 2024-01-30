@@ -36,7 +36,7 @@ public class SparseGammaScalingTest {
 			gammaTable.set(String.valueOf(i), String.valueOf(i), new IntegerGammaElement(3));
 
 			for (int j = 0; j <= i; j++) {
-				System.out.println(gammaTable.getGamma(String.valueOf(j)).toList(true));
+				System.out.println(gammaTable.getGamma(String.valueOf(j)).toMap(true));
 			}
 
 		}
@@ -49,7 +49,7 @@ public class SparseGammaScalingTest {
 			gammaDTable.set(String.valueOf(i), String.valueOf(i), new DoubleGammaElement(3d));
 
 			for (int j = 0; j <= i; j++) {
-				System.out.println(gammaDTable.getGamma(String.valueOf(j)).toList(true));
+				System.out.println(gammaDTable.getGamma(String.valueOf(j)).toMap(true));
 			}
 
 		}
@@ -61,7 +61,7 @@ public class SparseGammaScalingTest {
 			gammaBTable.set(String.valueOf(i), String.valueOf(i), new BooleanGammaElement(true));
 
 			for (int j = 0; j <= i; j++) {
-				System.out.println(gammaBTable.getGamma(String.valueOf(j)).toList(false));
+				System.out.println(gammaBTable.getGamma(String.valueOf(j)).toMap(false));
 			}
 
 		}

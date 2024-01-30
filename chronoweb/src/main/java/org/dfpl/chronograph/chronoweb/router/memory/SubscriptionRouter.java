@@ -3,6 +3,7 @@ package org.dfpl.chronograph.chronoweb.router.memory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dfpl.chronograph.chronoweb.Server;
@@ -19,6 +20,7 @@ import com.tinkerpop.blueprints.Graph;
 
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import static org.dfpl.chronograph.chronoweb.Server.*;
 
@@ -109,6 +111,55 @@ public class SubscriptionRouter extends BaseRouter {
 		});
 
 		Server.logger.info("POST /chronoweb/subscribe/:resource router added");
+	}
+
+	public void registerGetGammaRouter(Router router, EventBus eventBus) {
+
+		router.get("/chronoweb/subscribe/:resource").handler(routingContext -> {
+
+			// source
+			// recipe
+			// gamma
+
+			String resource = routingContext.pathParam("resource");
+			String recipeParameter = getStringURLParameter(routingContext, "recipe");
+
+			if (recipeParameter == null) {
+				sendResult(routingContext, 406);
+				return;
+			}
+
+			JsonObject result = new JsonObject();
+
+			if (vtPattern.matcher(resource).matches()) {
+				try {
+					String[] arr = resource.split("\\_");
+					String vertexID = arr[0];
+					long time = Long.parseLong(arr[1]);
+					result.put("source", vertexID + "_" + time);
+					result.put("recipe", recipeParameter);
+
+					JsonObject gamma = new JsonObject();
+
+					for (Entry<String, Object> entry : kairos.getProgram(time, recipeParameter).getGammaTable()
+							.getGamma(vertexID).toMap(true).entrySet()) {
+						gamma.put(entry.getKey(), entry.getValue());
+					}
+
+					result.put("gamma", gamma);
+					sendResult(routingContext, "application/json", result.toString(), 200);
+				} catch (Exception e) {
+					sendResult(routingContext, 406);
+					return;
+				}
+			} else {
+				sendResult(routingContext, 406);
+				return;
+			}
+
+		});
+
+		Server.logger.info("GET /chronoweb/subscribe/:resource router added");
 	}
 
 }

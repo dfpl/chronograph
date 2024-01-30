@@ -101,6 +101,10 @@ public class KairosEngine {
 		}
 		return null;
 	}
+	
+	public Set<AbstractKairosProgram<?>> getPrograms(Long startTime) {
+		return kairosPrograms.get(startTime);
+	}
 
 	public void addSubscription(Vertex source, Long startTime, AbstractKairosProgram<?> program) {
 		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);

@@ -83,7 +83,7 @@ public class SparseGammaTableTCPTest {
 		gammaTable.update("2", predicate, "3", new IntegerGammaElement(16), biPredicate);
 
 		for (int i = 1; i <= 5; i++) {
-			System.out.println(gammaTable.getGamma(String.valueOf(i)).toList(true));
+			System.out.println(gammaTable.getGamma(String.valueOf(i)).toMap(true));
 		}
 
 		gammaTable.clear();
@@ -127,7 +127,7 @@ public class SparseGammaTableTCPTest {
 		gammaDTable.update("2", predicate, "3", new DoubleGammaElement(16d), biPredicate);
 
 		for (int i = 1; i <= 5; i++) {
-			System.out.println(gammaDTable.getGamma(String.valueOf(i)).toList(true));
+			System.out.println(gammaDTable.getGamma(String.valueOf(i)).toMap(true));
 		}
 
 		gammaDTable.clear();
@@ -168,7 +168,7 @@ public class SparseGammaTableTCPTest {
 		gammaBTable.update("2", predicate, "3", new BooleanGammaElement(true), biPredicate);
 
 		for (int i = 1; i <= 5; i++) {
-			System.out.println(gammaBTable.getGamma(String.valueOf(i)).toList(false));
+			System.out.println(gammaBTable.getGamma(String.valueOf(i)).toMap(false));
 		}
 
 		gammaBTable.clear();
