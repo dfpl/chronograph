@@ -567,12 +567,24 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerLoadDatasetRouter(Router router, EventBus eventBus) {
-		router.post("/chronoweb/datasets/:dataset").handler(routingContext -> {
-			String dataset = routingContext.pathParam("dataset");
-			if (dataset.equals("EgoFacebook")) {
+		router.post("/chronoweb/datasets").handler(routingContext -> {
+			String label = getStringURLParameter(routingContext, "label");
+			if (label == null) {
+				sendResult(routingContext, 406);
+				return;
+			}
+
+			List<FileUpload> files = routingContext.fileUploads();
+			if (files == null || files.isEmpty()) {
+				sendResult(routingContext, 406);
+				return;
+			}
+			FileUpload file = files.get(0);
+			String fileName = file.name();
+			if (fileName.equals("facebook_combined")) {
 				try {
 					synchronized (graph) {
-						DataLoader.EgoFacebook("d:\\dataset", graph, "hasFriend");
+						DataLoader.EgoFacebook(file, graph, label);
 					}
 					sendResult(routingContext, 200);
 					return;
@@ -580,10 +592,10 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, 500);
 					return;
 				}
-			} else if (dataset.equals("EUEmailCommunicationNetwork")) {
+			} else if (fileName.equals("Email-EuAll")) {
 				try {
 					synchronized (graph) {
-						DataLoader.EUEmailCommunicationNetwork("d:\\dataset", graph, "sendEmail");
+						DataLoader.EUEmailCommunicationNetwork(file, graph, label);
 					}
 					sendResult(routingContext, 200);
 					return;
@@ -591,10 +603,10 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, 500);
 					return;
 				}
-			} else if (dataset.equals("sx-mathoverflow")) {
+			} else if (fileName.equals("sx-mathoverflow")) {
 				try {
 					synchronized (graph) {
-						DataLoader.SxMathOverflow("d:\\dataset", graph, "c");
+						DataLoader.SxMathOverflow(file, graph, label);
 					}
 					sendResult(routingContext, 200);
 					return;
@@ -602,10 +614,10 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, 500);
 					return;
 				}
-			} else if (dataset.equals("tcp_sample")) {
+			} else if (fileName.equals("tcp_sample")) {
 				try {
 					synchronized (graph) {
-						DataLoader.tcpSample("d:\\dataset", graph, "c");
+						DataLoader.tcpSample(file, graph, label);
 					}
 					sendResult(routingContext, 200);
 					return;
@@ -618,24 +630,7 @@ public class ManipulationRouter extends BaseRouter {
 				return;
 			}
 		});
-		
-		router.post("/chronoweb/datasets").handler(routingContext -> {
-			String label = routingContext.request().params().get("label");
-			
-			for(FileUpload fileUpload: routingContext.fileUploads()) {
-				try {
-					synchronized(graph) {
-						DataLoader.upload(fileUpload, graph, label);
-					}
-					sendResult(routingContext, 200);
-					return;
-				} catch (IOException e) {
-					sendResult(routingContext, 500);
-					return;
-				}				
-			}
-		});
 
-		Server.logger.info("POST /chronoweb/datasets/:dataset router added");
+		Server.logger.info("POST /chronoweb/datasets router added");
 	}
 }

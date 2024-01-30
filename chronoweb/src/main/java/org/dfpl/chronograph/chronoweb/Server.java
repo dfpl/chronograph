@@ -57,7 +57,7 @@ public class Server extends AbstractVerticle {
 	public static Pattern vtPattern = Pattern.compile("^[^|_]+_[0-9]+$");
 	public static Pattern etPattern = Pattern.compile("^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$");
 
-	public static List<String> datasetList = List.of("EgoFacebook", "EUEmailCommunicationNetwork", "sx-mathoverflow",
+	public static List<String> datasetList = List.of("facebook_combined", "Email-EuAll", "sx-mathoverflow",
 			"tcp_sample");
 
 	private ManipulationRouter manipulationRouter;
@@ -71,7 +71,8 @@ public class Server extends AbstractVerticle {
 
 		final HttpServer server = vertx.createHttpServer();
 		this.router = Router.router(vertx);
-		router.route().handler(BodyHandler.create().setBodyLimit(BodyHandler.DEFAULT_BODY_LIMIT*2).setDeleteUploadedFilesOnEnd(true));
+		router.route().handler(BodyHandler.create().setBodyLimit(BodyHandler.DEFAULT_BODY_LIMIT * 2)
+				.setDeleteUploadedFilesOnEnd(true));
 
 		this.eventBus = vertx.eventBus();
 		graph = new ChronoGraph(eventBus);

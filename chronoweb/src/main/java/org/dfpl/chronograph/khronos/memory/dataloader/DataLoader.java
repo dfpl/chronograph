@@ -34,8 +34,8 @@ import io.vertx.ext.web.FileUpload;
  * 
  */
 public class DataLoader {
-	public static void EgoFacebook(String baseURL, Graph graph, String label) throws IOException {
-		BufferedReader r = new BufferedReader(new FileReader(baseURL + "\\static\\facebook_combined.txt"));
+	public static void EgoFacebook(FileUpload file, Graph graph, String label) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));
 
 		int cnt = 0;
 		while (true) {
@@ -52,8 +52,8 @@ public class DataLoader {
 		r.close();
 	}
 
-	public static void EUEmailCommunicationNetwork(String baseURL, Graph graph, String label) throws IOException {
-		BufferedReader r = new BufferedReader(new FileReader(baseURL + "\\static\\Email-EuAll.txt"));
+	public static void EUEmailCommunicationNetwork(FileUpload file, Graph graph, String label) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));
 
 		int cnt = 0;
 		while (true) {
@@ -71,8 +71,8 @@ public class DataLoader {
 		r.close();
 	}
 
-	public static void SxMathOverflow(String baseURL, Graph graph, String label) throws IOException {
-		BufferedReader r = new BufferedReader(new FileReader(baseURL + "\\temporal\\sx-mathoverflow.txt"));
+	public static void SxMathOverflow(FileUpload file, Graph graph, String label) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));
 
 		int cnt = 0;
 		while (true) {
@@ -89,24 +89,25 @@ public class DataLoader {
 		r.close();
 	}
 
-	public static void tcpSample(String baseURL, Graph graph, String label) throws IOException {
+	public static void tcpSample(FileUpload file, Graph graph, String label) throws IOException {
 
-		Edge e = graph.addEdge(graph.addVertex("1"), graph.addVertex("4"), label);
-		e.addEvent(5l);
-		e = graph.addEdge(graph.addVertex("2"), graph.addVertex("3"), label);
-		e.addEvent(8l);
-		e = graph.addEdge(graph.addVertex("1"), graph.addVertex("2"), label);
-		e.addEvent(10l);
-		e = graph.addEdge(graph.addVertex("4"), graph.addVertex("2"), label);
-		e.addEvent(12l);
-		e = graph.addEdge(graph.addVertex("4"), graph.addVertex("3"), label);
-		e.addEvent(13l);
-		e = graph.addEdge(graph.addVertex("3"), graph.addVertex("5"), label);
-		e.addEvent(14l);
-		e = graph.addEdge(graph.addVertex("2"), graph.addVertex("3"), label);
-		e.addEvent(16l);
+		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));
+
+		int cnt = 0;
+		while (true) {
+			String line = r.readLine();
+			if (line == null)
+				break;
+			String[] arr = line.split("\t");
+			Edge e = graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[1]), label);
+			e.addEvent(Long.parseLong(arr[2]));
+			if (++cnt % 1000 == 0)
+				Server.logger.debug("[tcp_sample] read lines " + cnt + " ... ");
+		}
+		Server.logger.debug("[tcp_sample] read lines " + cnt + " completed ");
+		r.close();
 	}
-	
+
 	public static void upload(FileUpload file, Graph graph, String label) throws IOException {
 
 		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));
@@ -121,9 +122,9 @@ public class DataLoader {
 			if (arr.length == 3)
 				e.addEvent(Long.parseLong(arr[2]));
 			if (++cnt % 1000 == 0)
-				Server.logger.debug("["+ file.name() +"] read lines " + cnt + " ... ");
+				Server.logger.debug("[" + file.name() + "] read lines " + cnt + " ... ");
 		}
-		Server.logger.debug("["+ file.name() +"] read lines " + cnt + " completed ");
+		Server.logger.debug("[" + file.name() + "] read lines " + cnt + " completed ");
 		r.close();
 	}
 }
