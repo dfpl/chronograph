@@ -71,8 +71,7 @@ public class Server extends AbstractVerticle {
 
 		final HttpServer server = vertx.createHttpServer();
 		this.router = Router.router(vertx);
-		router.route().handler(BodyHandler.create());
-
+		router.route().handler(BodyHandler.create().setBodyLimit(BodyHandler.DEFAULT_BODY_LIMIT*2).setDeleteUploadedFilesOnEnd(true));
 
 		this.eventBus = vertx.eventBus();
 		graph = new ChronoGraph(eventBus);
