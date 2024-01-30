@@ -18,7 +18,9 @@ import com.tinkerpop.blueprints.Graph;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.Router;
+
 import static org.dfpl.chronograph.chronoweb.Server.*;
 
 public class ManipulationRouter extends BaseRouter {
@@ -614,6 +616,23 @@ public class ManipulationRouter extends BaseRouter {
 			} else {
 				sendResult(routingContext, 406);
 				return;
+			}
+		});
+		
+		router.post("/chronoweb/datasets").handler(routingContext -> {
+			String label = routingContext.request().params().get("label");
+			
+			for(FileUpload fileUpload: routingContext.fileUploads()) {
+				try {
+					synchronized(graph) {
+						DataLoader.upload(fileUpload, graph, label);
+					}
+					sendResult(routingContext, 200);
+					return;
+				} catch (IOException e) {
+					sendResult(routingContext, 500);
+					return;
+				}				
 			}
 		});
 

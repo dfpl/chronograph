@@ -9,6 +9,8 @@ import org.dfpl.chronograph.chronoweb.Server;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 
+import io.vertx.ext.web.FileUpload;
+
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -103,6 +105,25 @@ public class DataLoader {
 		e.addEvent(14l);
 		e = graph.addEdge(graph.addVertex("2"), graph.addVertex("3"), label);
 		e.addEvent(16l);
+	}
+	
+	public static void upload(FileUpload file, Graph graph, String label) throws IOException {
 
+		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));
+
+		int cnt = 0;
+		while (true) {
+			String line = r.readLine();
+			if (line == null)
+				break;
+			String[] arr = line.split("\\s");
+			Edge e = graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[1]), label);
+			if (arr.length == 3)
+				e.addEvent(Long.parseLong(arr[2]));
+			if (++cnt % 1000 == 0)
+				Server.logger.debug("["+ file.name() +"] read lines " + cnt + " ... ");
+		}
+		Server.logger.debug("["+ file.name() +"] read lines " + cnt + " completed ");
+		r.close();
 	}
 }
