@@ -3,6 +3,7 @@ package org.dfpl.chronograph.chronoweb.router.memory;
 import java.io.IOException;
 import java.util.List;
 
+import org.dfpl.chronograph.chronoweb.MessageBuilder;
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
@@ -30,16 +31,17 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerAddElementRouter(Router router, EventBus eventBus) {
-		router.post("/chronoweb/graph/:resource").consumes("application/json").handler(routingContext -> {
+		router.put("/chronoweb/graph/:resource").consumes("application/json").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
-			String propertiesParameter = getStringURLParameter(routingContext, "properties");
-			boolean isSet = propertiesParameter == null || propertiesParameter.equals("set") ? true : false;
+			String propertiesParameter = getStringURLParameter(routingContext, "updateOrReplaceProperties");
+			boolean isUpdate = propertiesParameter == null || propertiesParameter.equals("update") ? true : false;
 			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
 			JsonObject properties = null;
 			try {
 				properties = routingContext.body().asJsonObject();
 			} catch (Exception e) {
-				sendResult(routingContext, "text/plain", e.getMessage(), 400);
+				sendResult(routingContext, "application/json",
+						MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				return;
 			}
 			if (properties == null)
@@ -54,22 +56,24 @@ public class ManipulationRouter extends BaseRouter {
 					} else {
 						v = (ChronoVertex) graph.addVertex(resource);
 					}
-					v.setProperties(properties, isSet);
+					v.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
 							v.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
 					String[] arr = resource.split("\\|");
 					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[2]), arr[1]);
-					e.setProperties(properties, isSet);
+					e.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
 							e.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 
@@ -80,11 +84,12 @@ public class ManipulationRouter extends BaseRouter {
 					long time = Long.parseLong(arr[1]);
 					ChronoVertex v = (ChronoVertex) graph.addVertex(vertexID);
 					ChronoVertexEvent ve = (ChronoVertexEvent) v.addEvent(time);
-					ve.setProperties(properties, isSet);
+					ve.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
 							ve.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 			} else if (etPattern.matcher(resource).matches()) {
 				try {
@@ -94,16 +99,18 @@ public class ManipulationRouter extends BaseRouter {
 					ChronoEdge e = (ChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
 							arr2[1]);
 					ChronoEdgeEvent ee = (ChronoEdgeEvent) e.addEvent(time);
-					ee.setProperties(properties, isSet);
+					ee.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
 							ee.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidResourceIDException.toString(),
+						400);
 				return;
 			}
 
@@ -122,7 +129,8 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, "application/json",
 							v.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
 				else
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 				return;
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
@@ -131,10 +139,12 @@ public class ManipulationRouter extends BaseRouter {
 						sendResult(routingContext, "application/json",
 								e.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
 					else
-						sendResult(routingContext, 404);
+						sendResult(routingContext, "application/json",
+								MessageBuilder.resourceNotFoundException.toString(), 404);
 					return;
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 			} else if (Server.vtPattern.matcher(resource).matches()) {
@@ -150,7 +160,8 @@ public class ManipulationRouter extends BaseRouter {
 						return;
 					}
 				}
-				sendResult(routingContext, 404);
+				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+						404);
 				return;
 			} else if (etPattern.matcher(resource).matches()) {
 				try {
@@ -168,14 +179,17 @@ public class ManipulationRouter extends BaseRouter {
 							return;
 						}
 					}
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 					return;
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 					return;
 				}
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidResourceIDException.toString(),
+						400);
 				return;
 			}
 		});
@@ -211,10 +225,11 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, "application/json",
 							ChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.OUT, labels)).toString(), 200);
 				} else
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 				return;
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException.toString(), 400);
 				return;
 			}
 		});
@@ -230,10 +245,11 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, "application/json",
 							ChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.IN, labels)).toString(), 200);
 				} else
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 				return;
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException.toString(), 400);
 				return;
 			}
 		});
@@ -251,10 +267,11 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, "application/json",
 							ChronoVertex.toJsonArrayOfIDs(v.getVertices(Direction.OUT, labels)).toString(), 200);
 				} else
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 				return;
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException.toString(), 400);
 				return;
 			}
 		});
@@ -270,10 +287,11 @@ public class ManipulationRouter extends BaseRouter {
 					sendResult(routingContext, "application/json",
 							ChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.IN, labels)).toString(), 200);
 				} else
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 				return;
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException.toString(), 400);
 				return;
 			}
 		});
@@ -284,7 +302,7 @@ public class ManipulationRouter extends BaseRouter {
 	public void registerDeleteGraphRouter(Router router, EventBus eventBus) {
 		router.delete("/chronoweb/graph").handler(routingContext -> {
 			graph.clear();
-			sendResult(routingContext, 200);
+			sendResult(routingContext, 204);
 		});
 
 		Server.logger.info("DELETE /chronoweb/graph router added");
@@ -297,26 +315,30 @@ public class ManipulationRouter extends BaseRouter {
 				try {
 					ChronoVertex v = (ChronoVertex) graph.getVertex(resource);
 					if (v == null) {
-						sendResult(routingContext, 404);
+						sendResult(routingContext, "application/json",
+								MessageBuilder.resourceNotFoundException.toString(), 404);
 						return;
 					}
 					graph.removeVertex(v);
-					sendResult(routingContext, 200);
+					sendResult(routingContext, 204);
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
 					ChronoEdge e = (ChronoEdge) graph.getEdge(resource);
 					if (e == null) {
-						sendResult(routingContext, 404);
+						sendResult(routingContext, "application/json",
+								MessageBuilder.resourceNotFoundException.toString(), 404);
 						return;
 					}
 					graph.removeEdge(e);
-					sendResult(routingContext, 200);
+					sendResult(routingContext, 204);
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 			} else if (Server.vtPattern.matcher(resource).matches()) {
@@ -329,14 +351,16 @@ public class ManipulationRouter extends BaseRouter {
 						ChronoVertexEvent ve = (ChronoVertexEvent) v.getEvent(time, TemporalRelation.cotemporal);
 						if (ve != null) {
 							v.removeEvents(time, TemporalRelation.cotemporal);
-							sendResult(routingContext, 200);
+							sendResult(routingContext, 204);
 							return;
 						}
 					}
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 					return;
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 			} else if (etPattern.matcher(resource).matches()) {
@@ -350,18 +374,21 @@ public class ManipulationRouter extends BaseRouter {
 						ChronoEdgeEvent ee = (ChronoEdgeEvent) e.getEvent(time);
 						if (ee != null) {
 							e.removeEvents(time, TemporalRelation.cotemporal);
-							sendResult(routingContext, 200);
+							sendResult(routingContext, 204);
 							return;
 						}
 					}
-					sendResult(routingContext, 404);
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
+							404);
 					return;
 				} catch (IllegalArgumentException e) {
-					sendResult(routingContext, 406);
+					sendResult(routingContext, "application/json",
+							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidResourceIDException.toString(),
+						400);
 				return;
 			}
 		});
@@ -443,7 +470,10 @@ public class ManipulationRouter extends BaseRouter {
 			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
 			String label = getStringURLParameter(routingContext, "label");
 			if (tr == null || label == null) {
-				sendResult(routingContext, 406);
+				sendResult(
+						routingContext, "application/json", MessageBuilder
+								.getMissingRequiredURLParameterException("[ temporalRelation, label ]").toString(),
+						400);
 				return;
 			}
 			if (Server.vtPattern.matcher(vertexEventID).matches()) {
@@ -456,11 +486,12 @@ public class ManipulationRouter extends BaseRouter {
 							ChronoEdgeEvent.toJsonArray(ve.getEdgeEvents(Direction.OUT, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
-					sendResult(routingContext, 404);
+					sendResult(routingContext, 500);
 					return;
 				}
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexEventIDException.toString(),
+						400);
 				return;
 			}
 		});
@@ -472,7 +503,10 @@ public class ManipulationRouter extends BaseRouter {
 			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
 			String label = getStringURLParameter(routingContext, "label");
 			if (tr == null || label == null) {
-				sendResult(routingContext, 406);
+				sendResult(
+						routingContext, "application/json", MessageBuilder
+								.getMissingRequiredURLParameterException("[ temporalRelation, label ]").toString(),
+						400);
 				return;
 			}
 			if (Server.vtPattern.matcher(vertexEventID).matches()) {
@@ -485,11 +519,11 @@ public class ManipulationRouter extends BaseRouter {
 							ChronoEdgeEvent.toJsonArray(ve.getEdgeEvents(Direction.IN, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
-					sendResult(routingContext, 404);
+					sendResult(routingContext, 500);
 					return;
 				}
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException.toString(), 400);
 				return;
 			}
 		});
@@ -503,7 +537,10 @@ public class ManipulationRouter extends BaseRouter {
 			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
 			String label = getStringURLParameter(routingContext, "label");
 			if (tr == null || label == null) {
-				sendResult(routingContext, 406);
+				sendResult(
+						routingContext, "application/json", MessageBuilder
+								.getMissingRequiredURLParameterException("[ temporalRelation, label ]").toString(),
+						400);
 				return;
 			}
 			if (Server.vtPattern.matcher(vertexEventID).matches()) {
@@ -517,11 +554,11 @@ public class ManipulationRouter extends BaseRouter {
 							200);
 					return;
 				} catch (Exception e) {
-					sendResult(routingContext, 404);
+					sendResult(routingContext, 500);
 					return;
 				}
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException.toString(), 400);
 				return;
 			}
 		});
@@ -533,7 +570,10 @@ public class ManipulationRouter extends BaseRouter {
 			TemporalRelation tr = getTemporalRelationURLParameter(routingContext, "temporalRelation");
 			String label = getStringURLParameter(routingContext, "label");
 			if (tr == null || label == null) {
-				sendResult(routingContext, 406);
+				sendResult(
+						routingContext, "application/json", MessageBuilder
+								.getMissingRequiredURLParameterException("[ temporalRelation, label ]").toString(),
+						400);
 				return;
 			}
 			if (Server.vtPattern.matcher(vertexEventID).matches()) {
@@ -546,11 +586,11 @@ public class ManipulationRouter extends BaseRouter {
 							ChronoVertexEvent.toJsonArray(ve.getVertexEvents(Direction.IN, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
-					sendResult(routingContext, 404);
+					sendResult(routingContext, 500);
 					return;
 				}
 			} else {
-				sendResult(routingContext, 406);
+				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException.toString(), 400);
 				return;
 			}
 		});

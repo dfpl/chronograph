@@ -153,7 +153,8 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 
 	public JsonObject toJsonObject(boolean includeProperties) {
 		JsonObject object = new JsonObject();
-		object.put("_id", vertex.getId());
+		object.put("_id", vertex.getId() + "_" + time);
+		object.put("_v", vertex.getId());
 		object.put("_t", time);
 		if (includeProperties)
 			object.put("properties", new JsonObject(properties));
