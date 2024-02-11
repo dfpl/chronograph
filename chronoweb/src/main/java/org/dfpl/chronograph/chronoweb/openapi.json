@@ -1,0 +1,5514 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Chronoweb - OpenAPI 3.1",
+    "description": "This is the API description of Chronoweb based on the OpenAPI 3.1 specification.  Chronoweb is an open-source web information system that analyzes temporal information diffusion with a unified RESTful web service. Users are able to create, retrieve, update, delete, and traverse graph elements such as vertices, edges, vertex events and edge events. Furthermore, the server allows subscribing a specific vertex source with an incremental computation program. \n\nRelated Article:\n- [Kairos, IEEE TKDE](https://ieeexplore.ieee.org/abstract/document/10374549)\n- [Time-centric engine, IEEE TKDE](https://ieeexplore.ieee.org/abstract/document/9128046)\n- [ChronoGraph, IEEE TKDE](https://ieeexplore.ieee.org/abstract/document/8606161/)",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "jwbyun@sejong.ac.kr"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://dfpl.sejong.ac.kr/chronoweb"
+    }
+  ],
+  "tags": "",
+  "paths": {
+    "/khronos/{vertexID}": {
+      "put": {
+        "tags": [
+          "vertex"
+        ],
+        "summary": "create or update a vertex with a given 'vertexID'",
+        "description": "create or update a vertex with a given 'vertexID'.",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "updateOrReplaceProperties",
+            "in": "query",
+            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "update",
+                "replace"
+              ],
+              "default": "update"
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "key-value properties for a given vertex",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "key-value properties for a resource",
+                "type": "object",
+                "examples": [
+                  {
+                    "latitude": 37.5326,
+                    "longitude": 127.024612
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "the vertex created or updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "propertySyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "propertySyntaxException",
+                          "reason": "Unexpected trailing token",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "vertex"
+        ],
+        "summary": "retrieve a vertex with a given 'vertexID'",
+        "description": "retrieve a vertex with a given 'vertexID'.",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "vertex"
+        ],
+        "summary": "delete a vertex with a given 'vertexID'",
+        "description": "delete a vertex with a given 'vertexID'.",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "the vertex deleted successfully"
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{edgeID}": {
+      "put": {
+        "tags": [
+          "edge"
+        ],
+        "summary": "create or update an edge with a given 'edgeID'",
+        "description": "create or update an edge with a given 'edgeID'.",
+        "parameters": [
+          {
+            "name": "edgeID",
+            "in": "path",
+            "required": true,
+            "description": "An edge identifier that is unique in a graph",
+            "schema": {
+              "description": "An edge identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+              },
+              "examples": [
+                "Seoul|isConnectedTo|Incheon"
+              ]
+            }
+          },
+          {
+            "name": "updateOrReplaceProperties",
+            "in": "query",
+            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "update",
+                "replace"
+              ],
+              "default": "update"
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "key-value properties for a given edge",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "key-value properties for a resource",
+                "type": "object",
+                "examples": [
+                  {
+                    "latitude": 37.5326,
+                    "longitude": 127.024612
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "the edge created or updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "An edge identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul|isConnectedTo|Incheon"
+                      ]
+                    },
+                    "_o": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_i": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_l": {
+                      "description": "An edge label",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "isConnectedTo",
+                        "hasFriend"
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  },
+                  "examples": [
+                    {
+                      "_id": "Seoul|isConnectedTo|Incheon",
+                      "_o": "Seoul",
+                      "_i": "Incheon",
+                      "_l": "isConnectedTo",
+                      "properties": {
+                        "elapsedTime": 3.2
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "propertySyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "propertySyntaxException",
+                          "reason": "Unexpected trailing token",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "edge"
+        ],
+        "summary": "retrieve an edge with a given 'edgeID'",
+        "description": "retrieve an edge with a given 'edgeID'.",
+        "parameters": [
+          {
+            "name": "edgeID",
+            "in": "path",
+            "required": true,
+            "description": "An edge identifier that is unique in a graph",
+            "schema": {
+              "description": "An edge identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+              },
+              "examples": [
+                "Seoul|isConnectedTo|Incheon"
+              ]
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the edge retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "An edge identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul|isConnectedTo|Incheon"
+                      ]
+                    },
+                    "_o": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_i": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_l": {
+                      "description": "An edge label",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "isConnectedTo",
+                        "hasFriend"
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  },
+                  "examples": [
+                    {
+                      "_id": "Seoul|isConnectedTo|Incheon",
+                      "_o": "Seoul",
+                      "_i": "Incheon",
+                      "_l": "isConnectedTo",
+                      "properties": {
+                        "elapsedTime": 3.2
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "edge"
+        ],
+        "summary": "delete an edge with a given 'edgeID'",
+        "description": "delete an edge with a given 'edgeID'.",
+        "parameters": [
+          {
+            "name": "edgeID",
+            "in": "path",
+            "required": true,
+            "description": "An edge identifier that is unique in a graph",
+            "schema": {
+              "description": "An edge identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+              },
+              "examples": [
+                "Seoul|isConnectedTo|Incheon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "the edge deleted successfully"
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexEventID}": {
+      "put": {
+        "tags": [
+          "vertex event"
+        ],
+        "summary": "create or update a vertex event with a given 'vertexEventID'",
+        "description": "create or update a vertex event with a given 'vertexEventID'.",
+        "parameters": [
+          {
+            "name": "vertexEventID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul_1707375682",
+                "Incheon_54"
+              ]
+            }
+          },
+          {
+            "name": "updateOrReplaceProperties",
+            "in": "query",
+            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "update",
+                "replace"
+              ],
+              "default": "update"
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "key-value properties for a given vertex event",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "key-value properties for a resource",
+                "type": "object",
+                "examples": [
+                  {
+                    "latitude": 37.5326,
+                    "longitude": 127.024612
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "the vertex created or updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "A vertex event identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+_[0-9]+$"
+                      },
+                      "examples": [
+                        "Seoul_1707375682",
+                        "Incheon_54"
+                      ]
+                    },
+                    "_v": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_t": {
+                      "description": "A time-instant",
+                      "schema": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "examples": [
+                        1707375682
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "propertySyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "propertySyntaxException",
+                          "reason": "Unexpected trailing token",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "vertex event"
+        ],
+        "summary": "retrieve a vertex event with a given 'vertexEventID'",
+        "description": "retrieve a vertex event with a given 'vertexEventID'.",
+        "parameters": [
+          {
+            "name": "vertexEventID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul_1707375682",
+                "Incheon_54"
+              ]
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "A vertex event identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+_[0-9]+$"
+                      },
+                      "examples": [
+                        "Seoul_1707375682",
+                        "Incheon_54"
+                      ]
+                    },
+                    "_v": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_t": {
+                      "description": "A time-instant",
+                      "schema": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "examples": [
+                        1707375682
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "vertex event"
+        ],
+        "summary": "delete a vertex event with a given 'vertexEventID'",
+        "description": "delete a vertex event with a given 'vertexEventID'.",
+        "parameters": [
+          {
+            "name": "vertexEventID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul_1707375682",
+                "Incheon_54"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "the vertex event deleted successfully"
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{edgeEventID}": {
+      "put": {
+        "tags": [
+          "edge event"
+        ],
+        "summary": "create or update an edge event with a given 'edgeID'",
+        "description": "create or update an edge event with a given 'edgeID'.",
+        "parameters": [
+          {
+            "name": "edgeEventID",
+            "in": "path",
+            "required": true,
+            "description": "An edge event identifier that is unique in a graph",
+            "schema": {
+              "description": "An edge event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul|isConnectedTo|Incheon_1707375844"
+              ]
+            }
+          },
+          {
+            "name": "updateOrReplaceProperties",
+            "in": "query",
+            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "update",
+                "replace"
+              ],
+              "default": "update"
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "key-value properties for a given edge event",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "key-value properties for a resource",
+                "type": "object",
+                "examples": [
+                  {
+                    "latitude": 37.5326,
+                    "longitude": 127.024612
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "the edge event created or updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "An edge event identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                      },
+                      "examples": [
+                        "Seoul|isConnectedTo|Incheon_1707375844"
+                      ]
+                    },
+                    "_e": {
+                      "description": "An edge identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul|isConnectedTo|Incheon"
+                      ]
+                    },
+                    "_o": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_i": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_l": {
+                      "description": "An edge label",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "isConnectedTo",
+                        "hasFriend"
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "propertySyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "propertySyntaxException",
+                          "reason": "Unexpected trailing token",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "edge event"
+        ],
+        "summary": "retrieve an edge event with a given 'edgeEventID'",
+        "description": "retrieve an edge event with a given 'edgeEventID'.",
+        "parameters": [
+          {
+            "name": "edgeEventID",
+            "in": "path",
+            "required": true,
+            "description": "An edge event identifier that is unique in a graph",
+            "schema": {
+              "description": "An edge event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul|isConnectedTo|Incheon_1707375844"
+              ]
+            }
+          },
+          {
+            "name": "includeProperties",
+            "in": "query",
+            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the edge event retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "An edge event identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                      },
+                      "examples": [
+                        "Seoul|isConnectedTo|Incheon_1707375844"
+                      ]
+                    },
+                    "_e": {
+                      "description": "An edge identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul|isConnectedTo|Incheon"
+                      ]
+                    },
+                    "_o": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_i": {
+                      "description": "A vertex identifier that is unique in a graph",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "Seoul",
+                        "Incpos,9ㅐheon"
+                      ]
+                    },
+                    "_l": {
+                      "description": "An edge label",
+                      "schema": {
+                        "type": "string",
+                        "pattern": "^[^|_]+$"
+                      },
+                      "examples": [
+                        "isConnectedTo",
+                        "hasFriend"
+                      ]
+                    },
+                    "properties": {
+                      "description": "key-value properties for a resource",
+                      "type": "object",
+                      "examples": [
+                        {
+                          "latitude": 37.5326,
+                          "longitude": 127.024612
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "edge event"
+        ],
+        "summary": "delete an edge event with a given 'edgeID'",
+        "description": "delete an edge event with a given 'edgeID'.",
+        "parameters": [
+          {
+            "name": "edgeEventID",
+            "in": "path",
+            "required": true,
+            "description": "An edge event identifier that is unique in a graph",
+            "schema": {
+              "description": "An edge event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul|isConnectedTo|Incheon_1707375844"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "the edge event deleted successfully"
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidResourceIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidResourceIDException",
+                          "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos": {
+      "get": {
+        "tags": [
+          "graph"
+        ],
+        "summary": "retrieve vertices or edges in a graph",
+        "description": "retrieve vertices or edges in a graph",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "query",
+            "description": "'vertices' returns all the vertices while 'edges' returns all the edges",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "vertices",
+                "edges"
+              ],
+              "default": "vertices"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the vertices retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of vertex identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VertexID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul",
+                          "Incheon"
+                        ]
+                      ]
+                    },
+                    {
+                      "description": "A set of edge identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/EdgeID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul|isConnectedTo|Incheon",
+                          "Incheon|isConnectedTo|Daejeon"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "graph"
+        ],
+        "summary": "clear a graph",
+        "description": "clear a graph",
+        "responses": {
+          "204": {
+            "description": "a graph cleared successfully"
+          }
+        }
+      }
+    },
+    "/khronos/{vertexID}/outE": {
+      "get": {
+        "tags": [
+          "static traversal"
+        ],
+        "summary": "retrieve out-going edges from a vertex with a given 'vertexID'",
+        "description": "retrieve out-going edges from a vertex with a given 'vertexID'",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "label[]",
+            "in": "query",
+            "description": "A (set of) label [filtering]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "description": "An edge label",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[^|_]+$"
+                },
+                "examples": [
+                  "isConnectedTo",
+                  "hasFriend"
+                ]
+              },
+              "collectionFormat": "multi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the out-going edges of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of edge identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/EdgeID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul|isConnectedTo|Incheon",
+                          "Incheon|isConnectedTo|Daejeon"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexID}/inE": {
+      "get": {
+        "tags": [
+          "static traversal"
+        ],
+        "summary": "retrieve in-going edges from a vertex with a given 'vertexID'",
+        "description": "retrieve in-going edges from a vertex with a given 'vertexID'",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "label[]",
+            "in": "query",
+            "description": "A (set of) label [filtering]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "description": "An edge label",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[^|_]+$"
+                },
+                "examples": [
+                  "isConnectedTo",
+                  "hasFriend"
+                ]
+              },
+              "collectionFormat": "multi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the in-going edges of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of edge identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/EdgeID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul|isConnectedTo|Incheon",
+                          "Incheon|isConnectedTo|Daejeon"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexID}/out": {
+      "get": {
+        "tags": [
+          "static traversal"
+        ],
+        "summary": "retrieve out-going vertices from a vertex with a given 'vertexID'",
+        "description": "retrieve out-going vertices from a vertex with a given 'vertexID'",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "label[]",
+            "in": "query",
+            "description": "A (set of) label [filtering]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "description": "An edge label",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[^|_]+$"
+                },
+                "examples": [
+                  "isConnectedTo",
+                  "hasFriend"
+                ]
+              },
+              "collectionFormat": "multi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the out-going vertices of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of vertex identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VertexID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul",
+                          "Incheon"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexID}/in": {
+      "get": {
+        "tags": [
+          "static traversal"
+        ],
+        "summary": "retrieve in-going vertices from a vertex with a given 'vertexID'",
+        "description": "retrieve in-going vertices from a vertex with a given 'vertexID'",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "label[]",
+            "in": "query",
+            "description": "A (set of) label [filtering]",
+            "schema": {
+              "type": "array",
+              "items": {
+                "description": "An edge label",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[^|_]+$"
+                },
+                "examples": [
+                  "isConnectedTo",
+                  "hasFriend"
+                ]
+              },
+              "collectionFormat": "multi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the in-going vertices of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of vertex identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VertexID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul",
+                          "Incheon"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexEventID}/outEe": {
+      "get": {
+        "tags": [
+          "temporal traversal"
+        ],
+        "summary": "retrieve out-going edge events from a vertex event with a given 'vertexEventID'",
+        "description": "retrieve out-going edge events from a vertex event with a given 'vertexEventID'",
+        "parameters": [
+          {
+            "name": "vertexEventID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul_1707375682",
+                "Incheon_54"
+              ]
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "description": "An edge label",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            }
+          },
+          {
+            "name": "temporalRelation",
+            "in": "query",
+            "description": "An Allen temporal relation",
+            "required": true,
+            "schema": {
+              "description": "An Allen temporal relation related to time-instant",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "isAfter",
+                  "isBefore",
+                  "cotemporal"
+                ]
+              },
+              "examples": [
+                "isAfter",
+                "isBefore",
+                "cotemporal"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the out-going edge events of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of edge event identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/EdgeEventID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul|isConnectedTo|Incheon_1707382874",
+                          "Incheon|isConnectedTo|Daejeon_1707382894"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexEventIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexEventIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "missingRequiredURLParameterException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "missingRequiredURLParameterException",
+                          "reason": "required parameters [ temporalRelation, label ] are missed",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexEventID}/inEe": {
+      "get": {
+        "tags": [
+          "temporal traversal"
+        ],
+        "summary": "retrieve in-going edge events from a vertex event with a given 'vertexEventID'",
+        "description": "retrieve in-going edge events from a vertex event with a given 'vertexEventID'",
+        "parameters": [
+          {
+            "name": "vertexEventID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul_1707375682",
+                "Incheon_54"
+              ]
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "description": "An edge label",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            }
+          },
+          {
+            "name": "temporalRelation",
+            "in": "query",
+            "description": "An Allen temporal relation",
+            "required": true,
+            "schema": {
+              "description": "An Allen temporal relation related to time-instant",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "isAfter",
+                  "isBefore",
+                  "cotemporal"
+                ]
+              },
+              "examples": [
+                "isAfter",
+                "isBefore",
+                "cotemporal"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the in-going edge events of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of edge event identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/EdgeEventID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul|isConnectedTo|Incheon_1707382874",
+                          "Incheon|isConnectedTo|Daejeon_1707382894"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexEventIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexEventIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "missingRequiredURLParameterException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "missingRequiredURLParameterException",
+                          "reason": "required parameters [ temporalRelation, label ] are missed",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexEventID}/oute": {
+      "get": {
+        "tags": [
+          "temporal traversal"
+        ],
+        "summary": "retrieve out-going vertex events from a vertex event with a given 'vertexEventID'",
+        "description": "retrieve out-going Vertex events from a vertex event with a given 'vertexEventID'",
+        "parameters": [
+          {
+            "name": "vertexEventID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul_1707375682",
+                "Incheon_54"
+              ]
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "description": "An edge label",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            }
+          },
+          {
+            "name": "temporalRelation",
+            "in": "query",
+            "description": "An Allen temporal relation",
+            "required": true,
+            "schema": {
+              "description": "An Allen temporal relation related to time-instant",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "isAfter",
+                  "isBefore",
+                  "cotemporal"
+                ]
+              },
+              "examples": [
+                "isAfter",
+                "isBefore",
+                "cotemporal"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the out-going vertex events of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of vertex event identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VertexEventID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul_1707382874",
+                          "Incheon_1707382894"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexEventIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexEventIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "missingRequiredURLParameterException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "missingRequiredURLParameterException",
+                          "reason": "required parameters [ temporalRelation, label ] are missed",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexEventID}/ine": {
+      "get": {
+        "tags": [
+          "temporal traversal"
+        ],
+        "summary": "retrieve in-going vertex events from a vertex event with a given 'vertexEventID'",
+        "description": "retrieve in-going Vertex events from a vertex event with a given 'vertexEventID'",
+        "parameters": [
+          {
+            "name": "vertexEventID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex event identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+_[0-9]+$"
+              },
+              "examples": [
+                "Seoul_1707375682",
+                "Incheon_54"
+              ]
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "description": "An edge label",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            }
+          },
+          {
+            "name": "temporalRelation",
+            "in": "query",
+            "description": "An Allen temporal relation",
+            "required": true,
+            "schema": {
+              "description": "An Allen temporal relation related to time-instant",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "isAfter",
+                  "isBefore",
+                  "cotemporal"
+                ]
+              },
+              "examples": [
+                "isAfter",
+                "isBefore",
+                "cotemporal"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the in-going vertex events of a vertex retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of vertex event identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VertexEventID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul_1707382874",
+                          "Incheon_1707382894"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexEventIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexEventIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+_[0-9]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "missingRequiredURLParameterException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "missingRequiredURLParameterException",
+                          "reason": "required parameters [ temporalRelation, label ] are missed",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{vertexID}/events": {
+      "get": {
+        "tags": [
+          "temporal traversal"
+        ],
+        "summary": "retrieve existing vertex events of a vertex with a given 'vertexID'",
+        "description": "retrieve existing vertex events of a vertex with a given 'vertexID'",
+        "parameters": [
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "time",
+            "in": "query",
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "temporalRelation",
+            "in": "query",
+            "schema": {
+              "description": "An Allen temporal relation related to time-instant",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "isAfter",
+                  "isBefore",
+                  "cotemporal"
+                ]
+              },
+              "examples": [
+                "isAfter",
+                "isBefore",
+                "cotemporal"
+              ]
+            }
+          },
+          {
+            "name": "awareOutEvents",
+            "in": "query",
+            "schema": {
+              "name": "awareOutEvents",
+              "in": "query",
+              "description": "include vertex events that have out-going edge events from their vertex if true",
+              "schema": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          },
+          {
+            "name": "awareInEvents",
+            "in": "query",
+            "schema": {
+              "name": "awareInEvents",
+              "in": "query",
+              "description": "include vertex events that have in-going edge events from their vertex if true",
+              "schema": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the vertex event identifiers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of vertex event identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VertexEventID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul_1707382874",
+                          "Incheon_1707382894"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khronos/{edgeID}/events": {
+      "get": {
+        "tags": [
+          "temporal traversal"
+        ],
+        "summary": "retrieve existing edge events of a vertex with a given 'vertexID'",
+        "description": "retrieve existing edge events of a vertex with a given 'vertexID'",
+        "parameters": [
+          {
+            "name": "edgeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "An edge identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+              },
+              "examples": [
+                "Seoul|isConnectedTo|Incheon"
+              ]
+            }
+          },
+          {
+            "name": "time",
+            "in": "query",
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "temporalRelation",
+            "in": "query",
+            "schema": {
+              "description": "An Allen temporal relation related to time-instant",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "isAfter",
+                  "isBefore",
+                  "cotemporal"
+                ]
+              },
+              "examples": [
+                "isAfter",
+                "isBefore",
+                "cotemporal"
+              ]
+            }
+          },
+          {
+            "name": "awareOutEvents",
+            "in": "query",
+            "schema": {
+              "name": "awareOutEvents",
+              "in": "query",
+              "description": "include vertex events that have out-going edge events from their vertex if true",
+              "schema": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          },
+          {
+            "name": "awareInEvents",
+            "in": "query",
+            "schema": {
+              "name": "awareInEvents",
+              "in": "query",
+              "description": "include vertex events that have in-going edge events from their vertex if true",
+              "schema": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the edge event identifiers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of edge event identifiers",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/EdgeEventID"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "Seoul|isConnectedTo|Incheon_1707382874",
+                          "Incheon|isConnectedTo|Daejeon_1707382894"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kairos/{time}/{kairosProgram}/{vertexID}": {
+      "put": {
+        "tags": [
+          "subscribe"
+        ],
+        "summary": "subscribe a source with a Kairos program",
+        "description": "subscribe a source with a Kairos program",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "kairosProgram",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "a name of Kairos program",
+              "schema": {
+                "type": "string"
+              },
+              "examples": [
+                "IsAfterReachability"
+              ]
+            }
+          },
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "the vertex event subscribed successfully."
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTimeSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the value of time should be from 0 to 9223372036854775807"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTimeSyntaxException",
+                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The source is already subscribed with the program",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "sourceAlreadySubscribedException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The source is already subscribed with the program"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            409
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "sourceAlreadySubscribedException",
+                          "reason": "The source is already subscribed with the program",
+                          "status": 409
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "subscribe"
+        ],
+        "summary": "unsubscribe a source from a Kairos program",
+        "description": "unsubscribe a source from a Kairos program",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "kairosProgram",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "a name of Kairos program",
+              "schema": {
+                "type": "string"
+              },
+              "examples": [
+                "IsAfterReachability"
+              ]
+            }
+          },
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "the vertex event unsubscribed successfully."
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTimeSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the value of time should be from 0 to 9223372036854775807"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTimeSyntaxException",
+                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "summary": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
+        "description": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "kairosProgram",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "a name of Kairos program",
+              "schema": {
+                "type": "string"
+              },
+              "examples": [
+                "IsAfterReachability"
+              ]
+            }
+          },
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "target-value pairs for an intermediate information diffusion result from a source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "target-value pairs for an intermediate information diffusion result from a source",
+                      "schema": {
+                        "type": "object"
+                      },
+                      "examples": [
+                        {
+                          "Incheon": 27,
+                          "Daejeon": 143
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTimeSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the value of time should be from 0 to 9223372036854775807"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTimeSyntaxException",
+                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kairos": {
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "summary": "retrieve a set of time-instants for gamma tables",
+        "description": "retrieve a set of time-instants for gamma tables",
+        "responses": {
+          "200": {
+            "description": "the set of time-instants retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of time-instants",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Time"
+                        }
+                      },
+                      "examples": [
+                        [
+                          1707493276,
+                          1707494276
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kairos/{time}": {
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "summary": "retrieve a set of Kairos program of gamma tables for a given time",
+        "description": "retrieve a set of Kairos program of gamma tables for a given time",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the set of time-instants retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "A set of Kairos programs",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/KairosProgram"
+                        }
+                      },
+                      "examples": [
+                        [
+                          "IsAfterReachability"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTimeSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the value of time should be from 0 to 9223372036854775807"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTimeSyntaxException",
+                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kairos/{time}/{kairosProgram}": {
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "summary": "retrieve a gamma table for {time} and {kairosProgram}",
+        "description": "retrieve a gamma table for {time} and {kairosProgram}",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "kairosProgram",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "a name of Kairos program",
+              "schema": {
+                "type": "string"
+              },
+              "examples": [
+                "IsAfterReachability"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "source-gamma pairs for an intermedaite information diffusion result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "source-gamma pairs for an intermedaite information diffusion result",
+                      "schema": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "Gamma"
+                        }
+                      },
+                      "examples": [
+                        {
+                          "Seoul": {
+                            "Incheon": 27,
+                            "Daejeon": 143
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTimeSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the value of time should be from 0 to 9223372036854775807"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTimeSyntaxException",
+                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VertexID": {
+        "description": "A vertex identifier that is unique in a graph",
+        "schema": {
+          "type": "string",
+          "pattern": "^[^|_]+$"
+        },
+        "examples": [
+          "Seoul",
+          "Incpos,9ㅐheon"
+        ]
+      },
+      "VertexIDs": {
+        "description": "A set of vertex identifiers",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/VertexID"
+          }
+        },
+        "examples": [
+          [
+            "Seoul",
+            "Incheon"
+          ]
+        ]
+      },
+      "VertexEventIDs": {
+        "description": "A set of vertex event identifiers",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/VertexEventID"
+          }
+        },
+        "examples": [
+          [
+            "Seoul_1707382874",
+            "Incheon_1707382894"
+          ]
+        ]
+      },
+      "Label": {
+        "description": "An edge label",
+        "schema": {
+          "type": "string",
+          "pattern": "^[^|_]+$"
+        },
+        "examples": [
+          "isConnectedTo",
+          "hasFriend"
+        ]
+      },
+      "TemporalRelation": {
+        "description": "An Allen temporal relation related to time-instant",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "isAfter",
+            "isBefore",
+            "cotemporal"
+          ]
+        },
+        "examples": [
+          "isAfter",
+          "isBefore",
+          "cotemporal"
+        ]
+      },
+      "EdgeID": {
+        "description": "An edge identifier that is unique in a graph",
+        "schema": {
+          "type": "string",
+          "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+        },
+        "examples": [
+          "Seoul|isConnectedTo|Incheon"
+        ]
+      },
+      "EdgeIDs": {
+        "description": "A set of edge identifiers",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EdgeID"
+          }
+        },
+        "examples": [
+          [
+            "Seoul|isConnectedTo|Incheon",
+            "Incheon|isConnectedTo|Daejeon"
+          ]
+        ]
+      },
+      "EdgeEventIDs": {
+        "description": "A set of edge event identifiers",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EdgeEventID"
+          }
+        },
+        "examples": [
+          [
+            "Seoul|isConnectedTo|Incheon_1707382874",
+            "Incheon|isConnectedTo|Daejeon_1707382894"
+          ]
+        ]
+      },
+      "Time": {
+        "description": "A time-instant",
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "examples": [
+          1707375682
+        ]
+      },
+      "TimeInstants": {
+        "description": "A set of time-instants",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Time"
+          }
+        },
+        "examples": [
+          [
+            1707493276,
+            1707494276
+          ]
+        ]
+      },
+      "VertexEventID": {
+        "description": "A vertex event identifier that is unique in a graph",
+        "schema": {
+          "type": "string",
+          "pattern": "^[^|_]+_[0-9]+$"
+        },
+        "examples": [
+          "Seoul_1707375682",
+          "Incheon_54"
+        ]
+      },
+      "EdgeEventID": {
+        "description": "An edge event identifier that is unique in a graph",
+        "schema": {
+          "type": "string",
+          "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+        },
+        "examples": [
+          "Seoul|isConnectedTo|Incheon_1707375844"
+        ]
+      },
+      "UpdateOrReplaceProperties": {
+        "name": "updateOrReplaceProperties",
+        "in": "query",
+        "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "update",
+            "replace"
+          ],
+          "default": "update"
+        }
+      },
+      "IncludeProperties": {
+        "name": "includeProperties",
+        "in": "query",
+        "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "AwareOutEvents": {
+        "name": "awareOutEvents",
+        "in": "query",
+        "description": "include vertex events that have out-going edge events from their vertex if true",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "AwareInEvents": {
+        "name": "awareInEvents",
+        "in": "query",
+        "description": "include vertex events that have in-going edge events from their vertex if true",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "Vertex": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "Seoul",
+              "Incpos,9ㅐheon"
+            ]
+          },
+          "properties": {
+            "description": "key-value properties for a resource",
+            "type": "object",
+            "examples": [
+              {
+                "latitude": 37.5326,
+                "longitude": 127.024612
+              }
+            ]
+          }
+        }
+      },
+      "VertexEvent": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "description": "A vertex event identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+_[0-9]+$"
+            },
+            "examples": [
+              "Seoul_1707375682",
+              "Incheon_54"
+            ]
+          },
+          "_v": {
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "Seoul",
+              "Incpos,9ㅐheon"
+            ]
+          },
+          "_t": {
+            "description": "A time-instant",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "examples": [
+              1707375682
+            ]
+          },
+          "properties": {
+            "description": "key-value properties for a resource",
+            "type": "object",
+            "examples": [
+              {
+                "latitude": 37.5326,
+                "longitude": 127.024612
+              }
+            ]
+          }
+        }
+      },
+      "Edge": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "description": "An edge identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+            },
+            "examples": [
+              "Seoul|isConnectedTo|Incheon"
+            ]
+          },
+          "_o": {
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "Seoul",
+              "Incpos,9ㅐheon"
+            ]
+          },
+          "_i": {
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "Seoul",
+              "Incpos,9ㅐheon"
+            ]
+          },
+          "_l": {
+            "description": "An edge label",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "isConnectedTo",
+              "hasFriend"
+            ]
+          },
+          "properties": {
+            "description": "key-value properties for a resource",
+            "type": "object",
+            "examples": [
+              {
+                "latitude": 37.5326,
+                "longitude": 127.024612
+              }
+            ]
+          }
+        },
+        "examples": [
+          {
+            "_id": "Seoul|isConnectedTo|Incheon",
+            "_o": "Seoul",
+            "_i": "Incheon",
+            "_l": "isConnectedTo",
+            "properties": {
+              "elapsedTime": 3.2
+            }
+          }
+        ]
+      },
+      "EdgeEvent": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "description": "An edge event identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+            },
+            "examples": [
+              "Seoul|isConnectedTo|Incheon_1707375844"
+            ]
+          },
+          "_e": {
+            "description": "An edge identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+$"
+            },
+            "examples": [
+              "Seoul|isConnectedTo|Incheon"
+            ]
+          },
+          "_o": {
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "Seoul",
+              "Incpos,9ㅐheon"
+            ]
+          },
+          "_i": {
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "Seoul",
+              "Incpos,9ㅐheon"
+            ]
+          },
+          "_l": {
+            "description": "An edge label",
+            "schema": {
+              "type": "string",
+              "pattern": "^[^|_]+$"
+            },
+            "examples": [
+              "isConnectedTo",
+              "hasFriend"
+            ]
+          },
+          "properties": {
+            "description": "key-value properties for a resource",
+            "type": "object",
+            "examples": [
+              {
+                "latitude": 37.5326,
+                "longitude": 127.024612
+              }
+            ]
+          }
+        }
+      },
+      "Properties": {
+        "description": "key-value properties for a resource",
+        "type": "object",
+        "examples": [
+          {
+            "latitude": 37.5326,
+            "longitude": 127.024612
+          }
+        ]
+      },
+      "Target": {
+        "name": "target",
+        "in": "query",
+        "description": "'vertices' returns all the vertices while 'edges' returns all the edges",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vertices",
+            "edges"
+          ],
+          "default": "vertices"
+        }
+      },
+      "KairosProgram": {
+        "description": "a name of Kairos program",
+        "schema": {
+          "type": "string"
+        },
+        "examples": [
+          "IsAfterReachability"
+        ]
+      },
+      "KairosPrograms": {
+        "description": "A set of Kairos programs",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/KairosProgram"
+          }
+        },
+        "examples": [
+          [
+            "IsAfterReachability"
+          ]
+        ]
+      },
+      "Gamma": {
+        "description": "target-value pairs for an intermediate information diffusion result from a source",
+        "schema": {
+          "type": "object"
+        },
+        "examples": [
+          {
+            "Incheon": 27,
+            "Daejeon": 143
+          }
+        ]
+      },
+      "GammaTable": {
+        "description": "source-gamma pairs for an intermedaite information diffusion result",
+        "schema": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "Gamma"
+          }
+        },
+        "examples": [
+          {
+            "Seoul": {
+              "Incheon": 27,
+              "Daejeon": 143
+            }
+          }
+        ]
+      },
+      "PropertySyntaxException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "propertySyntaxException"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "propertySyntaxException",
+            "reason": "Unexpected trailing token",
+            "status": 400
+          }
+        ]
+      },
+      "ResourceNotFoundException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "resourceNotFoundException"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "The resource is not found in a graph"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              404
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "resourceNotFoundException",
+            "reason": "The resource is not found in a graph",
+            "status": 404
+          }
+        ]
+      },
+      "InvalidResourceIDException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "invalidResourceIDException"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "invalidResourceIDException",
+            "reason": "the syntax of resource identifier should be one of ^[^|_]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+$, ^[^|_]+_[0-9]+$, ^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$",
+            "status": 400
+          }
+        ]
+      },
+      "InvalidVertexIDException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "invalidVertexIDException"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "the syntax of resource identifier should be ^[^|_]+$"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "invalidVertexIDException",
+            "reason": "the syntax of resource identifier should be ^[^|_]+$",
+            "status": 400
+          }
+        ]
+      },
+      "InvalidTimeSyntaxException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "invalidTimeSyntaxException"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "the value of time should be from 0 to 9223372036854775807"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "invalidTimeSyntaxException",
+            "reason": "the value of time should be from 0 to 9223372036854775807",
+            "status": 400
+          }
+        ]
+      },
+      "InvalidVertexEventIDException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "invalidVertexEventIDException"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "invalidVertexEventIDException",
+            "reason": "the syntax of resource identifier should be ^[^|_]+_[0-9]+$",
+            "status": 400
+          }
+        ]
+      },
+      "MissingRequiredURLParameterException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "missingRequiredURLParameterException"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "missingRequiredURLParameterException",
+            "reason": "required parameters [ temporalRelation, label ] are missed",
+            "status": 400
+          }
+        ]
+      },
+      "SourceAlreadySubscribedException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "sourceAlreadySubscribedException"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "The source is already subscribed with the program"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              409
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "sourceAlreadySubscribedException",
+            "reason": "The source is already subscribed with the program",
+            "status": 409
+          }
+        ]
+      }
+    }
+  }
+}
