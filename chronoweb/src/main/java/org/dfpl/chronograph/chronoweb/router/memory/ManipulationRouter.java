@@ -120,7 +120,7 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerGetElementRouter(Router router, EventBus eventBus) {
-		router.get("/chronoweb/graph/:resource").handler(routingContext -> {
+		router.get("/chronoweb/khronos/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
 			if (Server.vPattern.matcher(resource).matches()) {
@@ -309,7 +309,7 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerRemoveElementRouter(Router router, EventBus eventBus) {
-		router.delete("/chronoweb/graph/:resource").handler(routingContext -> {
+		router.delete("/chronoweb/khronos/:resource").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			if (Server.vPattern.matcher(resource).matches()) {
 				try {
