@@ -127,7 +127,7 @@ public class ManipulationRouter extends BaseRouter {
 				ChronoVertex v = (ChronoVertex) graph.getVertex(resource);
 				if (v != null)
 					sendResult(routingContext, "application/json",
-							v.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
+							v.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
 				else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException.toString(),
 							404);
@@ -137,7 +137,7 @@ public class ManipulationRouter extends BaseRouter {
 					ChronoEdge e = (ChronoEdge) graph.getEdge(resource);
 					if (e != null)
 						sendResult(routingContext, "application/json",
-								e.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
+								e.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
 					else
 						sendResult(routingContext, "application/json",
 								MessageBuilder.resourceNotFoundException.toString(), 404);
@@ -156,7 +156,7 @@ public class ManipulationRouter extends BaseRouter {
 					ChronoVertexEvent ve = (ChronoVertexEvent) v.getEvent(time, TemporalRelation.cotemporal);
 					if (ve != null) {
 						sendResult(routingContext, "application/json",
-								ve.toJsonObject(includeProperties == null ? true : includeProperties).toString(), 200);
+								ve.toJsonObject(includeProperties == null ? false : includeProperties).toString(), 200);
 						return;
 					}
 				}
@@ -174,7 +174,7 @@ public class ManipulationRouter extends BaseRouter {
 						ChronoEdgeEvent ee = (ChronoEdgeEvent) e.getEvent(time);
 						if (ee != null) {
 							sendResult(routingContext, "application/json",
-									ee.toJsonObject(includeProperties == null ? true : includeProperties).toString(),
+									ee.toJsonObject(includeProperties == null ? false : includeProperties).toString(),
 									200);
 							return;
 						}
