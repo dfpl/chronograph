@@ -31,7 +31,7 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerAddElementRouter(Router router, EventBus eventBus) {
-		router.put("/chronoweb/graph/:resource").consumes("application/json").handler(routingContext -> {
+		router.put("/chronoweb/khronos/:resource").consumes("application/json").handler(routingContext -> {
 			String resource = routingContext.pathParam("resource");
 			String propertiesParameter = getStringURLParameter(routingContext, "updateOrReplaceProperties");
 			boolean isUpdate = propertiesParameter == null || propertiesParameter.equals("update") ? true : false;
