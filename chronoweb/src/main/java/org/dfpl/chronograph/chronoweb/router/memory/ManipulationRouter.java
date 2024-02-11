@@ -300,7 +300,7 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerDeleteGraphRouter(Router router, EventBus eventBus) {
-		router.delete("/chronoweb/graph").handler(routingContext -> {
+		router.delete("/chronoweb/khronos").handler(routingContext -> {
 			graph.clear();
 			sendResult(routingContext, 204);
 		});

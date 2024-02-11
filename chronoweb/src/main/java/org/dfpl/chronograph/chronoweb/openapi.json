@@ -64,7 +64,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -220,7 +220,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -499,7 +499,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -697,7 +697,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -992,7 +992,7 @@
               "description": "A vertex event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul_1707375682",
@@ -1019,7 +1019,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -1053,7 +1053,7 @@
                       "description": "A vertex event identifier that is unique in a graph",
                       "schema": {
                         "type": "string",
-                        "pattern": "^[^|_]+_[0-9]+$"
+                        "pattern": "^[^|_]+_[+-]?[0-9]+$"
                       },
                       "examples": [
                         "Seoul_1707375682",
@@ -1182,7 +1182,7 @@
               "description": "A vertex event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul_1707375682",
@@ -1196,7 +1196,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -1212,7 +1212,7 @@
                       "description": "A vertex event identifier that is unique in a graph",
                       "schema": {
                         "type": "string",
-                        "pattern": "^[^|_]+_[0-9]+$"
+                        "pattern": "^[^|_]+_[+-]?[0-9]+$"
                       },
                       "examples": [
                         "Seoul_1707375682",
@@ -1355,7 +1355,7 @@
               "description": "A vertex event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul_1707375682",
@@ -1470,7 +1470,7 @@
               "description": "An edge event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul|isConnectedTo|Incheon_1707375844"
@@ -1496,7 +1496,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -1530,7 +1530,7 @@
                       "description": "An edge event identifier that is unique in a graph",
                       "schema": {
                         "type": "string",
-                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$"
                       },
                       "examples": [
                         "Seoul|isConnectedTo|Incheon_1707375844"
@@ -1680,7 +1680,7 @@
               "description": "An edge event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul|isConnectedTo|Incheon_1707375844"
@@ -1693,7 +1693,7 @@
             "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
@@ -1709,7 +1709,7 @@
                       "description": "An edge event identifier that is unique in a graph",
                       "schema": {
                         "type": "string",
-                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                        "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$"
                       },
                       "examples": [
                         "Seoul|isConnectedTo|Incheon_1707375844"
@@ -1873,7 +1873,7 @@
               "description": "An edge event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul|isConnectedTo|Incheon_1707375844"
@@ -2698,7 +2698,7 @@
               "description": "A vertex event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul_1707375682",
@@ -2902,7 +2902,7 @@
               "description": "A vertex event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul_1707375682",
@@ -3106,7 +3106,7 @@
               "description": "A vertex event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul_1707375682",
@@ -3310,7 +3310,7 @@
               "description": "A vertex event identifier that is unique in a graph",
               "schema": {
                 "type": "string",
-                "pattern": "^[^|_]+_[0-9]+$"
+                "pattern": "^[^|_]+_[+-]?[0-9]+$"
               },
               "examples": [
                 "Seoul_1707375682",
@@ -3997,7 +3997,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from 0 to 9223372036854775807"
+                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4210,7 +4210,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from 0 to 9223372036854775807"
+                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4402,7 +4402,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from 0 to 9223372036854775807"
+                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4574,7 +4574,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from 0 to 9223372036854775807"
+                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4726,7 +4726,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from 0 to 9223372036854775807"
+                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4933,7 +4933,7 @@
         "description": "A vertex event identifier that is unique in a graph",
         "schema": {
           "type": "string",
-          "pattern": "^[^|_]+_[0-9]+$"
+          "pattern": "^[^|_]+_[+-]?[0-9]+$"
         },
         "examples": [
           "Seoul_1707375682",
@@ -4944,7 +4944,7 @@
         "description": "An edge event identifier that is unique in a graph",
         "schema": {
           "type": "string",
-          "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+          "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$"
         },
         "examples": [
           "Seoul|isConnectedTo|Incheon_1707375844"
@@ -4969,7 +4969,7 @@
         "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
         "schema": {
           "type": "boolean",
-          "default": true
+          "default": false
         }
       },
       "AwareOutEvents": {
@@ -5023,7 +5023,7 @@
             "description": "A vertex event identifier that is unique in a graph",
             "schema": {
               "type": "string",
-              "pattern": "^[^|_]+_[0-9]+$"
+              "pattern": "^[^|_]+_[+-]?[0-9]+$"
             },
             "examples": [
               "Seoul_1707375682",
@@ -5139,7 +5139,7 @@
             "description": "An edge event identifier that is unique in a graph",
             "schema": {
               "type": "string",
-              "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[0-9]+$"
+              "pattern": "^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$"
             },
             "examples": [
               "Seoul|isConnectedTo|Incheon_1707375844"
@@ -5404,7 +5404,7 @@
           "reason": {
             "type": "string",
             "enum": [
-              "the value of time should be from 0 to 9223372036854775807"
+              "the value of time should be from -9223372036854775808 to 9223372036854775807"
             ]
           },
           "status": {
