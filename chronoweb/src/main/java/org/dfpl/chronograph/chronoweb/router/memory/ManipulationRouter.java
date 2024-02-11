@@ -198,7 +198,7 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerGetElementsRouter(Router router, EventBus eventBus) {
-		router.get("/chronoweb/graph").handler(routingContext -> {
+		router.get("/chronoweb/khronos").handler(routingContext -> {
 			String target = getStringURLParameter(routingContext, "target");
 			target = target == null ? "vertices" : target;
 			if (target.equals("vertices")) {
