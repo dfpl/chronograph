@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.NavigableSet;
 import java.util.Set;
 
 import org.dfpl.chronograph.chronoweb.Server;
@@ -76,6 +77,10 @@ public class KairosEngine {
 
 	}
 
+	public Set<Long> getTimes() {
+		return kairosPrograms.keySet();
+	}
+
 	public Set<VertexEvent> getSources() {
 		HashSet<VertexEvent> set = new HashSet<VertexEvent>();
 
@@ -101,7 +106,7 @@ public class KairosEngine {
 		}
 		return null;
 	}
-	
+
 	public Set<AbstractKairosProgram<?>> getPrograms(Long startTime) {
 		return kairosPrograms.get(startTime);
 	}
@@ -115,7 +120,7 @@ public class KairosEngine {
 		} else {
 			programs.add(program);
 		}
-		program.onInitialization(Set.of(source));
+		program.onInitialization(Set.of(source), startTime);
 	}
 
 }

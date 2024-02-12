@@ -36,7 +36,7 @@ public abstract class AbstractKairosProgram<E> {
 		return name;
 	}
 
-	public abstract void onInitialization(Set<Vertex> sources);
+	public abstract void onInitialization(Set<Vertex> sources, Long startTime);
 
 	public abstract void onAddEdgeEvent(EdgeEvent newEvent);
 

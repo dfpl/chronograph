@@ -107,6 +107,7 @@ public class Server extends AbstractVerticle {
 	public void registerSubscriptionRouter() {
 		subscriptionRouter = new SubscriptionRouter(graph, kairos);
 		subscriptionRouter.registerSubscribeVertexEventRouter(router, eventBus);
+		
 		subscriptionRouter.registerGetSubscriptions(router, eventBus);
 		subscriptionRouter.registerGetGammaRouter(router, eventBus);
 	}

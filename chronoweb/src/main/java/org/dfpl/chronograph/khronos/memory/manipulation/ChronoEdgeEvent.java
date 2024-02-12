@@ -150,6 +150,7 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 		JsonObject object = ((ChronoEdge) edge).toJsonObject(false);
 		object.put("_id", edge.getId()+"_"+time);
 		object.put("_e", edge.getId());
+		object.put("_t", time);
 		if (includeProperties)
 			object.put("properties", new JsonObject(properties));
 		

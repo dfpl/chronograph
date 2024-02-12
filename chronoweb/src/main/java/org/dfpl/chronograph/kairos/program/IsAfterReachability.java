@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.kairos.recipe;
+package org.dfpl.chronograph.kairos.program;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,8 +44,12 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 	};
 
 	@Override
-	public void onInitialization(Set<Vertex> sources) {
+	public void onInitialization(Set<Vertex> sources, Long startTime) {
 		synchronized (gammaTable) {
+			for(Vertex s: sources) {
+				gammaTable.set(s.getId(), s.getId(), new LongGammaElement(startTime));
+			}
+			
 			Iterator<Entry<Long, HashSet<EdgeEvent>>> iter = ((ChronoGraph) graph).getEdgeEventIterator();
 			while (iter.hasNext()) {
 				Entry<Long, HashSet<EdgeEvent>> eventEntry = iter.next();
