@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dfpl.chronograph.chronoweb.MessageBuilder;
 import org.dfpl.chronograph.chronoweb.Server;
@@ -146,6 +147,8 @@ public class SubscriptionRouter extends BaseRouter {
 			sendResult(routingContext, "application/json", timeArray.toString(), 200);
 		});
 
+		Server.logger.info("GET /chronoweb/gammaTable router added");
+
 		router.get("/chronoweb/gammaTable/:time").handler(routingContext -> {
 			long time;
 			try {
@@ -162,14 +165,56 @@ public class SubscriptionRouter extends BaseRouter {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
 			}
-			for (AbstractKairosProgram<?> program : programs) {
-				result.add(program.getName());
+
+			for (String program : programs.stream().map(p -> p.getName()).collect(Collectors.toSet())) {
+				result.add(program);
 			}
 			sendResult(routingContext, "application/json", result.toString(), 200);
 		});
 
-		router.get("chronoweb/graph/:time/:kairosProgram").handler(routingContext -> {
+		Server.logger.info("GET /chronoweb/gammaTable/:time router added");
 
+		router.get("/chronoweb/gammaTable/:time/:kairosProgram").handler(routingContext -> {
+
+			long time;
+			try {
+				time = Long.parseLong(routingContext.pathParam("time"));
+			} catch (Exception e) {
+				sendResult(routingContext, "application/json", MessageBuilder.invalidTimeSynta1xException, 400);
+				return;
+			}
+
+			String kairosProgram = routingContext.pathParam("kairosProgram");
+			if (!isAvailableProgram(kairosProgram)) {
+				sendResult(routingContext, "application/json", MessageBuilder.noSuchProgramException, 404);
+				return;
+			}
+
+			try {
+				JsonObject result = new JsonObject();
+				result.put("time", time);
+				result.put("program", kairosProgram);
+				Set<String> sources = kairos.getProgram(time, kairosProgram).getGammaTable().getSources();
+				JsonArray sourceArray = new JsonArray();
+				for (String source : sources) {
+					sourceArray.add(source);
+				}
+				result.put("gammaSources", sourceArray);
+				sendResult(routingContext, "application/json", result.toString(), 200);
+				return;
+			} catch (NullPointerException e) {
+				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
+				return;
+			} catch (Exception e) {
+				sendResult(routingContext, 500);
+				return;
+			}
+
+		});
+
+		Server.logger.info("GET /chronoweb/graph/:time/:kairosProgram router added");
+
+		router.get("/chronoweb/gammaTable/:time/:kairosProgram/:vertexID").handler(routingContext -> {
 			long time;
 			try {
 				time = Long.parseLong(routingContext.pathParam("time"));
@@ -186,7 +231,6 @@ public class SubscriptionRouter extends BaseRouter {
 
 			String vertexID = routingContext.pathParam("vertexID");
 			if (!vPattern.matcher(vertexID).matches()) {
-
 				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException, 400);
 				return;
 			}
@@ -194,41 +238,34 @@ public class SubscriptionRouter extends BaseRouter {
 			ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
 			if (v == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
-
 				return;
 			}
 
-			JsonObject result = new JsonObject();
-
-//			if (vtPattern.matcher(resource).matches()) {
-//				try {
-//					String[] arr = resource.split("\\_");
-//					String vertexID = arr[0];
-//					long time = Long.parseLong(arr[1]);
-//					result.put("source", vertexID + "_" + time);
-//					result.put("recipe", recipeParameter);
-//
-//					JsonObject gamma = new JsonObject();
-//
-//					for (Entry<String, Object> entry : kairos.getProgram(time, recipeParameter).getGammaTable()
-//							.getGamma(vertexID).toMap(true).entrySet()) {
-//						gamma.put(entry.getKey(), entry.getValue());
-//					}
-//
-//					result.put("gamma", gamma);
-//					sendResult(routingContext, "application/json", result.toString(), 200);
-//				} catch (Exception e) {
-//					sendResult(routingContext, 406);
-//					return;
-//				}
-//			} else {
-//				sendResult(routingContext, 406);
-//				return;
-//			}
-
+			try {
+				JsonObject result = new JsonObject();
+				result.put("time", time);
+				result.put("source", vertexID);
+				result.put("program", kairosProgram);
+				JsonObject gamma = kairos.getProgram(time, kairosProgram).getGammaTable().getGamma(vertexID)
+						.toJson(true);
+				if (gamma == null) {
+					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
+					return;
+				} else {
+					result.put("gamma", gamma);
+				}
+				sendResult(routingContext, "application/json", result.toString(), 200);
+				return;
+			} catch (NullPointerException e) {
+				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
+				return;
+			} catch (Exception e) {
+				sendResult(routingContext, 500);
+				return;
+			}
 		});
 
-		Server.logger.info("GET /chronoweb/subscribe/:resource router added");
+		Server.logger.info("GET /chronoweb/graph/:time/:kairosProgram/:vertexID router added");
 	}
 
 }

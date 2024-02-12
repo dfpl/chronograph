@@ -27,6 +27,12 @@ public class DoubleGammaElement implements GammaElement<Double> {
 	public Double toElement(byte[] bytesToRead) {
 		return ByteBuffer.wrap(bytesToRead).getDouble();
 	}
+	
+	@Override
+	public Object toJsonValue(byte[] bytesToRead) {
+		return ByteBuffer.wrap(bytesToRead).getDouble();
+	}
+
 
 	@Override
 	public int getElementByteSize() {
@@ -53,4 +59,5 @@ public class DoubleGammaElement implements GammaElement<Double> {
 		return 1.3824172084878715E306;
 	}
 
+	
 }

@@ -20,7 +20,7 @@
   ],
   "tags": "",
   "paths": {
-    "/khronos/{vertexID}": {
+    "/graph/{vertexID}": {
       "put": {
         "tags": [
           "vertex"
@@ -456,7 +456,7 @@
         }
       }
     },
-    "/khronos/{edgeID}": {
+    "/graph/{edgeID}": {
       "put": {
         "tags": [
           "edge"
@@ -975,7 +975,7 @@
         }
       }
     },
-    "/khronos/{vertexEventID}": {
+    "/graph/{vertexEventID}": {
       "put": {
         "tags": [
           "vertex event"
@@ -1453,7 +1453,7 @@
         }
       }
     },
-    "/khronos/{edgeEventID}": {
+    "/graph/{edgeEventID}": {
       "put": {
         "tags": [
           "edge event"
@@ -1579,6 +1579,16 @@
                         "hasFriend"
                       ]
                     },
+                    "_t": {
+                      "description": "A time-instant",
+                      "schema": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "examples": [
+                        1707375682
+                      ]
+                    },
                     "properties": {
                       "description": "key-value properties for a resource",
                       "type": "object",
@@ -1589,7 +1599,20 @@
                         }
                       ]
                     }
-                  }
+                  },
+                  "examples": [
+                    {
+                      "_id": "Seoul|isConnectedTo|Incheon_1707375682",
+                      "__e": "Seoul|isConnectedTo|Incheon",
+                      "_o": "Seoul",
+                      "_i": "Incheon",
+                      "_l": "isConnectedTo",
+                      "_t": 1707375682,
+                      "properties": {
+                        "elapsedTime": 3.2
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1758,6 +1781,16 @@
                         "hasFriend"
                       ]
                     },
+                    "_t": {
+                      "description": "A time-instant",
+                      "schema": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "examples": [
+                        1707375682
+                      ]
+                    },
                     "properties": {
                       "description": "key-value properties for a resource",
                       "type": "object",
@@ -1768,7 +1801,20 @@
                         }
                       ]
                     }
-                  }
+                  },
+                  "examples": [
+                    {
+                      "_id": "Seoul|isConnectedTo|Incheon_1707375682",
+                      "__e": "Seoul|isConnectedTo|Incheon",
+                      "_o": "Seoul",
+                      "_i": "Incheon",
+                      "_l": "isConnectedTo",
+                      "_t": 1707375682,
+                      "properties": {
+                        "elapsedTime": 3.2
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1970,7 +2016,7 @@
         }
       }
     },
-    "/khronos": {
+    "/graph": {
       "get": {
         "tags": [
           "graph"
@@ -2025,7 +2071,7 @@
                       "examples": [
                         [
                           "Seoul|isConnectedTo|Incheon",
-                          "Incheon|isConnectedTo|Daejeon"
+                          "Seoul|isConnectedTo|Daejeon"
                         ]
                       ]
                     }
@@ -2049,7 +2095,7 @@
         }
       }
     },
-    "/khronos/{vertexID}/outE": {
+    "/graph/{vertexID}/outE": {
       "get": {
         "tags": [
           "static traversal"
@@ -2113,7 +2159,7 @@
                       "examples": [
                         [
                           "Seoul|isConnectedTo|Incheon",
-                          "Incheon|isConnectedTo|Daejeon"
+                          "Seoul|isConnectedTo|Daejeon"
                         ]
                       ]
                     }
@@ -2207,7 +2253,7 @@
         }
       }
     },
-    "/khronos/{vertexID}/inE": {
+    "/graph/{vertexID}/inE": {
       "get": {
         "tags": [
           "static traversal"
@@ -2271,7 +2317,7 @@
                       "examples": [
                         [
                           "Seoul|isConnectedTo|Incheon",
-                          "Incheon|isConnectedTo|Daejeon"
+                          "Seoul|isConnectedTo|Daejeon"
                         ]
                       ]
                     }
@@ -2365,7 +2411,7 @@
         }
       }
     },
-    "/khronos/{vertexID}/out": {
+    "/graph/{vertexID}/out": {
       "get": {
         "tags": [
           "static traversal"
@@ -2523,7 +2569,7 @@
         }
       }
     },
-    "/khronos/{vertexID}/in": {
+    "/graph/{vertexID}/in": {
       "get": {
         "tags": [
           "static traversal"
@@ -2681,7 +2727,7 @@
         }
       }
     },
-    "/khronos/{vertexEventID}/outEe": {
+    "/graph/{vertexEventID}/outEe": {
       "get": {
         "tags": [
           "temporal traversal"
@@ -2764,7 +2810,7 @@
                       "examples": [
                         [
                           "Seoul|isConnectedTo|Incheon_1707382874",
-                          "Incheon|isConnectedTo|Daejeon_1707382894"
+                          "Seoul|isConnectedTo|Daejeon_1707382894"
                         ]
                       ]
                     }
@@ -2835,6 +2881,33 @@
                           "status": 400
                         }
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTemporalRelationSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTemporalRelationSyntaxException",
+                          "reason": "temporal relation should be one of 'isAfter', 'isBefore', 'cotemporal'",
+                          "status": 400
+                        }
+                      ]
                     }
                   ]
                 }
@@ -2885,7 +2958,7 @@
         }
       }
     },
-    "/khronos/{vertexEventID}/inEe": {
+    "/graph/{vertexEventID}/inEe": {
       "get": {
         "tags": [
           "temporal traversal"
@@ -2968,7 +3041,7 @@
                       "examples": [
                         [
                           "Seoul|isConnectedTo|Incheon_1707382874",
-                          "Incheon|isConnectedTo|Daejeon_1707382894"
+                          "Seoul|isConnectedTo|Daejeon_1707382894"
                         ]
                       ]
                     }
@@ -3039,6 +3112,33 @@
                           "status": 400
                         }
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTemporalRelationSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTemporalRelationSyntaxException",
+                          "reason": "temporal relation should be one of 'isAfter', 'isBefore', 'cotemporal'",
+                          "status": 400
+                        }
+                      ]
                     }
                   ]
                 }
@@ -3089,7 +3189,7 @@
         }
       }
     },
-    "/khronos/{vertexEventID}/oute": {
+    "/graph/{vertexEventID}/oute": {
       "get": {
         "tags": [
           "temporal traversal"
@@ -3243,6 +3343,33 @@
                           "status": 400
                         }
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTemporalRelationSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTemporalRelationSyntaxException",
+                          "reason": "temporal relation should be one of 'isAfter', 'isBefore', 'cotemporal'",
+                          "status": 400
+                        }
+                      ]
                     }
                   ]
                 }
@@ -3293,7 +3420,7 @@
         }
       }
     },
-    "/khronos/{vertexEventID}/ine": {
+    "/graph/{vertexEventID}/ine": {
       "get": {
         "tags": [
           "temporal traversal"
@@ -3447,6 +3574,33 @@
                           "status": 400
                         }
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTemporalRelationSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTemporalRelationSyntaxException",
+                          "reason": "temporal relation should be one of 'isAfter', 'isBefore', 'cotemporal'",
+                          "status": 400
+                        }
+                      ]
                     }
                   ]
                 }
@@ -3497,7 +3651,7 @@
         }
       }
     },
-    "/khronos/{vertexID}/events": {
+    "/graph/{vertexID}/events": {
       "get": {
         "tags": [
           "temporal traversal"
@@ -3694,7 +3848,7 @@
         }
       }
     },
-    "/khronos/{edgeID}/events": {
+    "/graph/{edgeID}/events": {
       "get": {
         "tags": [
           "temporal traversal"
@@ -3796,7 +3950,7 @@
                       "examples": [
                         [
                           "Seoul|isConnectedTo|Incheon_1707382874",
-                          "Incheon|isConnectedTo|Daejeon_1707382894"
+                          "Seoul|isConnectedTo|Daejeon_1707382894"
                         ]
                       ]
                     }
@@ -3890,13 +4044,13 @@
         }
       }
     },
-    "/kairos/{time}/{kairosProgram}/{vertexID}": {
+    "/graph/{time}/{kairosProgram}/{vertexID}": {
       "put": {
         "tags": [
-          "subscribe"
+          "incremental computation"
         ],
-        "summary": "subscribe a source with a Kairos program",
-        "description": "subscribe a source with a Kairos program",
+        "summary": "subscribe a source (vertex event) with a Kairos program",
+        "description": "subscribe a source (vertex event) with a Kairos program",
         "parameters": [
           {
             "name": "time",
@@ -4010,7 +4164,7 @@
                       "examples": [
                         {
                           "type": "invalidTimeSyntaxException",
-                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "reason": "the value of time should be from -9223372036854775808 to 9223372036854775807",
                           "status": 400
                         }
                       ]
@@ -4106,7 +4260,7 @@
       },
       "delete": {
         "tags": [
-          "subscribe"
+          "incremental computation"
         ],
         "summary": "unsubscribe a source from a Kairos program",
         "description": "unsubscribe a source from a Kairos program",
@@ -4223,199 +4377,7 @@
                       "examples": [
                         {
                           "type": "invalidTimeSyntaxException",
-                          "reason": "the value of time should be from 0 to 9223372036854775807",
-                          "status": 400
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found in a graph",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "resourceNotFoundException"
-                          ]
-                        },
-                        "reason": {
-                          "type": "string",
-                          "enum": [
-                            "The resource is not found in a graph"
-                          ]
-                        },
-                        "status": {
-                          "type": "integer",
-                          "enum": [
-                            404
-                          ]
-                        }
-                      },
-                      "examples": [
-                        {
-                          "type": "resourceNotFoundException",
-                          "reason": "The resource is not found in a graph",
-                          "status": 404
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "subscribe"
-        ],
-        "summary": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
-        "description": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
-        "parameters": [
-          {
-            "name": "time",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "description": "A time-instant",
-              "schema": {
-                "type": "integer",
-                "format": "int64"
-              },
-              "examples": [
-                1707375682
-              ]
-            }
-          },
-          {
-            "name": "kairosProgram",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "description": "a name of Kairos program",
-              "schema": {
-                "type": "string"
-              },
-              "examples": [
-                "IsAfterReachability"
-              ]
-            }
-          },
-          {
-            "name": "vertexID",
-            "in": "path",
-            "required": true,
-            "description": "A vertex identifier that is unique in a graph",
-            "schema": {
-              "description": "A vertex identifier that is unique in a graph",
-              "schema": {
-                "type": "string",
-                "pattern": "^[^|_]+$"
-              },
-              "examples": [
-                "Seoul",
-                "Incpos,9ㅐheon"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "target-value pairs for an intermediate information diffusion result from a source",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "description": "target-value pairs for an intermediate information diffusion result from a source",
-                      "schema": {
-                        "type": "object"
-                      },
-                      "examples": [
-                        {
-                          "Incheon": 27,
-                          "Daejeon": 143
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Syntax error in the request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "invalidVertexIDException"
-                          ]
-                        },
-                        "reason": {
-                          "type": "string",
-                          "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
-                          ]
-                        },
-                        "status": {
-                          "type": "integer",
-                          "enum": [
-                            400
-                          ]
-                        }
-                      },
-                      "examples": [
-                        {
-                          "type": "invalidVertexIDException",
-                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
-                          "status": 400
-                        }
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "invalidTimeSyntaxException"
-                          ]
-                        },
-                        "reason": {
-                          "type": "string",
-                          "enum": [
-                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
-                          ]
-                        },
-                        "status": {
-                          "type": "integer",
-                          "enum": [
-                            400
-                          ]
-                        }
-                      },
-                      "examples": [
-                        {
-                          "type": "invalidTimeSyntaxException",
-                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "reason": "the value of time should be from -9223372036854775808 to 9223372036854775807",
                           "status": 400
                         }
                       ]
@@ -4469,10 +4431,10 @@
         }
       }
     },
-    "/kairos": {
+    "/gammaTable": {
       "get": {
         "tags": [
-          "subscribe"
+          "incremental computation"
         ],
         "summary": "retrieve a set of time-instants for gamma tables",
         "description": "retrieve a set of time-instants for gamma tables",
@@ -4506,10 +4468,10 @@
         }
       }
     },
-    "/kairos/{time}": {
+    "/gammaTable/{time}": {
       "get": {
         "tags": [
-          "subscribe"
+          "incremental computation"
         ],
         "summary": "retrieve a set of Kairos program of gamma tables for a given time",
         "description": "retrieve a set of Kairos program of gamma tables for a given time",
@@ -4587,7 +4549,7 @@
                       "examples": [
                         {
                           "type": "invalidTimeSyntaxException",
-                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "reason": "the value of time should be from -9223372036854775808 to 9223372036854775807",
                           "status": 400
                         }
                       ]
@@ -4641,10 +4603,10 @@
         }
       }
     },
-    "/kairos/{time}/{kairosProgram}": {
+    "/gammaTable/{time}/{kairosProgram}": {
       "get": {
         "tags": [
-          "subscribe"
+          "incremental computation"
         ],
         "summary": "retrieve a gamma table for {time} and {kairosProgram}",
         "description": "retrieve a gamma table for {time} and {kairosProgram}",
@@ -4690,15 +4652,24 @@
                       "description": "source-gamma pairs for an intermedaite information diffusion result",
                       "schema": {
                         "type": "object",
-                        "additionalProperties": {
-                          "type": "Gamma"
+                        "properties": {
+                          "time": "Time",
+                          "program": "KairosProgram",
+                          "gammaTable": "object",
+                          "additionalProperties": {
+                            "type": "Gamma"
+                          }
                         }
                       },
                       "examples": [
                         {
-                          "Seoul": {
-                            "Incheon": 27,
-                            "Daejeon": 143
+                          "time": 1707375682,
+                          "program": "IsAfterReachability",
+                          "gammaTable": {
+                            "Seoul": {
+                              "Incheon": 27,
+                              "Daejeon": 143
+                            }
                           }
                         }
                       ]
@@ -4739,7 +4710,212 @@
                       "examples": [
                         {
                           "type": "invalidTimeSyntaxException",
-                          "reason": "the value of time should be from 0 to 9223372036854775807",
+                          "reason": "the value of time should be from -9223372036854775808 to 9223372036854775807",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gammaTable/{time}/{kairosProgram}/{vertexID}": {
+      "get": {
+        "tags": [
+          "incremental computation"
+        ],
+        "summary": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
+        "description": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "kairosProgram",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "a name of Kairos program",
+              "schema": {
+                "type": "string"
+              },
+              "examples": [
+                "IsAfterReachability"
+              ]
+            }
+          },
+          {
+            "name": "vertexID",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "target-value pairs for an intermediate information diffusion result from a source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "target-value pairs for an intermediate information diffusion result from a source",
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "time": "Time",
+                          "source": "VertexID",
+                          "program": "KairosProgram",
+                          "gamma": "object"
+                        }
+                      },
+                      "examples": [
+                        {
+                          "time": 1707375682,
+                          "source": "Seoul",
+                          "program": "IsAfterReachability",
+                          "gamma": {
+                            "Incheon": 27,
+                            "Daejeon": 143
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTimeSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTimeSyntaxException",
+                          "reason": "the value of time should be from -9223372036854775808 to 9223372036854775807",
                           "status": 400
                         }
                       ]
@@ -4885,7 +5061,7 @@
         "examples": [
           [
             "Seoul|isConnectedTo|Incheon",
-            "Incheon|isConnectedTo|Daejeon"
+            "Seoul|isConnectedTo|Daejeon"
           ]
         ]
       },
@@ -4900,7 +5076,7 @@
         "examples": [
           [
             "Seoul|isConnectedTo|Incheon_1707382874",
-            "Incheon|isConnectedTo|Daejeon_1707382894"
+            "Seoul|isConnectedTo|Daejeon_1707382894"
           ]
         ]
       },
@@ -5188,6 +5364,16 @@
               "hasFriend"
             ]
           },
+          "_t": {
+            "description": "A time-instant",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "examples": [
+              1707375682
+            ]
+          },
           "properties": {
             "description": "key-value properties for a resource",
             "type": "object",
@@ -5198,7 +5384,20 @@
               }
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "_id": "Seoul|isConnectedTo|Incheon_1707375682",
+            "__e": "Seoul|isConnectedTo|Incheon",
+            "_o": "Seoul",
+            "_i": "Incheon",
+            "_l": "isConnectedTo",
+            "_t": 1707375682,
+            "properties": {
+              "elapsedTime": 3.2
+            }
+          }
+        ]
       },
       "Properties": {
         "description": "key-value properties for a resource",
@@ -5249,12 +5448,23 @@
       "Gamma": {
         "description": "target-value pairs for an intermediate information diffusion result from a source",
         "schema": {
-          "type": "object"
+          "type": "object",
+          "properties": {
+            "time": "Time",
+            "source": "VertexID",
+            "program": "KairosProgram",
+            "gamma": "object"
+          }
         },
         "examples": [
           {
-            "Incheon": 27,
-            "Daejeon": 143
+            "time": 1707375682,
+            "source": "Seoul",
+            "program": "IsAfterReachability",
+            "gamma": {
+              "Incheon": 27,
+              "Daejeon": 143
+            }
           }
         ]
       },
@@ -5262,15 +5472,24 @@
         "description": "source-gamma pairs for an intermedaite information diffusion result",
         "schema": {
           "type": "object",
-          "additionalProperties": {
-            "type": "Gamma"
+          "properties": {
+            "time": "Time",
+            "program": "KairosProgram",
+            "gammaTable": "object",
+            "additionalProperties": {
+              "type": "Gamma"
+            }
           }
         },
         "examples": [
           {
-            "Seoul": {
-              "Incheon": 27,
-              "Daejeon": 143
+            "time": 1707375682,
+            "program": "IsAfterReachability",
+            "gammaTable": {
+              "Seoul": {
+                "Incheon": 27,
+                "Daejeon": 143
+              }
             }
           }
         ]
@@ -5298,6 +5517,33 @@
           {
             "type": "propertySyntaxException",
             "reason": "Unexpected trailing token",
+            "status": 400
+          }
+        ]
+      },
+      "InvalidTemporalRelationSyntaxException": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "invalidTemporalRelationSyntaxException"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        },
+        "examples": [
+          {
+            "type": "invalidTemporalRelationSyntaxException",
+            "reason": "temporal relation should be one of 'isAfter', 'isBefore', 'cotemporal'",
             "status": 400
           }
         ]
@@ -5417,7 +5663,7 @@
         "examples": [
           {
             "type": "invalidTimeSyntaxException",
-            "reason": "the value of time should be from 0 to 9223372036854775807",
+            "reason": "the value of time should be from -9223372036854775808 to 9223372036854775807",
             "status": 400
           }
         ]

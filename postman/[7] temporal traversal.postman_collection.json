@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "c0a72eef-5736-477e-aeca-bf06542e1fcc",
+		"name": "[7] temporal traversal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "266000",
+		"_collection_link": "https://winter-robot-182029.postman.co/workspace/Chronoweb~14e47814-22cf-43ad-8668-0c324a3f9ad7/collection/266000-c0a72eef-5736-477e-aeca-bf06542e1fcc?action=share&source=collection_link&creator=266000"
+	},
+	"item": [
+		{
+			"name": "GET /:vertexID/events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1/events?time=1&temporalRelation=isAfter&awareOutEvents=true&awareInEvents=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1",
+						"events"
+					],
+					"query": [
+						{
+							"key": "time",
+							"value": "1"
+						},
+						{
+							"key": "temporalRelation",
+							"value": "isAfter"
+						},
+						{
+							"key": "awareOutEvents",
+							"value": "true"
+						},
+						{
+							"key": "awareInEvents",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:edgeID/events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1|c|2/events?time=0&temporalRelation=isAfter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1|c|2",
+						"events"
+					],
+					"query": [
+						{
+							"key": "time",
+							"value": "0"
+						},
+						{
+							"key": "temporalRelation",
+							"value": "isAfter"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:vertexEventID/outEe",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1_0/outEe?temporalRelation=isAfter&label=c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1_0",
+						"outEe"
+					],
+					"query": [
+						{
+							"key": "temporalRelation",
+							"value": "isAfter"
+						},
+						{
+							"key": "label",
+							"value": "c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:vertexEventID/inEe",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/2_0/inEe?temporalRelation=isAfter&label=c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"2_0",
+						"inEe"
+					],
+					"query": [
+						{
+							"key": "temporalRelation",
+							"value": "isAfter"
+						},
+						{
+							"key": "label",
+							"value": "c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:vertexEventID/oute",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1_0/oute?temporalRelation=isAfter&label=c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1_0",
+						"oute"
+					],
+					"query": [
+						{
+							"key": "temporalRelation",
+							"value": "isAfter"
+						},
+						{
+							"key": "label",
+							"value": "c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:vertexEventID/ine",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/2_0/ine?temporalRelation=isAfter&label=c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"2_0",
+						"ine"
+					],
+					"query": [
+						{
+							"key": "temporalRelation",
+							"value": "isAfter"
+						},
+						{
+							"key": "label",
+							"value": "c"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

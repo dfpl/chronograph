@@ -29,6 +29,11 @@ public class IntegerGammaElement implements GammaElement<Integer> {
 	}
 
 	@Override
+	public Object toJsonValue(byte[] bytesToRead) {
+		return ByteBuffer.wrap(bytesToRead).getInt();
+	}
+
+	@Override
 	public int getElementByteSize() {
 		return 4;
 	}

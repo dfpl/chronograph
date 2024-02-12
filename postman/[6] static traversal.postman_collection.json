@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "b7c3dbcd-1758-44ad-8ff1-8be63f46c103",
+		"name": "[6] static traversal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "266000",
+		"_collection_link": "https://winter-robot-182029.postman.co/workspace/Chronoweb~14e47814-22cf-43ad-8668-0c324a3f9ad7/collection/266000-b7c3dbcd-1758-44ad-8ff1-8be63f46c103?action=share&source=collection_link&creator=266000"
+	},
+	"item": [
+		{
+			"name": "GET /:vertexID/outE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1/outE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1",
+						"outE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:vertexID/inE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/2/inE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"2",
+						"inE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:vertexID/out",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1/out",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1",
+						"out"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /:vertexID/in",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/2/in",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"2",
+						"in"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

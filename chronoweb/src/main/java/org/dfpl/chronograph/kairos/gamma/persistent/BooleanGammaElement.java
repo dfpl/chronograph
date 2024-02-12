@@ -32,6 +32,15 @@ public class BooleanGammaElement implements GammaElement<Boolean> {
 		else
 			return false;
 	}
+	
+	@Override
+	public Object toJsonValue(byte[] bytesToRead) {
+		byte b = ByteBuffer.wrap(bytesToRead).get();
+		if (b == 1)
+			return true;
+		else
+			return false;
+	}
 
 	@Override
 	public int getElementByteSize() {
@@ -57,5 +66,7 @@ public class BooleanGammaElement implements GammaElement<Boolean> {
 	public Boolean getDefaultValue() {
 		return false;
 	}
+
+	
 
 }

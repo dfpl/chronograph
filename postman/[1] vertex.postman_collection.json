@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "a71bcd13-e0c5-41c1-aefa-4a4dbee5f0af",
+		"name": "[1] vertex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "266000",
+		"_collection_link": "https://winter-robot-182029.postman.co/workspace/Chronoweb~14e47814-22cf-43ad-8668-0c324a3f9ad7/collection/266000-a71bcd13-e0c5-41c1-aefa-4a4dbee5f0af?action=share&source=collection_link&creator=266000"
+	},
+	"item": [
+		{
+			"name": "PUT /graph/{vertexID}",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"k\" : \"v\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/6?updateOrReplaceProperties=replace&includeProperties=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"6"
+					],
+					"query": [
+						{
+							"key": "updateOrReplaceProperties",
+							"value": "replace"
+						},
+						{
+							"key": "includeProperties",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /graph/{vertexID}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1?includeProperties=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1"
+					],
+					"query": [
+						{
+							"key": "includeProperties",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /graph/{vertexID}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

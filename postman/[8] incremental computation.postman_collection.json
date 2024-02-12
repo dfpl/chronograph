@@ -1,0 +1,115 @@
+{
+	"info": {
+		"_postman_id": "00418a6a-8631-4da3-986a-93bd9c6c3165",
+		"name": "[8] incremental computation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "266000",
+		"_collection_link": "https://winter-robot-182029.postman.co/workspace/Chronoweb~14e47814-22cf-43ad-8668-0c324a3f9ad7/collection/266000-00418a6a-8631-4da3-986a-93bd9c6c3165?action=share&source=collection_link&creator=266000"
+	},
+	"item": [
+		{
+			"name": "PUT /graph/{time}/{kairosProgram}/{source}",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/graph/3/IsAfterReachability/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"graph",
+						"3",
+						"IsAfterReachability",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /gammaTable",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/gammaTable",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"gammaTable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /gammaTable/{time}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/gammaTable/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"gammaTable",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /gammaTable/{time}/{kairosProgram}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/gammaTable/3/IsAfterReachability",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"gammaTable",
+						"3",
+						"IsAfterReachability"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /gammaTable/{time}/{kairosProgram}/{vertexID}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/gammaTable/3/IsAfterReachability/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"gammaTable",
+						"3",
+						"IsAfterReachability",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

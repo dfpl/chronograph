@@ -150,6 +150,14 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		return e;
 	}
 
+	public Object getJsonValue(long pos, RandomAccessFile gamma) throws IOException {
+		gamma.seek(pos);
+		byte[] bytesToRead = new byte[elementByteSize];
+		gamma.read(bytesToRead);
+		Object e = gammaElementConverter.toJsonValue(bytesToRead);
+		return e;
+	}
+
 	@Override
 	public E get(K from, K to) {
 

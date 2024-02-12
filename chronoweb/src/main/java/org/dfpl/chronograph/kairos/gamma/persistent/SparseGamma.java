@@ -8,6 +8,8 @@ import java.util.Map;
 import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaElement;
 
+import io.vertx.core.json.JsonObject;
+
 public class SparseGamma<K, E> implements Gamma<K, E> {
 
 	private SparseGammaTable<K, E> gammaTable;
@@ -50,8 +52,29 @@ public class SparseGamma<K, E> implements Gamma<K, E> {
 		try {
 			for (int i = 0; i < gammaTable.cnt; i++) {
 				E elem = gammaTable.getElement(i * gammaTable.elementByteSize, gamma);
+				if(elem.equals(gammaTable.gammaElementConverter.getDefaultValue())){
+					elem = null;
+				}
 				K key = gammaTable.idList.get(i);
 				result.put(key, elem);
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return result;
+	}
+	
+	@Override
+	public JsonObject toJson(boolean setDefaultToNull) {
+		JsonObject result = new JsonObject();
+		try {
+			for (int i = 0; i < gammaTable.cnt; i++) {
+				Object elem = gammaTable.getJsonValue(i * gammaTable.elementByteSize, gamma);
+				if(elem.equals(gammaTable.gammaElementConverter.getDefaultValue())){
+					elem = null;
+				}
+				K key = gammaTable.idList.get(i);
+				result.put(key.toString(), elem);
 			}
 		} catch (Exception e) {
 			return null;

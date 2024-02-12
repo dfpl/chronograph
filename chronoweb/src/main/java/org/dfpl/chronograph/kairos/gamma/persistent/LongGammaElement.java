@@ -29,6 +29,11 @@ public class LongGammaElement implements GammaElement<Long> {
 	}
 
 	@Override
+	public Object toJsonValue(byte[] bytesToRead) {
+		return ByteBuffer.wrap(bytesToRead).getLong();
+	}
+
+	@Override
 	public int getElementByteSize() {
 		return 16;
 	}
