@@ -3,7 +3,6 @@ package org.dfpl.chronograph.chronoweb.router.memory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dfpl.chronograph.chronoweb.MessageBuilder;
@@ -135,11 +134,8 @@ public class SubscriptionRouter extends BaseRouter {
 
 		Server.logger.info("POST /chronoweb/subscribe/:resource router added");
 	}
-	
-	
-	
-	
 
+	@SuppressWarnings("unused")
 	public void registerGetGammaRouter(Router router, EventBus eventBus) {
 
 		router.get("/chronoweb/gammaTable").handler(routingContext -> {
@@ -187,14 +183,10 @@ public class SubscriptionRouter extends BaseRouter {
 				sendResult(routingContext, "application/json", MessageBuilder.noSuchProgramException, 404);
 				return;
 			}
-			''
-			
 
 			String vertexID = routingContext.pathParam("vertexID");
 			if (!vPattern.matcher(vertexID).matches()) {
-				
-				
-				
+
 				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException, 400);
 				return;
 			}
@@ -202,43 +194,37 @@ public class SubscriptionRouter extends BaseRouter {
 			ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
 			if (v == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
-			
-				 
-				
-				
-				
-				
-				  
+
 				return;
 			}
-			
+
 			JsonObject result = new JsonObject();
 
-			if (vtPattern.matcher(resource).matches()) {
-				try {
-					String[] arr = resource.split("\\_");
-					String vertexID = arr[0];
-					long time = Long.parseLong(arr[1]);
-					result.put("source", vertexID + "_" + time);
-					result.put("recipe", recipeParameter);
-
-					JsonObject gamma = new JsonObject();
-
-					for (Entry<String, Object> entry : kairos.getProgram(time, recipeParameter).getGammaTable()
-							.getGamma(vertexID).toMap(true).entrySet()) {
-						gamma.put(entry.getKey(), entry.getValue());
-					}
-
-					result.put("gamma", gamma);
-					sendResult(routingContext, "application/json", result.toString(), 200);
-				} catch (Exception e) {
-					sendResult(routingContext, 406);
-					return;
-				}
-			} else {
-				sendResult(routingContext, 406);
-				return;
-			}
+//			if (vtPattern.matcher(resource).matches()) {
+//				try {
+//					String[] arr = resource.split("\\_");
+//					String vertexID = arr[0];
+//					long time = Long.parseLong(arr[1]);
+//					result.put("source", vertexID + "_" + time);
+//					result.put("recipe", recipeParameter);
+//
+//					JsonObject gamma = new JsonObject();
+//
+//					for (Entry<String, Object> entry : kairos.getProgram(time, recipeParameter).getGammaTable()
+//							.getGamma(vertexID).toMap(true).entrySet()) {
+//						gamma.put(entry.getKey(), entry.getValue());
+//					}
+//
+//					result.put("gamma", gamma);
+//					sendResult(routingContext, "application/json", result.toString(), 200);
+//				} catch (Exception e) {
+//					sendResult(routingContext, 406);
+//					return;
+//				}
+//			} else {
+//				sendResult(routingContext, 406);
+//				return;
+//			}
 
 		});
 
