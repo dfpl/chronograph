@@ -110,6 +110,28 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GET /gammaTable/{time}/{kairosProgram}/{sourceID}/{destinationID}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/chronoweb/gammaTable/3/IsAfterReachability/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"chronoweb",
+						"gammaTable",
+						"3",
+						"IsAfterReachability",
+						"1"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

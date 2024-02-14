@@ -4655,22 +4655,17 @@
                         "properties": {
                           "time": "Time",
                           "program": "KairosProgram",
-                          "gammaTable": "object",
-                          "additionalProperties": {
-                            "type": "Gamma"
-                          }
+                          "gammaSources": "vertexIDs"
                         }
                       },
                       "examples": [
                         {
                           "time": 1707375682,
                           "program": "IsAfterReachability",
-                          "gammaTable": {
-                            "Seoul": {
-                              "Incheon": 27,
-                              "Daejeon": 143
-                            }
-                          }
+                          "gammaSources": [
+                            "Seoul",
+                            "Incheon"
+                          ]
                         }
                       ]
                     }
@@ -4846,6 +4841,248 @@
                             "Incheon": 27,
                             "Daejeon": 143
                           }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Syntax error in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidVertexIDException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the syntax of resource identifier should be ^[^|_]+$"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidVertexIDException",
+                          "reason": "the syntax of resource identifier should be ^[^|_]+$",
+                          "status": 400
+                        }
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "invalidTimeSyntaxException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            400
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "invalidTimeSyntaxException",
+                          "reason": "the value of time should be from -9223372036854775808 to 9223372036854775807",
+                          "status": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found in a graph",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "resourceNotFoundException"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "enum": [
+                            "The resource is not found in a graph"
+                          ]
+                        },
+                        "status": {
+                          "type": "integer",
+                          "enum": [
+                            404
+                          ]
+                        }
+                      },
+                      "examples": [
+                        {
+                          "type": "resourceNotFoundException",
+                          "reason": "The resource is not found in a graph",
+                          "status": 404
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gammaTable/{time}/{kairosProgram}/{source}/{destination}": {
+      "get": {
+        "tags": [
+          "incremental computation"
+        ],
+        "summary": "retrieve an gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+        "description": "retrieve an gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "A time-instant",
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "examples": [
+                1707375682
+              ]
+            }
+          },
+          {
+            "name": "kairosProgram",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "a name of Kairos program",
+              "schema": {
+                "type": "string"
+              },
+              "examples": [
+                "IsAfterReachability"
+              ]
+            }
+          },
+          {
+            "name": "source",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          },
+          {
+            "name": "destination",
+            "in": "path",
+            "required": true,
+            "description": "A vertex identifier that is unique in a graph",
+            "schema": {
+              "description": "A vertex identifier that is unique in a graph",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "Seoul",
+                "Incpos,9ㅐheon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "an gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "description": "An gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "time": "Time",
+                          "source": "VertexID",
+                          "destination": "VertexID",
+                          "program": "KairosProgram",
+                          "gammaElement": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "object"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "examples": [
+                        {
+                          "time": 1707375682,
+                          "program": "IsAfterReachability",
+                          "source": "Seoul",
+                          "destination": "Incheon",
+                          "gammaElement": 27
                         }
                       ]
                     }
@@ -5468,16 +5705,36 @@
           }
         ]
       },
-      "GammaTable": {
-        "description": "source-gamma pairs for an intermedaite information diffusion result",
+      "GammaElement": {
+        "description": "An gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
         "schema": {
           "type": "object",
           "properties": {
             "time": "Time",
+            "source": "VertexID",
+            "destination": "VertexID",
             "program": "KairosProgram",
-            "gammaTable": "object",
-            "additionalProperties": {
-              "type": "Gamma"
+            "gammaElement": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "array"
+                },
+                {
+                  "type": "object"
+                }
+              ]
             }
           }
         },
@@ -5485,12 +5742,30 @@
           {
             "time": 1707375682,
             "program": "IsAfterReachability",
-            "gammaTable": {
-              "Seoul": {
-                "Incheon": 27,
-                "Daejeon": 143
-              }
-            }
+            "source": "Seoul",
+            "destination": "Incheon",
+            "gammaElement": 27
+          }
+        ]
+      },
+      "GammaTable": {
+        "description": "source-gamma pairs for an intermedaite information diffusion result",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "time": "Time",
+            "program": "KairosProgram",
+            "gammaSources": "vertexIDs"
+          }
+        },
+        "examples": [
+          {
+            "time": 1707375682,
+            "program": "IsAfterReachability",
+            "gammaSources": [
+              "Seoul",
+              "Incheon"
+            ]
           }
         ]
       },
