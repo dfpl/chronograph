@@ -8,10 +8,10 @@ import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * The persistent implementation of temporal graph database with MongoDB.
@@ -112,38 +112,55 @@ public class PChronoVertex implements Vertex {
 
 	@Override
 	public Document getProperties() {
-		// TODO
-		// return properties;
-		return null;
+		try {
+			return g.vertices.find(new Document("_id", id)).first().get("properties", Document.class);
+		} catch (Exception e) {
+			return new Document();
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getProperty(String key) {
-		// TODO
-		// return (T) properties.get(key);
-		return null;
+		try {
+			return (T) g.vertices.find(new Document("_id", id)).first().get("properties", Document.class).get(key);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override
 	public Set<String> getPropertyKeys() {
-		// return this.properties.keySet();
-		// TODO
-		return null;
+		try {
+			return g.vertices.find(new Document("_id", id)).first().get("properties", Document.class).keySet();
+		} catch (Exception e) {
+			return new HashSet<String>();
+		}
 	}
 
 	@Override
 	public void setProperty(String key, Object value) {
-		// properties.put(key, value);
-		// TODO
+		g.vertices.updateOne(new Document("_id", id), new Document("$set", new Document("properties." + key, value)),
+				new UpdateOptions().upsert(true));
 	}
 
-	public void setProperties(JsonObject properties, boolean isSet) {
-//		if (!isSet)
-//			this.properties.clear();
-//		properties.stream().forEach(e -> {
-//			this.properties.put(e.getKey(), e.getValue());
-//		});
-		// TODO
+	public void setProperties(Document properties, boolean isSet) {
+		if (!isSet) {
+			g.vertices.updateOne(new Document("_id", id), new Document("$set", new Document("properties", properties)),
+					new UpdateOptions().upsert(true));
+		} else {
+			Document existingProperties = g.vertices.find(new Document("_id", id)).first().get("properties",
+					Document.class);
+			if (existingProperties == null) {
+				existingProperties = properties;
+			}else {
+				for (String key : properties.keySet()) {
+					existingProperties.put(key, properties.get(key));
+				}
+				g.vertices.updateOne(new Document("_id", id), new Document("$set", new Document("properties", properties)),
+						new UpdateOptions().upsert(true));
+			}
+		}
 	}
 
 	@Override
