@@ -2,6 +2,7 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 
 import java.util.*;
 
+import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
@@ -10,7 +11,6 @@ import org.dfpl.chronograph.common.VertexEvent;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -34,16 +34,16 @@ import io.vertx.core.json.JsonObject;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEvent> {
+public class MChronoVertexEvent implements VertexEvent, Comparable<MChronoVertexEvent> {
 
 	private final Vertex vertex;
 	private final Long time;
-	private HashMap<String, Object> properties;
+	private Document properties;
 
-	public ChronoVertexEvent(Vertex v, Long time) {
+	public MChronoVertexEvent(Vertex v, Long time) {
 		this.vertex = v;
 		this.time = time;
-		this.properties = new HashMap<String, Object>();
+		this.properties = new Document();
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 	 * @return Integer difference
 	 */
 	@Override
-	public int compareTo(ChronoVertexEvent event) {
+	public int compareTo(MChronoVertexEvent event) {
 		int elementComparison = this.getElement().getId().compareTo(event.getElement().getId());
 
 		if (elementComparison != 0)
@@ -91,7 +91,7 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 	}
 
 	@Override
-	public Map<String, Object> getProperties() {
+	public Document getProperties() {
 		return properties;
 	}
 
@@ -111,12 +111,14 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 		properties.put(key, value);
 	}
 
-	public void setProperties(JsonObject properties, boolean isSet) {
-		if (!isSet)
-			this.properties.clear();
-		properties.stream().forEach(e -> {
-			this.properties.put(e.getKey(), e.getValue());
-		});
+	public void setProperties(Document properties, boolean isSet) {
+		if (!isSet) {
+			this.properties = properties;
+		} else {
+			for (String key : properties.keySet()) {
+				this.properties.put(key, properties.get(key));
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -151,13 +153,13 @@ public class ChronoVertexEvent implements VertexEvent, Comparable<ChronoVertexEv
 		}).toList();
 	}
 
-	public JsonObject toJsonObject(boolean includeProperties) {
-		JsonObject object = new JsonObject();
+	public Document toDocument(boolean includeProperties) {
+		Document object = new Document();
 		object.put("_id", vertex.getId() + "_" + time);
 		object.put("_v", vertex.getId());
 		object.put("_t", time);
 		if (includeProperties)
-			object.put("properties", new JsonObject(properties));
+			object.put("properties", properties);
 		return object;
 	}
 

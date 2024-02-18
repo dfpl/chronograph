@@ -2,6 +2,7 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 
 import java.util.*;
 
+import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.TimeInstant;
@@ -9,7 +10,6 @@ import org.dfpl.chronograph.common.TimeInstant;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -33,23 +33,23 @@ import io.vertx.core.json.JsonObject;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class ChronoEdge implements Edge {
+public class MChronoEdge implements Edge {
 
 	private Graph g;
 	private String id;
 	private Vertex out;
 	private String label;
 	private Vertex in;
-	private HashMap<String, Object> properties;
+	private Document properties;
 	private NavigableSet<EdgeEvent> events;
 
-	public ChronoEdge(Graph g, Vertex out, String label, Vertex in) {
+	public MChronoEdge(Graph g, Vertex out, String label, Vertex in) {
 		this.g = g;
 		this.out = out;
 		this.label = label;
 		this.in = in;
 		this.id = getEdgeID(out, in, label);
-		this.properties = new HashMap<>();
+		this.properties = new Document();
 		this.events = new TreeSet<EdgeEvent>();
 	}
 
@@ -101,7 +101,7 @@ public class ChronoEdge implements Edge {
 	}
 
 	@Override
-	public Map<String, Object> getProperties() {
+	public Document getProperties() {
 		return properties;
 	}
 
@@ -127,22 +127,24 @@ public class ChronoEdge implements Edge {
 		return (T) properties.remove(key);
 	}
 
-	public void setProperties(JsonObject properties, boolean isSet) {
-		if (!isSet)
-			this.properties.clear();
-		properties.stream().forEach(e -> {
-			this.properties.put(e.getKey(), e.getValue());
-		});
+	public void setProperties(Document properties, boolean isSet) {
+		if (!isSet) {
+			this.properties = properties;
+		} else {
+			for (String key : properties.keySet()) {
+				this.properties.put(key, properties.get(key));
+			}
+		}
 	}
 
-	public JsonObject toJsonObject(boolean includeProperties) {
-		JsonObject object = new JsonObject();
+	public Document toDocument(boolean includeProperties) {
+		Document object = new Document();
 		object.put("_id", id);
 		object.put("_o", out.getId());
 		object.put("_l", label);
 		object.put("_i", in.getId());
 		if (includeProperties)
-			object.put("properties", new JsonObject(properties));
+			object.put("properties", properties);
 		return object;
 	}
 
@@ -156,10 +158,10 @@ public class ChronoEdge implements Edge {
 	public EdgeEvent addEvent(long time) {
 		EdgeEvent event = getEvent(time);
 		if (event == null) {
-			EdgeEvent newEe = new ChronoEdgeEvent(this, time);
+			EdgeEvent newEe = new MChronoEdgeEvent(this, time);
 			this.events.add(newEe);
-			if (((ChronoGraph) g).getEventBus() != null)
-				((ChronoGraph) g).getEventBus().send("addEdgeEvent", newEe.getId());
+			if (((MChronoGraph) g).getEventBus() != null)
+				((MChronoGraph) g).getEventBus().send("addEdgeEvent", newEe.getId());
 			return newEe;
 		} else
 			return event;
@@ -167,7 +169,7 @@ public class ChronoEdge implements Edge {
 
 	@Override
 	public EdgeEvent getEvent(long time) {
-		EdgeEvent event = events.floor(new ChronoEdgeEvent(this, time));
+		EdgeEvent event = events.floor(new MChronoEdgeEvent(this, time));
 		if (event == null)
 			return null;
 		else if (event.getTime() != time)
@@ -197,9 +199,9 @@ public class ChronoEdge implements Edge {
 	@Override
 	public EdgeEvent getEvent(long time, TemporalRelation temporalRelation) {
 		if (temporalRelation.equals(TemporalRelation.isAfter)) {
-			return events.higher(new ChronoEdgeEvent(this, time));
+			return events.higher(new MChronoEdgeEvent(this, time));
 		} else if (temporalRelation.equals(TemporalRelation.isBefore)) {
-			return events.lower(new ChronoEdgeEvent(this, time));
+			return events.lower(new MChronoEdgeEvent(this, time));
 		} else {
 			return getEvent(time);
 		}

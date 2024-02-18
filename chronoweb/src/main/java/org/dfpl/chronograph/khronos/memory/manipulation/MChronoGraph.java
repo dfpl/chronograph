@@ -33,7 +33,7 @@ import io.vertx.core.eventbus.EventBus;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class ChronoGraph implements Graph {
+public class MChronoGraph implements Graph {
 
 	/**
 	 * Vertices queried by a vertex identifier
@@ -65,7 +65,7 @@ public class ChronoGraph implements Graph {
 		return eventBus;
 	}
 
-	public ChronoGraph() {
+	public MChronoGraph() {
 		vertices = new HashMap<String, Vertex>();
 		edges = new HashMap<String, Edge>();
 		outEdges = new HashMap<String, HashSet<Edge>>();
@@ -75,7 +75,7 @@ public class ChronoGraph implements Graph {
 	/**
 	 * Create an empty graph
 	 */
-	public ChronoGraph(EventBus eventBus) {
+	public MChronoGraph(EventBus eventBus) {
 		vertices = new HashMap<String, Vertex>();
 		edges = new HashMap<String, Edge>();
 		outEdges = new HashMap<String, HashSet<Edge>>();
@@ -97,7 +97,7 @@ public class ChronoGraph implements Graph {
 			throw new IllegalArgumentException("Vertex ID cannot contains '|'");
 		return vertices.compute(id, (String identifier, Vertex existingVertex) -> {
 			if (existingVertex == null) {
-				Vertex v = new ChronoVertex(ChronoGraph.this, identifier);
+				Vertex v = new MChronoVertex(MChronoGraph.this, identifier);
 				if (eventBus != null)
 					eventBus.send("addVertex", v.getId());
 				return v;
@@ -165,12 +165,12 @@ public class ChronoGraph implements Graph {
 		if (label.contains("|"))
 			throw new IllegalArgumentException("An edge label cannot contain '|'");
 
-		String edgeId = ChronoEdge.getEdgeID(outVertex, inVertex, label);
+		String edgeId = MChronoEdge.getEdgeID(outVertex, inVertex, label);
 
 		if (edges.containsKey(edgeId))
 			return edges.get(edgeId);
 
-		final Edge edge = new ChronoEdge(ChronoGraph.this, outVertex, label, inVertex);
+		final Edge edge = new MChronoEdge(MChronoGraph.this, outVertex, label, inVertex);
 		edges.put(edgeId, edge);
 
 		// update an index for out-going edges
@@ -208,7 +208,7 @@ public class ChronoGraph implements Graph {
 	 */
 	@Override
 	public Edge getEdge(Vertex outVertex, Vertex inVertex, String label) {
-		return edges.get(ChronoEdge.getEdgeID(outVertex, inVertex, label));
+		return edges.get(MChronoEdge.getEdgeID(outVertex, inVertex, label));
 	}
 
 	/**

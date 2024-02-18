@@ -16,8 +16,8 @@ import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
 import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
 import org.dfpl.chronograph.kairos.program.IsAfterReachability;
-import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertex;
-import org.dfpl.chronograph.khronos.memory.manipulation.ChronoVertexEvent;
+import org.dfpl.chronograph.khronos.memory.manipulation.MChronoVertex;
+import org.dfpl.chronograph.khronos.memory.manipulation.MChronoVertexEvent;
 import com.tinkerpop.blueprints.Graph;
 
 import io.vertx.core.eventbus.EventBus;
@@ -80,7 +80,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+			MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
 			if (v == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -96,7 +96,7 @@ public class SubscriptionRouter extends BaseRouter {
 
 			}
 
-			ChronoVertexEvent ve = (ChronoVertexEvent) v.getEvent(time);
+			MChronoVertexEvent ve = (MChronoVertexEvent) v.getEvent(time);
 
 			if (kairosProgram.equals("IsAfterReachability")) {
 				AbstractKairosProgram<?> existing = kairos.getProgram(time, "IsAfterReachability");
@@ -234,7 +234,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			ChronoVertex v = (ChronoVertex) graph.getVertex(vertexID);
+			MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
 			if (v == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -288,7 +288,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			ChronoVertex source = (ChronoVertex) graph.getVertex(sourceID);
+			MChronoVertex source = (MChronoVertex) graph.getVertex(sourceID);
 			if (source == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -300,7 +300,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			ChronoVertex destination = (ChronoVertex) graph.getVertex(destinationID);
+			MChronoVertex destination = (MChronoVertex) graph.getVertex(destinationID);
 			if (destination == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;

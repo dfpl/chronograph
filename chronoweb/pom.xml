@@ -53,7 +53,11 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.22.1</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-sync</artifactId>
+			<version>4.11.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

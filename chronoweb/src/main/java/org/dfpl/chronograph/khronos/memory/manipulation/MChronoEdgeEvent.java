@@ -1,10 +1,9 @@
 package org.dfpl.chronograph.khronos.memory.manipulation;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
+import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.VertexEvent;
@@ -12,7 +11,6 @@ import org.dfpl.chronograph.common.VertexEvent;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -36,15 +34,15 @@ import io.vertx.core.json.JsonObject;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
+public class MChronoEdgeEvent implements EdgeEvent, Comparable<MChronoEdgeEvent> {
 	private final Edge edge;
 	private final Long time;
-	private HashMap<String, Object> properties;
+	private Document properties;
 
-	public ChronoEdgeEvent(Edge e, Long time) {
+	public MChronoEdgeEvent(Edge e, Long time) {
 		this.edge = e;
 		this.time = time;
-		this.properties = new HashMap<String, Object>();
+		this.properties = new Document();
 	}
 
 	@Override
@@ -60,7 +58,7 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 	 * @return Integer difference
 	 */
 	@Override
-	public int compareTo(ChronoEdgeEvent event) {
+	public int compareTo(MChronoEdgeEvent event) {
 		int elementComparison = this.getElement().getId().compareTo(event.getElement().getId());
 
 		if (elementComparison != 0)
@@ -85,7 +83,7 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 	}
 
 	@Override
-	public Map<String, Object> getProperties() {
+	public Document getProperties() {
 		return properties;
 	}
 
@@ -105,12 +103,14 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 		properties.put(key, value);
 	}
 
-	public void setProperties(JsonObject properties, boolean isSet) {
-		if (!isSet)
-			this.properties.clear();
-		properties.stream().forEach(e -> {
-			this.properties.put(e.getKey(), e.getValue());
-		});
+	public void setProperties(Document properties, boolean isSet) {
+		if (!isSet) {
+			this.properties = properties;
+		} else {
+			for (String key : properties.keySet()) {
+				this.properties.put(key, properties.get(key));
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -146,14 +146,14 @@ public class ChronoEdgeEvent implements EdgeEvent, Comparable<ChronoEdgeEvent> {
 		return edge.getId() + "_" + time;
 	}
 
-	public JsonObject toJsonObject(boolean includeProperties) {		
-		JsonObject object = ((ChronoEdge) edge).toJsonObject(false);
-		object.put("_id", edge.getId()+"_"+time);
+	public Document toDocument(boolean includeProperties) {
+		Document object = ((MChronoEdge) edge).toDocument(false);
+		object.put("_id", edge.getId() + "_" + time);
 		object.put("_e", edge.getId());
 		object.put("_t", time);
 		if (includeProperties)
-			object.put("properties", new JsonObject(properties));
-		
+			object.put("properties", properties);
+
 		return object;
 	}
 

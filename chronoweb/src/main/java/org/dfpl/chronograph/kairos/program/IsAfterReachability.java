@@ -12,7 +12,7 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
-import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
+import org.dfpl.chronograph.khronos.memory.manipulation.MChronoGraph;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Graph;
@@ -50,7 +50,7 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 				gammaTable.set(s.getId(), s.getId(), new LongGammaElement(startTime));
 			}
 			
-			Iterator<Entry<Long, HashSet<EdgeEvent>>> iter = ((ChronoGraph) graph).getEdgeEventIterator();
+			Iterator<Entry<Long, HashSet<EdgeEvent>>> iter = ((MChronoGraph) graph).getEdgeEventIterator();
 			while (iter.hasNext()) {
 				Entry<Long, HashSet<EdgeEvent>> eventEntry = iter.next();
 				Long t = eventEntry.getKey();

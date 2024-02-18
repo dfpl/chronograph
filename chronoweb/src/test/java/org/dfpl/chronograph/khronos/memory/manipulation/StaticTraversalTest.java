@@ -53,7 +53,7 @@ public class StaticTraversalTest {
 
 	@Before
 	public void setUp() throws Exception {
-		g = new ChronoGraph();
+		g = new MChronoGraph();
 
 		v1 = g.addVertex("1");
 		v1.setProperty("isOdd", true);

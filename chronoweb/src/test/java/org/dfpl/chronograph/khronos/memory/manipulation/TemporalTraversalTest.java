@@ -52,7 +52,7 @@ public class TemporalTraversalTest {
 
 	@Before
 	public void setUp() throws Exception {
-		g = new ChronoGraph();
+		g = new MChronoGraph();
 
 		v1 = g.addVertex("1");
 		v2 = g.addVertex("2");

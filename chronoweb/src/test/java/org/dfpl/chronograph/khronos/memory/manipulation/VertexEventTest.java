@@ -34,7 +34,7 @@ public class VertexEventTest {
 
 	@Before
 	public void setUp() throws Exception {
-		g = new ChronoGraph();
+		g = new MChronoGraph();
 		a = g.addVertex("A");
 	}
 

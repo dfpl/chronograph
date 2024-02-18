@@ -1,7 +1,8 @@
 package com.tinkerpop.blueprints;
 
-import java.util.Map;
 import java.util.Set;
+
+import org.bson.Document;
 
 public interface Element {
 
@@ -15,11 +16,10 @@ public interface Element {
 	public String getId();
 
 	/**
-	 * Return a java.util.Map of properties
 	 * 
-	 * @return a java.util.Map of properties
+	 * @return org.bson.JsonObject
 	 */
-	Map<String, Object> getProperties();
+	Document getProperties();
 
 	/**
 	 * Return the object value associated with the provided string key. If no value

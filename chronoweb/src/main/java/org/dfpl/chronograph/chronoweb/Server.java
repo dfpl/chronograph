@@ -11,7 +11,7 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.dfpl.chronograph.chronoweb.router.memory.ManipulationRouter;
 import org.dfpl.chronograph.chronoweb.router.memory.SubscriptionRouter;
 import org.dfpl.chronograph.kairos.KairosEngine;
-import org.dfpl.chronograph.khronos.memory.manipulation.ChronoGraph;
+import org.dfpl.chronograph.khronos.memory.manipulation.MChronoGraph;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -47,7 +47,7 @@ public class Server extends AbstractVerticle {
 
 	public static Logger logger;
 	public static int port = 80;
-	private ChronoGraph graph;
+	private MChronoGraph graph;
 	private KairosEngine kairos;
 	private EventBus eventBus;
 	private Router router;
@@ -75,7 +75,7 @@ public class Server extends AbstractVerticle {
 				.setDeleteUploadedFilesOnEnd(true));
 
 		this.eventBus = vertx.eventBus();
-		graph = new ChronoGraph(eventBus);
+		graph = new MChronoGraph(eventBus);
 		kairos = new KairosEngine(graph, eventBus);
 
 		registerManipulationRouter();

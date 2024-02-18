@@ -3,6 +3,7 @@ package org.dfpl.chronograph.khronos.memory.manipulation;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.bson.Document;
 import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.TimeInstant;
@@ -11,7 +12,6 @@ import org.dfpl.chronograph.common.VertexEvent;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -35,17 +35,18 @@ import io.vertx.core.json.JsonObject;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class ChronoVertex implements Vertex {
+public class MChronoVertex implements Vertex {
 
-	private ChronoGraph g;
+	private MChronoGraph g;
 	private String id;
-	private HashMap<String, Object> properties;
+	private Document properties;
 	private NavigableSet<VertexEvent> events;
 
-	ChronoVertex(ChronoGraph g, String id) {
+	MChronoVertex(MChronoGraph g, String id) {
 		this.id = id;
 		this.g = g;
-		this.properties = new HashMap<>();
+		this.properties = new Document();
+
 		this.events = new TreeSet<VertexEvent>();
 	}
 
@@ -114,7 +115,7 @@ public class ChronoVertex implements Vertex {
 	}
 
 	@Override
-	public Map<String, Object> getProperties() {
+	public Document getProperties() {
 		return properties;
 	}
 
@@ -134,12 +135,14 @@ public class ChronoVertex implements Vertex {
 		properties.put(key, value);
 	}
 
-	public void setProperties(JsonObject properties, boolean isSet) {
-		if (!isSet)
-			this.properties.clear();
-		properties.stream().forEach(e -> {
-			this.properties.put(e.getKey(), e.getValue());
-		});
+	public void setProperties(Document properties, boolean isSet) {
+		if (!isSet) {
+			this.properties = properties;
+		} else {
+			for (String key : properties.keySet()) {
+				this.properties.put(key, properties.get(key));
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -155,9 +158,9 @@ public class ChronoVertex implements Vertex {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ChronoVertex))
+		if (!(obj instanceof MChronoVertex))
 			return false;
-		return this.getId().equals(((ChronoVertex) obj).getId());
+		return this.getId().equals(((MChronoVertex) obj).getId());
 	}
 
 	@Override
@@ -165,11 +168,11 @@ public class ChronoVertex implements Vertex {
 		return id;
 	}
 
-	public JsonObject toJsonObject(boolean includeProperties) {
-		JsonObject object = new JsonObject();
+	public Document toDocument(boolean includeProperties) {
+		Document object = new Document();
 		object.put("_id", id);
 		if (includeProperties)
-			object.put("properties", new JsonObject(properties));
+			object.put("properties", properties);
 		return object;
 	}
 
@@ -183,7 +186,7 @@ public class ChronoVertex implements Vertex {
 	public VertexEvent addEvent(long time) {
 		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
 		if (event == null) {
-			VertexEvent newVe = new ChronoVertexEvent(this, time);
+			VertexEvent newVe = new MChronoVertexEvent(this, time);
 			this.events.add(newVe);
 			if (g.getEventBus() != null)
 				g.getEventBus().send("addVertexEvent", newVe.getId());
@@ -196,7 +199,7 @@ public class ChronoVertex implements Vertex {
 	public VertexEvent getEvent(long time) {
 		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
 		if (event == null)
-			return new ChronoVertexEvent(this, time);
+			return new MChronoVertexEvent(this, time);
 		else
 			return event;
 	}
@@ -216,7 +219,7 @@ public class ChronoVertex implements Vertex {
 		for (Direction direction : directions) {
 			for (Edge e : this.getEdges(direction, null)) {
 				e.getEvents().stream().map(Event::getTime).forEach(t -> {
-					resultSet.add(new ChronoVertexEvent(this, t));
+					resultSet.add(new MChronoVertexEvent(this, t));
 				});
 			}
 		}
@@ -239,7 +242,7 @@ public class ChronoVertex implements Vertex {
 		for (Direction direction : directions) {
 			for (Edge e : this.getEdges(direction, null)) {
 				e.getEvents(time, tr).stream().map(Event::getTime).forEach(t -> {
-					resultSet.add(new ChronoVertexEvent(this, t));
+					resultSet.add(new MChronoVertexEvent(this, t));
 				});
 			}
 		}
@@ -274,7 +277,7 @@ public class ChronoVertex implements Vertex {
 
 	@Override
 	public VertexEvent getEvent(long time, TemporalRelation tr) {
-		ChronoVertexEvent tve = new ChronoVertexEvent(this, time);
+		MChronoVertexEvent tve = new MChronoVertexEvent(this, time);
 		if (tr.equals(TemporalRelation.isAfter)) {
 			return events.higher(tve);
 		} else if (tr.equals(TemporalRelation.isBefore)) {

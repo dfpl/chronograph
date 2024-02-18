@@ -39,7 +39,7 @@ public class EdgeTest {
 
 	@Before
 	public void setUp() {
-		g = new ChronoGraph();
+		g = new MChronoGraph();
 		a = g.addVertex("A");
 		b = g.addVertex("B");
 		c = g.addVertex("C");
