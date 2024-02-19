@@ -1,25 +1,18 @@
-package org.dfpl.chronograph.khronos.persistent.manipulation;
+package org.dfpl.chronograph.khronos.manipulation.memory;
 
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.json.JsonObject;
 
 /**
- * The persistent implementation of temporal graph database with MongoDB.
+ * The in-memory implementation of temporal graph database.
  *
  * @author Jaewook Byun, Ph.D., Assistant Professor, DFPL, Department of
  *         Software, Sejong University
@@ -40,39 +33,54 @@ import io.vertx.core.json.JsonObject;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-@SuppressWarnings("unused")
-public class PChronoGraph implements Graph {
+public class MChronoGraph implements Graph {
 
-	private MongoClient client;
-	private MongoDatabase database;
-	MongoCollection<Document> vertices;
-	MongoCollection<Document> edges;
-	MongoCollection<Document> vertexEvents;
-	MongoCollection<Document> edgeEvents;
+	/**
+	 * Vertices queried by a vertex identifier
+	 */
+	private HashMap<String, Vertex> vertices;
+
+	/**
+	 * Edges queried by an edge identifier
+	 */
+	private HashMap<String, Edge> edges;
+
+	/**
+	 * simple index for out-going edges by a key of vertex identifier
+	 * 
+	 * <vertexID, HashSet<out-going edges>
+	 */
+	private HashMap<String, HashSet<Edge>> outEdges;
+
+	/**
+	 * simple index for in-going edges by a key of vertex identifier
+	 * 
+	 * <vertexID, HashSet<in-going edges>
+	 */
+	private HashMap<String, HashSet<Edge>> inEdges;
 
 	private EventBus eventBus;
 
-	public PChronoGraph(String connectionString, String databaseName) {
-		client = MongoClients.create(connectionString);
-		database = client.getDatabase(databaseName);
-		vertices = database.getCollection("vertex", Document.class);
-		edges = database.getCollection("edge", Document.class);
-		vertexEvents = database.getCollection("vertexEvent", Document.class);
-		edgeEvents = database.getCollection("edgeEvents", Document.class);
-	}
-
-	public PChronoGraph(String connectionString, String databaseName, EventBus eventBus) {
-		client = MongoClients.create(connectionString);
-		database = client.getDatabase(databaseName);
-		vertices = database.getCollection("vertex", Document.class);
-		edges = database.getCollection("edge", Document.class);
-		vertexEvents = database.getCollection("vertexEvent", Document.class);
-		edgeEvents = database.getCollection("edgeEvents", Document.class);
-		this.eventBus = eventBus;
-	}
-
 	public EventBus getEventBus() {
 		return eventBus;
+	}
+
+	public MChronoGraph() {
+		vertices = new HashMap<String, Vertex>();
+		edges = new HashMap<String, Edge>();
+		outEdges = new HashMap<String, HashSet<Edge>>();
+		inEdges = new HashMap<String, HashSet<Edge>>();
+	}
+
+	/**
+	 * Create an empty graph
+	 */
+	public MChronoGraph(EventBus eventBus) {
+		vertices = new HashMap<String, Vertex>();
+		edges = new HashMap<String, Edge>();
+		outEdges = new HashMap<String, HashSet<Edge>>();
+		inEdges = new HashMap<String, HashSet<Edge>>();
+		this.eventBus = eventBus;
 	}
 
 	/**
@@ -87,23 +95,16 @@ public class PChronoGraph implements Graph {
 	public Vertex addVertex(String id) {
 		if (id.contains("|"))
 			throw new IllegalArgumentException("Vertex ID cannot contains '|'");
-		Document v = vertices.find(new Document("_id", id)).first();
-		Vertex vertex = new PChronoVertex(this, id, vertices);
-		if (v != null) {
-			return vertex;
-		} else {
-			vertices.insertOne(new Document("_id", id));
-			if (eventBus != null)
-				eventBus.send("addVertex", id);
-			return vertex;
-		}
+		return vertices.compute(id, (String identifier, Vertex existingVertex) -> {
+			if (existingVertex == null) {
+				Vertex v = new MChronoVertex(MChronoGraph.this, identifier);
+				if (eventBus != null)
+					eventBus.send("addVertex", v.getId());
+				return v;
+			}
+			return existingVertex;
+		});
 	}
-
-	/**
-	 * public JsonObject toJsonObject(boolean includeProperties) { JsonObject object
-	 * = new JsonObject(); object.put("_id", id); if (includeProperties)
-	 * object.put("properties", new JsonObject(properties)); return object; }
-	 */
 
 	/**
 	 * Return the vertex referenced by the provided object identifier. If no vertex
@@ -115,13 +116,7 @@ public class PChronoGraph implements Graph {
 	 */
 	@Override
 	public Vertex getVertex(String id) {
-		Document v = vertices.find(new Document("_id", id)).first();
-		Vertex vertex = new PChronoVertex(this, id, vertices);
-		if (v == null) {
-			return null;
-		} else {
-			return vertex;
-		}
+		return vertices.get(id);
 	}
 
 	/**
@@ -132,13 +127,7 @@ public class PChronoGraph implements Graph {
 	 */
 	@Override
 	public Collection<Vertex> getVertices() {
-		HashSet<Vertex> vertices = new HashSet<Vertex>();
-		MongoCursor<Document> cursor = this.vertices.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			vertices.add(new PChronoVertex(this, doc.getString("_id"), this.vertices));
-		}
-		return vertices;
+		return vertices.values();
 	}
 
 	/**
@@ -154,20 +143,10 @@ public class PChronoGraph implements Graph {
 	 */
 	@Override
 	public Collection<Vertex> getVertices(String key, Object value) {
-		HashSet<Vertex> vertices = new HashSet<Vertex>();
-		MongoCursor<Document> cursor = this.vertices.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			Document properties = doc.get("properties", Document.class);
-			if (properties == null)
-				continue;
-			if (!properties.containsKey(key))
-				continue;
-			if (properties.get(key).equals(value))
-				vertices.add(new PChronoVertex(this, doc.getString("_id"), this.vertices));
-		}
-
-		return vertices;
+		return vertices.values().parallelStream().filter(v -> {
+			Object val = v.getProperty(key);
+			return val == null ? false : val.equals(value) ? true : false;
+		}).collect(Collectors.toSet());
 	}
 
 	/**
@@ -186,17 +165,33 @@ public class PChronoGraph implements Graph {
 		if (label.contains("|"))
 			throw new IllegalArgumentException("An edge label cannot contain '|'");
 
-		String edgeId = PChronoEdge.getEdgeID(outVertex, inVertex, label);
-		Document e = edges.find(new Document("_id", edgeId)).first();
-		Edge edge = new PChronoEdge(this, outVertex, label, inVertex, edges);
-		if (e != null) {
-			return edge;
-		} else {
-			edges.insertOne(new Document("_id", edgeId));
-			if (eventBus != null)
-				eventBus.send("addEdge", edgeId);
-			return edge;
-		}
+		String edgeId = MChronoEdge.getEdgeID(outVertex, inVertex, label);
+
+		if (edges.containsKey(edgeId))
+			return edges.get(edgeId);
+
+		final Edge edge = new MChronoEdge(MChronoGraph.this, outVertex, label, inVertex);
+		edges.put(edgeId, edge);
+
+		// update an index for out-going edges
+		outEdges.compute(outVertex.getId(), (String out, HashSet<Edge> outEdges) -> {
+			if (outEdges == null)
+				outEdges = new HashSet<Edge>();
+			outEdges.add(edge);
+			return outEdges;
+		});
+
+		// update an index for in-going edges
+		inEdges.compute(inVertex.getId(), (String in, HashSet<Edge> inEdges) -> {
+			if (inEdges == null)
+				inEdges = new HashSet<Edge>();
+			inEdges.add(edge);
+			return inEdges;
+		});
+		if (eventBus != null)
+			eventBus.send("addEdge", edge.getId());
+
+		return edge;
 	}
 
 	/**
@@ -213,14 +208,7 @@ public class PChronoGraph implements Graph {
 	 */
 	@Override
 	public Edge getEdge(Vertex outVertex, Vertex inVertex, String label) {
-		String edgeId = PChronoEdge.getEdgeID(outVertex, inVertex, label);
-		Document e = edges.find(new Document("_id", edgeId)).first();
-		Edge edge = new PChronoEdge(this, outVertex, label, inVertex, edges);
-		if (e == null) {
-			return null;
-		} else {
-			return edge;
-		}
+		return edges.get(MChronoEdge.getEdgeID(outVertex, inVertex, label));
 	}
 
 	/**
@@ -233,13 +221,7 @@ public class PChronoGraph implements Graph {
 	 */
 	@Override
 	public Edge getEdge(String id) {
-		Document e = edges.find(new Document("_id", id)).first();
-		if (e == null) {
-			return null;
-		} else {
-			Edge edge = new PChronoEdge(this, id, edges);
-			return edge;
-		}
+		return edges.get(id);
 	}
 
 	/**
@@ -250,13 +232,7 @@ public class PChronoGraph implements Graph {
 	 */
 	@Override
 	public Collection<Edge> getEdges() {
-		HashSet<Edge> edges = new HashSet<Edge>();
-		MongoCursor<Document> cursor = this.edges.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			edges.add(new PChronoEdge(this, doc.getString("_id"), this.edges));
-		}
-		return edges;
+		return edges.values();
 	}
 
 	/**
@@ -272,20 +248,10 @@ public class PChronoGraph implements Graph {
 	 */
 	@Override
 	public Collection<Edge> getEdges(String key, Object value) {
-		HashSet<Edge> edges = new HashSet<Edge>();
-		MongoCursor<Document> cursor = this.edges.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			Document properties = doc.get("properties", Document.class);
-			if (properties == null)
-				continue;
-			if (!properties.containsKey(key))
-				continue;
-			if (properties.get(key).equals(value))
-				edges.add(new PChronoEdge(this, doc.getString("_id"), this.edges));
-		}
-
-		return edges;
+		return edges.values().parallelStream().filter(v -> {
+			Object val = v.getProperty(key);
+			return val == null ? false : val.equals(value) ? true : false;
+		}).collect(Collectors.toSet());
 	}
 
 	/**
@@ -297,24 +263,74 @@ public class PChronoGraph implements Graph {
 	@Override
 	public void removeVertex(Vertex vertex) {
 		String id = vertex.getId();
-		vertices.deleteOne(new Document("_id", id));
-		edges.deleteMany(new Document("_o", id));
-		edges.deleteMany(new Document("_i", id));
+		this.vertices.remove(id);
+
+		// update a key-value map for edges
+		Iterator<Entry<String, Edge>> eIter = edges.entrySet().iterator();
+		while (eIter.hasNext()) {
+			Entry<String, Edge> entry = eIter.next();
+			Edge cEdge = entry.getValue();
+			if (cEdge.getVertex(Direction.OUT).equals(vertex) || cEdge.getVertex(Direction.IN).equals(vertex)) {
+				eIter.remove();
+			}
+		}
+		// indexes
+		Iterator<Entry<String, HashSet<Edge>>> outIter = outEdges.entrySet().iterator();
+		while (outIter.hasNext()) {
+			Entry<String, HashSet<Edge>> entry = outIter.next();
+			if (entry.getKey().equals(id)) {
+				outIter.remove();
+			} else {
+				entry.getValue().removeIf(e -> e.getVertex(Direction.IN).equals(vertex));
+				if (entry.getValue().isEmpty())
+					outIter.remove();
+			}
+		}
+		Iterator<Entry<String, HashSet<Edge>>> inIter = inEdges.entrySet().iterator();
+		while (inIter.hasNext()) {
+			Entry<String, HashSet<Edge>> entry = inIter.next();
+			if (entry.getKey().equals(id)) {
+				inIter.remove();
+			} else {
+				entry.getValue().removeIf(e -> e.getVertex(Direction.OUT).equals(vertex));
+				if (entry.getValue().isEmpty())
+					inIter.remove();
+			}
+		}
 	}
 
 	@Override
 	public void removeEdge(Edge edge) {
-		edges.deleteOne(new Document("_id", edge.getId()));
+		this.edges.remove(edge.toString());
+		this.outEdges.values().forEach(set -> set.remove(edge));
+		this.inEdges.values().forEach(set -> set.remove(edge));
+	}
+
+	HashMap<String, HashSet<Edge>> getOutEdges() {
+		return outEdges;
+	}
+
+	void setOutEdges(HashMap<String, HashSet<Edge>> outEdges) {
+		this.outEdges = outEdges;
+	}
+
+	HashMap<String, HashSet<Edge>> getInEdges() {
+		return inEdges;
+	}
+
+	void setInEdges(HashMap<String, HashSet<Edge>> inEdges) {
+		this.inEdges = inEdges;
 	}
 
 	@Override
 	public void clear() {
-		vertices.deleteMany(new Document());
-		edges.deleteMany(new Document());
+		vertices.clear();
+		edges.clear();
+		outEdges.clear();
+		inEdges.clear();
 	}
 
 	public Iterator<Entry<Long, HashSet<EdgeEvent>>> getEdgeEventIterator() {
-		// TODO
 		TreeMap<Long, HashSet<EdgeEvent>> eventMap = new TreeMap<Long, HashSet<EdgeEvent>>();
 		Collection<Edge> edges = getEdges();
 		edges.parallelStream().flatMap(e -> {
@@ -333,8 +349,11 @@ public class PChronoGraph implements Graph {
 		return eventMap.entrySet().iterator();
 	}
 
+	/**
+	 * Do Nothing in an in-memory graph
+	 */
 	@Override
 	public void shutdown() {
-		client.close();
+		// Do Nothing
 	}
 }

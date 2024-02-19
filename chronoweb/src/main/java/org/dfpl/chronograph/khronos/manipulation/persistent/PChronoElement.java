@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.khronos.persistent.manipulation;
+package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import java.util.HashSet;
 import java.util.Set;

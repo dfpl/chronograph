@@ -8,8 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.dfpl.chronograph.chronoweb.router.ManipulationRouter;
 import org.dfpl.chronograph.chronoweb.router.SubscriptionRouter;
 import org.dfpl.chronograph.kairos.KairosEngine;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoGraph;
-import org.dfpl.chronograph.khronos.persistent.manipulation.PChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
 import com.tinkerpop.blueprints.Graph;
 

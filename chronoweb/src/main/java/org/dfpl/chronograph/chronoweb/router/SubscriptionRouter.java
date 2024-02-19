@@ -16,8 +16,9 @@ import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
 import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
 import org.dfpl.chronograph.kairos.program.IsAfterReachability;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoVertex;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoVertexEvent;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
+
 import com.tinkerpop.blueprints.Graph;
 
 import io.vertx.core.eventbus.EventBus;

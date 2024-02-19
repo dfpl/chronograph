@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.khronos.memory.dataloader;
+package org.dfpl.chronograph.khronos.dataloader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,7 +12,6 @@ import com.tinkerpop.blueprints.Graph;
 import io.vertx.ext.web.FileUpload;
 
 /**
- * The in-memory implementation of temporal graph database.
  *
  * @author Jaewook Byun, Ph.D., Assistant Professor, DFPL, Department of
  *         Software, Sejong University

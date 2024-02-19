@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.junit.*;
 
 import com.tinkerpop.blueprints.Direction;

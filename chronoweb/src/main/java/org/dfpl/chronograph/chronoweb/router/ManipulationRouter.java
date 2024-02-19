@@ -10,7 +10,7 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.Util;
 import org.dfpl.chronograph.common.VertexEvent;
-import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
+import org.dfpl.chronograph.khronos.dataloader.DataLoader;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;

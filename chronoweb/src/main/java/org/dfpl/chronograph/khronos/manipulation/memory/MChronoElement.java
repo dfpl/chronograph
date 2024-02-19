@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.khronos.memory.manipulation;
+package org.dfpl.chronograph.khronos.manipulation.memory;
 
 import java.util.Set;
 

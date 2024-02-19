@@ -10,6 +10,7 @@ import java.util.List;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.junit.*;
 
 import com.tinkerpop.blueprints.Direction;

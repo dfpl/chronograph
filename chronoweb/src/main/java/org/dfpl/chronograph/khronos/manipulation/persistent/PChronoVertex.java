@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.khronos.persistent.manipulation;
+package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import java.util.*;
 
@@ -51,7 +51,9 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 		else if (direction.equals(Direction.IN))
 			query.append("_i", id);
 
-		if (labels != null && labels.size() == 1) {
+		if (labels != null && labels.isEmpty()) {
+
+		} else if (labels != null && labels.size() == 1) {
 			query.append("_l", labels.get(0));
 		} else {
 			query.append("_l", new Document("$in", labels));
@@ -74,7 +76,9 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 		else if (direction.equals(Direction.IN))
 			query.append("_i", id);
 
-		if (labels != null && labels.size() == 1) {
+		if (labels != null && labels.isEmpty()) {
+
+		} else if (labels != null && labels.size() == 1) {
 			query.append("_l", labels.get(0));
 		} else {
 			query.append("_l", new Document("$in", labels));

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Comparator;
 import java.util.List;
 
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.junit.*;
 
 import com.tinkerpop.blueprints.Direction;

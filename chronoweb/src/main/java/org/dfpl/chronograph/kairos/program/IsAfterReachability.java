@@ -12,7 +12,7 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Graph;
