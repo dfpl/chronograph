@@ -1,5 +1,7 @@
 package org.dfpl.chronograph.common;
 
+import org.bson.Document;
+
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -38,4 +40,6 @@ public interface EdgeEvent extends Event {
 	public Vertex getVertex(Direction direction);
 
 	public String getLabel();
+	
+	public Document toDocument(boolean includeProperties);
 }

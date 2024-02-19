@@ -9,8 +9,6 @@ import org.dfpl.chronograph.common.TimeInstant;
 
 import com.tinkerpop.blueprints.*;
 
-import io.vertx.core.json.JsonArray;
-
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -33,18 +31,16 @@ import io.vertx.core.json.JsonArray;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class MChronoEdge implements Edge {
+public class MChronoEdge extends MChronoElement implements Edge {
 
-	private Graph g;
-	private String id;
 	private Vertex out;
 	private String label;
 	private Vertex in;
-	private Document properties;
+
 	private NavigableSet<EdgeEvent> events;
 
 	public MChronoEdge(Graph g, Vertex out, String label, Vertex in) {
-		this.g = g;
+		this.g = (MChronoGraph) g;
 		this.out = out;
 		this.label = label;
 		this.in = in;
@@ -78,65 +74,6 @@ public class MChronoEdge implements Edge {
 		g.removeEdge(this);
 	}
 
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Edge))
-			return false;
-		return id.equals(obj.toString());
-	}
-
-	@Override
-	public String toString() {
-		return id;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public Document getProperties() {
-		return properties;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getProperty(String key) {
-		return (T) properties.get(key);
-	}
-
-	@Override
-	public Set<String> getPropertyKeys() {
-		return this.properties.keySet();
-	}
-
-	@Override
-	public void setProperty(String key, Object value) {
-		properties.put(key, value);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T removeProperty(String key) {
-		return (T) properties.remove(key);
-	}
-
-	public void setProperties(Document properties, boolean isSet) {
-		if (!isSet) {
-			this.properties = properties;
-		} else {
-			for (String key : properties.keySet()) {
-				this.properties.put(key, properties.get(key));
-			}
-		}
-	}
-
 	public Document toDocument(boolean includeProperties) {
 		Document object = new Document();
 		object.put("_id", id);
@@ -146,12 +83,6 @@ public class MChronoEdge implements Edge {
 		if (includeProperties)
 			object.put("properties", properties);
 		return object;
-	}
-
-	public static JsonArray toJsonArrayOfIDs(Collection<Edge> edges) {
-		JsonArray array = new JsonArray();
-		edges.parallelStream().forEach(e -> array.add(e.getId()));
-		return array;
 	}
 
 	@Override

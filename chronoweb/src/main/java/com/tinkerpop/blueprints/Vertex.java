@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NavigableSet;
 
+import org.bson.Document;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 
@@ -60,6 +61,8 @@ public interface Vertex extends Element {
 	 */
 	public void remove();
 
+	public Document toDocument(boolean includeProperties);
+	
 	/**
 	 * Explicitly add a vertex event of this graph element valid at time.
 	 * 
@@ -124,5 +127,4 @@ public interface Vertex extends Element {
 	 * @param tr   the temporal relation to match with time
 	 */
 	public void removeEvents(long time, TemporalRelation tr);
-
 }

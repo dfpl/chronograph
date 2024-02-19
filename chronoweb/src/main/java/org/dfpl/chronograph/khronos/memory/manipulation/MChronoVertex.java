@@ -11,8 +11,6 @@ import org.dfpl.chronograph.common.VertexEvent;
 
 import com.tinkerpop.blueprints.*;
 
-import io.vertx.core.json.JsonArray;
-
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -35,18 +33,14 @@ import io.vertx.core.json.JsonArray;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class MChronoVertex implements Vertex {
+public class MChronoVertex extends MChronoElement implements Vertex {
 
-	private MChronoGraph g;
-	private String id;
-	private Document properties;
 	private NavigableSet<VertexEvent> events;
 
 	MChronoVertex(MChronoGraph g, String id) {
 		this.id = id;
 		this.g = g;
 		this.properties = new Document();
-
 		this.events = new TreeSet<VertexEvent>();
 	}
 
@@ -109,77 +103,12 @@ public class MChronoVertex implements Vertex {
 		g.removeVertex(this);
 	}
 
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public Document getProperties() {
-		return properties;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getProperty(String key) {
-		return (T) properties.get(key);
-	}
-
-	@Override
-	public Set<String> getPropertyKeys() {
-		return this.properties.keySet();
-	}
-
-	@Override
-	public void setProperty(String key, Object value) {
-		properties.put(key, value);
-	}
-
-	public void setProperties(Document properties, boolean isSet) {
-		if (!isSet) {
-			this.properties = properties;
-		} else {
-			for (String key : properties.keySet()) {
-				this.properties.put(key, properties.get(key));
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T removeProperty(String key) {
-		return (T) properties.remove(key);
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof MChronoVertex))
-			return false;
-		return this.getId().equals(((MChronoVertex) obj).getId());
-	}
-
-	@Override
-	public String toString() {
-		return id;
-	}
-
 	public Document toDocument(boolean includeProperties) {
 		Document object = new Document();
 		object.put("_id", id);
 		if (includeProperties)
 			object.put("properties", properties);
 		return object;
-	}
-
-	public static JsonArray toJsonArrayOfIDs(Collection<Vertex> edges) {
-		JsonArray array = new JsonArray();
-		edges.parallelStream().forEach(v -> array.add(v.getId()));
-		return array;
 	}
 
 	@Override

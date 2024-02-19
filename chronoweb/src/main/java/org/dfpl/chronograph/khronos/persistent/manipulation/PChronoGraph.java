@@ -88,7 +88,7 @@ public class PChronoGraph implements Graph {
 		if (id.contains("|"))
 			throw new IllegalArgumentException("Vertex ID cannot contains '|'");
 		Document v = vertices.find(new Document("_id", id)).first();
-		Vertex vertex = new PChronoVertex(this, id);
+		Vertex vertex = new PChronoVertex(this, id, vertices);
 		if (v != null) {
 			return vertex;
 		} else {
@@ -116,7 +116,7 @@ public class PChronoGraph implements Graph {
 	@Override
 	public Vertex getVertex(String id) {
 		Document v = vertices.find(new Document("_id", id)).first();
-		Vertex vertex = new PChronoVertex(this, id);
+		Vertex vertex = new PChronoVertex(this, id, vertices);
 		if (v == null) {
 			return null;
 		} else {
@@ -136,7 +136,7 @@ public class PChronoGraph implements Graph {
 		MongoCursor<Document> cursor = this.vertices.find().iterator();
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
-			vertices.add(new PChronoVertex(this, doc.getString("_id")));
+			vertices.add(new PChronoVertex(this, doc.getString("_id"), this.vertices));
 		}
 		return vertices;
 	}
@@ -164,7 +164,7 @@ public class PChronoGraph implements Graph {
 			if (!properties.containsKey(key))
 				continue;
 			if (properties.get(key).equals(value))
-				vertices.add(new PChronoVertex(this, doc.getString("_id")));
+				vertices.add(new PChronoVertex(this, doc.getString("_id"), this.vertices));
 		}
 
 		return vertices;
@@ -188,7 +188,7 @@ public class PChronoGraph implements Graph {
 
 		String edgeId = PChronoEdge.getEdgeID(outVertex, inVertex, label);
 		Document e = edges.find(new Document("_id", edgeId)).first();
-		Edge edge = new PChronoEdge(this, outVertex, label, inVertex);
+		Edge edge = new PChronoEdge(this, outVertex, label, inVertex, edges);
 		if (e != null) {
 			return edge;
 		} else {
@@ -215,7 +215,7 @@ public class PChronoGraph implements Graph {
 	public Edge getEdge(Vertex outVertex, Vertex inVertex, String label) {
 		String edgeId = PChronoEdge.getEdgeID(outVertex, inVertex, label);
 		Document e = edges.find(new Document("_id", edgeId)).first();
-		Edge edge = new PChronoEdge(this, outVertex, label, inVertex);
+		Edge edge = new PChronoEdge(this, outVertex, label, inVertex, edges);
 		if (e == null) {
 			return null;
 		} else {
@@ -237,7 +237,7 @@ public class PChronoGraph implements Graph {
 		if (e == null) {
 			return null;
 		} else {
-			Edge edge = new PChronoEdge(this, id);
+			Edge edge = new PChronoEdge(this, id, edges);
 			return edge;
 		}
 	}
@@ -254,7 +254,7 @@ public class PChronoGraph implements Graph {
 		MongoCursor<Document> cursor = this.edges.find().iterator();
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
-			edges.add(new PChronoEdge(this, doc.getString("_id")));
+			edges.add(new PChronoEdge(this, doc.getString("_id"), this.edges));
 		}
 		return edges;
 	}
@@ -282,7 +282,7 @@ public class PChronoGraph implements Graph {
 			if (!properties.containsKey(key))
 				continue;
 			if (properties.get(key).equals(value))
-				edges.add(new PChronoEdge(this, doc.getString("_id")));
+				edges.add(new PChronoEdge(this, doc.getString("_id"), this.edges));
 		}
 
 		return edges;

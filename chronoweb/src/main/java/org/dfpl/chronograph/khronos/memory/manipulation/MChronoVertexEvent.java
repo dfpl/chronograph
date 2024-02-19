@@ -10,8 +10,6 @@ import org.dfpl.chronograph.common.VertexEvent;
 
 import com.tinkerpop.blueprints.*;
 
-import io.vertx.core.json.JsonArray;
-
 /**
  * The in-memory implementation of temporal graph database.
  *
@@ -161,13 +159,5 @@ public class MChronoVertexEvent implements VertexEvent, Comparable<MChronoVertex
 		if (includeProperties)
 			object.put("properties", properties);
 		return object;
-	}
-
-	public static JsonArray toJsonArray(Collection<VertexEvent> vertexSet) {
-		JsonArray result = new JsonArray();
-		for (VertexEvent ve : vertexSet) {
-			result.add(ve.getId());
-		}
-		return result;
 	}
 }

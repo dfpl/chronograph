@@ -7,11 +7,9 @@ import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.UpdateOptions;
 import com.tinkerpop.blueprints.*;
-
-import io.vertx.core.json.JsonArray;
 
 /**
  * The persistent implementation of temporal graph database with MongoDB.
@@ -35,14 +33,12 @@ import io.vertx.core.json.JsonArray;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class PChronoVertex implements Vertex {
+public class PChronoVertex extends PChronoElement implements Vertex {
 
-	private PChronoGraph g;
-	private String id;
-
-	PChronoVertex(PChronoGraph g, String id) {
+	PChronoVertex(PChronoGraph g, String id, MongoCollection<Document> collection) {
 		this.id = id;
 		this.g = g;
+		this.collection = collection;
 	}
 
 	@Override
@@ -64,7 +60,7 @@ public class PChronoVertex implements Vertex {
 		MongoCursor<Document> cursor = g.edges.find(query).iterator();
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
-			edges.add(new PChronoEdge(g, doc.getString("_id")));
+			edges.add(new PChronoEdge(g, doc.getString("_id"), collection));
 		}
 		return edges;
 	}
@@ -88,9 +84,9 @@ public class PChronoVertex implements Vertex {
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
 			if (direction.equals(Direction.OUT))
-				vertices.add(new PChronoVertex(g, doc.getString("_i")));
+				vertices.add(new PChronoVertex(g, doc.getString("_i"), collection));
 			else if (direction.equals(Direction.IN))
-				vertices.add(new PChronoVertex(g, doc.getString("_o")));
+				vertices.add(new PChronoVertex(g, doc.getString("_o"), collection));
 		}
 		return vertices;
 	}
@@ -105,102 +101,13 @@ public class PChronoVertex implements Vertex {
 		g.removeVertex(this);
 	}
 
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public Document getProperties() {
-		try {
-			return g.vertices.find(new Document("_id", id)).first().get("properties", Document.class);
-		} catch (Exception e) {
-			return new Document();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getProperty(String key) {
-		try {
-			return (T) g.vertices.find(new Document("_id", id)).first().get("properties", Document.class).get(key);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	@Override
-	public Set<String> getPropertyKeys() {
-		try {
-			return g.vertices.find(new Document("_id", id)).first().get("properties", Document.class).keySet();
-		} catch (Exception e) {
-			return new HashSet<String>();
-		}
-	}
-
-	@Override
-	public void setProperty(String key, Object value) {
-		g.vertices.updateOne(new Document("_id", id), new Document("$set", new Document("properties." + key, value)),
-				new UpdateOptions().upsert(true));
-	}
-
-	public void setProperties(Document properties, boolean isSet) {
-		if (!isSet) {
-			g.vertices.updateOne(new Document("_id", id), new Document("$set", new Document("properties", properties)),
-					new UpdateOptions().upsert(true));
-		} else {
-			Document existingProperties = g.vertices.find(new Document("_id", id)).first().get("properties",
-					Document.class);
-			if (existingProperties == null) {
-				existingProperties = properties;
-			}else {
-				for (String key : properties.keySet()) {
-					existingProperties.put(key, properties.get(key));
-				}
-				g.vertices.updateOne(new Document("_id", id), new Document("$set", new Document("properties", properties)),
-						new UpdateOptions().upsert(true));
-			}
-		}
-	}
-
-	@Override
-	public <T> T removeProperty(String key) {
-		// return (T) properties.remove(key);
-		// TODO
-		return null;
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof PChronoVertex))
-			return false;
-		return this.getId().equals(((PChronoVertex) obj).getId());
-	}
-
-	@Override
-	public String toString() {
-		return id;
-	}
-
 	public Document toDocument(boolean includeProperties) {
-//		JsonObject object = new JsonObject();
-//		object.put("_id", id);
-//		if (includeProperties)
-//			object.put("properties", new JsonObject(properties));
-//		return object;
-		// TODO
-		return null;
-	}
-
-	public static JsonArray toJsonArrayOfIDs(Collection<Vertex> edges) {
-		JsonArray array = new JsonArray();
-		edges.parallelStream().forEach(v -> array.add(v.getId()));
-		return array;
+		Document object = new Document();
+		object.put("_id", id);
+		if (includeProperties) {
+			object.put("properties", getProperties());
+		}
+		return object;
 	}
 
 	@Override

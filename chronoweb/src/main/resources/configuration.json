@@ -1,9 +1,9 @@
 {
 	"_port" : "an integer value for port (default 8080)",
-	"port" : 8080,
+	"port" : 80,
 
 	"_data_storage_type" : "{memory|persistent}",
-	"data_storage_type" : "persistent",
+	"data_storage_type" : "memory",
 
 	"_db_name" : "mongodb database name to be used if data_storage_type is persistent",
 	"db_name" : "chronoweb",
@@ -11,5 +11,6 @@
 	"_db_connection_string" : "mongo connection string if data_storage_type is persistent",
 	"db_connection_string" : "mongodb://localhost:27017",
 
-	"_number_of_verticles" : "The number of cores (default is cores + 1) as integer value"
+	"_number_of_verticles" : "The number of cores (default is cores + 1) as integer value",
+	"number_of_verticles" : 1
 }

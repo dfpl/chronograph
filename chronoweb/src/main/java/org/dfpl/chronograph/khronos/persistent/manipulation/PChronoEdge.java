@@ -6,6 +6,8 @@ import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.json.JsonArray;
@@ -34,37 +36,38 @@ import io.vertx.core.json.JsonObject;
  * 
  */
 @SuppressWarnings("unused")
-public class PChronoEdge implements Edge {
+public class PChronoEdge extends PChronoElement implements Edge {
 
-	private Graph g;
-	private String id;
 	private String outId;
 	private String label;
 	private String inId;
 
-	public PChronoEdge(Graph g, Vertex out, String label, Vertex in) {
+	public PChronoEdge(PChronoGraph g, Vertex out, String label, Vertex in, MongoCollection<Document> collection) {
 		this.g = g;
 		this.outId = out.getId();
 		this.label = label;
 		this.inId = in.getId();
 		this.id = getEdgeID(out, in, label);
+		this.collection = collection;
 	}
 
-	public PChronoEdge(Graph g, String out, String label, String in) {
+	public PChronoEdge(PChronoGraph g, String out, String label, String in, MongoCollection<Document> collection) {
 		this.g = g;
 		this.outId = out;
 		this.label = label;
 		this.inId = in;
 		this.id = getEdgeID(out, in, label);
+		this.collection = collection;
 	}
 
-	public PChronoEdge(Graph g, String id) {
+	public PChronoEdge(PChronoGraph g, String id, MongoCollection<Document> collection) {
 		this.g = g;
 		String[] arr = id.split("|");
 		this.outId = arr[0];
 		this.label = arr[1];
 		this.inId = arr[2];
 		this.id = id;
+		this.collection = collection;
 	}
 
 	public static String getEdgeID(Vertex out, Vertex in, String label) {
@@ -77,15 +80,13 @@ public class PChronoEdge implements Edge {
 
 	@Override
 	public Vertex getVertex(Direction direction) throws IllegalArgumentException {
-//		if (direction.equals(Direction.OUT)) {
-//			return out;
-//		} else if (direction.equals(Direction.IN)) {
-//			return in;
-//		} else {
-//			throw new IllegalArgumentException("A direction should be either OUT or IN");
-//		}
-		// TODO
-		return null;
+		if (direction.equals(Direction.OUT)) {
+			return new PChronoVertex((PChronoGraph) g, outId, collection);
+		} else if (direction.equals(Direction.IN)) {
+			return new PChronoVertex((PChronoGraph) g, inId, collection);
+		} else {
+			throw new IllegalArgumentException("A direction should be either OUT or IN");
+		}
 	}
 
 	@Override
@@ -122,64 +123,81 @@ public class PChronoEdge implements Edge {
 
 	@Override
 	public Document getProperties() {
-		// return properties;
-		// TODO
-		return null;
+		try {
+			return g.edges.find(new Document("_id", id)).first().get("properties", Document.class);
+		} catch (Exception e) {
+			return new Document();
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getProperty(String key) {
-		// return (T) properties.get(key);
-		// TODO
-		return null;
+		try {
+			return (T) g.edges.find(new Document("_id", id)).first().get("properties", Document.class).get(key);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override
 	public Set<String> getPropertyKeys() {
-		// return this.properties.keySet();
-		// TODO
-		return null;
+		try {
+			return g.edges.find(new Document("_id", id)).first().get("properties", Document.class).keySet();
+		} catch (Exception e) {
+			return new HashSet<String>();
+		}
 	}
 
 	@Override
 	public void setProperty(String key, Object value) {
-		// properties.put(key, value);
-		// TODO
+		g.edges.updateOne(new Document("_id", id), new Document("$set", new Document("properties." + key, value)),
+				new UpdateOptions().upsert(true));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T removeProperty(String key) {
-		// return (T) properties.remove(key);
-		// TODO
-		return null;
+		Document doc = g.edges.find(new Document("_id", id)).first().get("properties", Document.class);
+		if (doc == null)
+			return null;
+		if (doc.containsKey(key)) {
+			g.edges.updateOne(new Document("_id", id), new Document("$unset", new Document("properties." + key, "")),
+					new UpdateOptions().upsert(true));
+			return (T) doc.get(key);
+		} else {
+			return null;
+		}
 	}
 
-	public void setProperties(JsonObject properties, boolean isSet) {
-//		if (!isSet)
-//			this.properties.clear();
-//		properties.stream().forEach(e -> {
-//			this.properties.put(e.getKey(), e.getValue());
-//		});
-		// TODO
+	public void setProperties(Document properties, boolean isSet) {
+		if (!isSet) {
+			g.edges.updateOne(new Document("_id", id), new Document("$set", new Document("properties", properties)),
+					new UpdateOptions().upsert(true));
+		} else {
+			Document existingProperties = g.edges.find(new Document("_id", id)).first().get("properties",
+					Document.class);
+			if (existingProperties == null) {
+				existingProperties = properties;
+			} else {
+				for (String key : properties.keySet()) {
+					existingProperties.put(key, properties.get(key));
+				}
+				g.edges.updateOne(new Document("_id", id), new Document("$set", new Document("properties", properties)),
+						new UpdateOptions().upsert(true));
+			}
+		}
 	}
 
 	public Document toDocument(boolean includeProperties) {
-//		JsonObject object = new JsonObject();
-//		object.put("_id", id);
-//		object.put("_o", out.getId());
-//		object.put("_l", label);
-//		object.put("_i", in.getId());
-//		if (includeProperties)
-//			object.put("properties", new JsonObject(properties));
-//		return object;
-		// TODO
-		return null;
-	}
-
-	public static JsonArray toJsonArrayOfIDs(Collection<Edge> edges) {
-		JsonArray array = new JsonArray();
-		edges.parallelStream().forEach(e -> array.add(e.getId()));
-		return array;
+		Document object = new Document();
+		object.put("_id", id);
+		object.put("_o", outId);
+		object.put("_l", label);
+		object.put("_i", inId);
+		if (includeProperties)
+			object.put("properties", getProperties());
+		return object;
 	}
 
 	@Override

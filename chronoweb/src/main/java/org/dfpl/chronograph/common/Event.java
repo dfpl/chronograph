@@ -1,8 +1,5 @@
 package org.dfpl.chronograph.common;
 
-import java.util.Map;
-import java.util.Set;
-
 import com.tinkerpop.blueprints.Element;
 
 /**
@@ -27,22 +24,10 @@ import com.tinkerpop.blueprints.Element;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public interface Event {
+public interface Event extends Element {
 
-	public String getId();
-	
 	public String getElementId();
-	
-	Map<String, Object> getProperties();
-	
-	public <T> T getProperty(String key);
-	
-	public Set<String> getPropertyKeys();
-	
-	public void setProperty(String key, Object value);
-	
-	public <T> T removeProperty(String key);
-	
+
 	public Long getTime();
 
 	public Element getElement();

@@ -1,6 +1,5 @@
 package org.dfpl.chronograph.khronos.memory.manipulation;
 
-import java.util.Collection;
 import java.util.Set;
 
 import org.bson.Document;
@@ -9,8 +8,6 @@ import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.VertexEvent;
 
 import com.tinkerpop.blueprints.*;
-
-import io.vertx.core.json.JsonArray;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -155,13 +152,5 @@ public class MChronoEdgeEvent implements EdgeEvent, Comparable<MChronoEdgeEvent>
 			object.put("properties", properties);
 
 		return object;
-	}
-
-	public static JsonArray toJsonArray(Collection<EdgeEvent> edgeSet) {
-		JsonArray result = new JsonArray();
-		for (EdgeEvent ee : edgeSet) {
-			result.add(ee.getId());
-		}
-		return result;
 	}
 }

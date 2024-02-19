@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.chronoweb.router.memory;
+package org.dfpl.chronograph.chronoweb.router;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,16 +6,16 @@ import java.util.List;
 import org.bson.Document;
 import org.dfpl.chronograph.chronoweb.MessageBuilder;
 import org.dfpl.chronograph.chronoweb.Server;
+import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.Util;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.khronos.memory.dataloader.DataLoader;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoEdge;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoEdgeEvent;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoVertex;
-import org.dfpl.chronograph.khronos.memory.manipulation.MChronoVertexEvent;
 
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
 
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonArray;
@@ -49,12 +49,9 @@ public class ManipulationRouter extends BaseRouter {
 
 			if (Server.vPattern.matcher(resource).matches()) {
 				try {
-					MChronoVertex v = null;
-					if (graph.getVertex(resource) == null) {
-						v = (MChronoVertex) graph.addVertex(resource);
-						eventBus.send("addVertex", v.toDocument(false).toJson());
-					} else {
-						v = (MChronoVertex) graph.addVertex(resource);
+					Vertex v = graph.getVertex(resource);
+					if (v == null) {
+						v = graph.addVertex(resource);
 					}
 					v.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
@@ -67,8 +64,10 @@ public class ManipulationRouter extends BaseRouter {
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
 					String[] arr = resource.split("\\|");
-					MChronoEdge e = (MChronoEdge) graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[2]),
-							arr[1]);
+					Edge e = graph.getEdge(resource);
+					if (e == null) {
+						e = graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[2]), arr[1]);
+					}
 					e.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
 							e.toDocument(includeProperties == null ? false : includeProperties).toJson(), 200);
@@ -77,14 +76,13 @@ public class ManipulationRouter extends BaseRouter {
 							MessageBuilder.getPropertySyntaxException(e.getMessage()), 400);
 				}
 				return;
-
 			} else if (vtPattern.matcher(resource).matches()) {
 				try {
 					String[] arr = resource.split("\\_");
 					String vertexID = arr[0];
 					long time = Long.parseLong(arr[1]);
-					MChronoVertex v = (MChronoVertex) graph.addVertex(vertexID);
-					MChronoVertexEvent ve = (MChronoVertexEvent) v.addEvent(time);
+					Vertex v = graph.addVertex(vertexID);
+					VertexEvent ve = v.addEvent(time);
 					ve.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
 							ve.toDocument(includeProperties == null ? false : includeProperties).toJson(), 200);
@@ -97,9 +95,8 @@ public class ManipulationRouter extends BaseRouter {
 					String[] arr = resource.split("\\_");
 					long time = Long.parseLong(arr[1]);
 					String[] arr2 = arr[0].split("\\|");
-					MChronoEdge e = (MChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
-							arr2[1]);
-					MChronoEdgeEvent ee = (MChronoEdgeEvent) e.addEvent(time);
+					Edge e = graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]), arr2[1]);
+					EdgeEvent ee = e.addEvent(time);
 					ee.setProperties(properties, isUpdate);
 					sendResult(routingContext, "application/json",
 							ee.toDocument(includeProperties == null ? false : includeProperties).toJson(), 200);
@@ -124,7 +121,7 @@ public class ManipulationRouter extends BaseRouter {
 			String resource = routingContext.pathParam("resource");
 			Boolean includeProperties = getBooleanURLParameter(routingContext, "includeProperties");
 			if (Server.vPattern.matcher(resource).matches()) {
-				MChronoVertex v = (MChronoVertex) graph.getVertex(resource);
+				Vertex v = graph.getVertex(resource);
 				if (v != null)
 					sendResult(routingContext, "application/json",
 							v.toDocument(includeProperties == null ? false : includeProperties).toJson(), 200);
@@ -133,7 +130,7 @@ public class ManipulationRouter extends BaseRouter {
 				return;
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
-					MChronoEdge e = (MChronoEdge) graph.getEdge(resource);
+					Edge e = graph.getEdge(resource);
 					if (e != null)
 						sendResult(routingContext, "application/json",
 								e.toDocument(includeProperties == null ? false : includeProperties).toJson(), 200);
@@ -149,9 +146,9 @@ public class ManipulationRouter extends BaseRouter {
 				String[] arr = resource.split("\\_");
 				String vertexID = arr[0];
 				long time = Long.parseLong(arr[1]);
-				MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
-					MChronoVertexEvent ve = (MChronoVertexEvent) v.getEvent(time, TemporalRelation.cotemporal);
+					VertexEvent ve = v.getEvent(time, TemporalRelation.cotemporal);
 					if (ve != null) {
 						sendResult(routingContext, "application/json",
 								ve.toDocument(includeProperties == null ? false : includeProperties).toJson(), 200);
@@ -165,10 +162,9 @@ public class ManipulationRouter extends BaseRouter {
 					String[] arr = resource.split("\\_");
 					long time = Long.parseLong(arr[1]);
 					String[] arr2 = arr[0].split("\\|");
-					MChronoEdge e = (MChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
-							arr2[1]);
+					Edge e = graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]), arr2[1]);
 					if (e != null) {
-						MChronoEdgeEvent ee = (MChronoEdgeEvent) e.getEvent(time);
+						EdgeEvent ee = e.getEvent(time);
 						if (ee != null) {
 							sendResult(routingContext, "application/json",
 									ee.toDocument(includeProperties == null ? false : includeProperties).toJson(), 200);
@@ -214,10 +210,10 @@ public class ManipulationRouter extends BaseRouter {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
-				MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							MChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.OUT, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs(v.getEdges(Direction.OUT, labels)).toString(), 200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -233,10 +229,10 @@ public class ManipulationRouter extends BaseRouter {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
-				MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							MChronoEdge.toJsonArrayOfIDs(v.getEdges(Direction.IN, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs(v.getEdges(Direction.IN, labels)).toString(), 200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -254,10 +250,10 @@ public class ManipulationRouter extends BaseRouter {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
-				MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							MChronoVertex.toJsonArrayOfIDs(v.getVertices(Direction.OUT, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs(v.getVertices(Direction.OUT, labels)).toString(), 200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -273,10 +269,10 @@ public class ManipulationRouter extends BaseRouter {
 			String vertexID = routingContext.pathParam("vertexID");
 			List<String> labels = routingContext.queryParam("label");
 			if (Server.vPattern.matcher(vertexID).matches()) {
-				MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							MChronoVertex.toJsonArrayOfIDs(v.getVertices(Direction.IN, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs(v.getVertices(Direction.IN, labels)).toString(), 200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -303,7 +299,7 @@ public class ManipulationRouter extends BaseRouter {
 			String resource = routingContext.pathParam("resource");
 			if (Server.vPattern.matcher(resource).matches()) {
 				try {
-					MChronoVertex v = (MChronoVertex) graph.getVertex(resource);
+					Vertex v = graph.getVertex(resource);
 					if (v == null) {
 						sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 						return;
@@ -317,7 +313,7 @@ public class ManipulationRouter extends BaseRouter {
 				return;
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
-					MChronoEdge e = (MChronoEdge) graph.getEdge(resource);
+					Edge e = graph.getEdge(resource);
 					if (e == null) {
 						sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 						return;
@@ -334,9 +330,9 @@ public class ManipulationRouter extends BaseRouter {
 					String[] arr = resource.split("\\_");
 					String vertexID = arr[0];
 					long time = Long.parseLong(arr[1]);
-					MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+					Vertex v = graph.getVertex(vertexID);
 					if (v != null) {
-						MChronoVertexEvent ve = (MChronoVertexEvent) v.getEvent(time, TemporalRelation.cotemporal);
+						VertexEvent ve = v.getEvent(time, TemporalRelation.cotemporal);
 						if (ve != null) {
 							v.removeEvents(time, TemporalRelation.cotemporal);
 							sendResult(routingContext, 204);
@@ -355,10 +351,9 @@ public class ManipulationRouter extends BaseRouter {
 					String[] arr = resource.split("\\_");
 					long time = Long.parseLong(arr[1]);
 					String[] arr2 = arr[0].split("\\|");
-					MChronoEdge e = (MChronoEdge) graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]),
-							arr2[1]);
+					Edge e = graph.addEdge(graph.addVertex(arr2[0]), graph.addVertex(arr2[2]), arr2[1]);
 					if (e != null) {
-						MChronoEdgeEvent ee = (MChronoEdgeEvent) e.getEvent(time);
+						EdgeEvent ee = e.getEvent(time);
 						if (ee != null) {
 							e.removeEvents(time, TemporalRelation.cotemporal);
 							sendResult(routingContext, 204);
@@ -406,16 +401,16 @@ public class ManipulationRouter extends BaseRouter {
 						sendResult(routingContext, e.getMessage(), 404);
 						return;
 					}
-					MChronoVertex v = (MChronoVertex) graph.getVertex(resource);
+					Vertex v = graph.getVertex(resource);
 					if (time == null || tr == null) {
 						sendResult(routingContext, "application/json",
-								MChronoVertexEvent.toJsonArray(
+								Util.toJsonArrayOfIDs(
 										v.getEvents(awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
 										.toString(),
 								200);
 						return;
 					} else {
-						sendResult(routingContext, "application/json", MChronoVertexEvent.toJsonArray(
+						sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs(
 								v.getEvents(time, tr, awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
 								.toString(), 200);
 						return;
@@ -426,14 +421,14 @@ public class ManipulationRouter extends BaseRouter {
 				return;
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
-					MChronoEdge e = (MChronoEdge) graph.getEdge(resource);
+					Edge e = graph.getEdge(resource);
 					if (time == null || tr == null) {
-						sendResult(routingContext, "application/json",
-								MChronoEdgeEvent.toJsonArray(e.getEvents()).toString(), 200);
+						sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs(e.getEvents()).toString(),
+								200);
 						return;
 					} else {
 						sendResult(routingContext, "application/json",
-								MChronoEdgeEvent.toJsonArray(e.getEvents(time, tr)).toString(), 200);
+								Util.toJsonArrayOfIDs(e.getEvents(time, tr)).toString(), 200);
 						return;
 					}
 				} catch (IllegalArgumentException e) {
@@ -470,14 +465,14 @@ public class ManipulationRouter extends BaseRouter {
 				String[] arr = vertexEventID.split("\\_");
 				try {
 					Long time = Long.parseLong(arr[1]);
-					MChronoVertex v = (MChronoVertex) graph.getVertex(arr[0]);
+					Vertex v = graph.getVertex(arr[0]);
 					if (v == null) {
 						sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 						return;
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							MChronoEdgeEvent.toJsonArray(ve.getEdgeEvents(Direction.OUT, tr, label)).toString(), 200);
+							Util.toJsonArrayOfIDs(ve.getEdgeEvents(Direction.OUT, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);
@@ -513,14 +508,14 @@ public class ManipulationRouter extends BaseRouter {
 				String[] arr = vertexEventID.split("\\_");
 				try {
 					Long time = Long.parseLong(arr[1]);
-					MChronoVertex v = (MChronoVertex) graph.getVertex(arr[0]);
+					Vertex v = graph.getVertex(arr[0]);
 					if (v == null) {
 						sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 						return;
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							MChronoEdgeEvent.toJsonArray(ve.getEdgeEvents(Direction.IN, tr, label)).toString(), 200);
+							Util.toJsonArrayOfIDs(ve.getEdgeEvents(Direction.IN, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);
@@ -558,15 +553,14 @@ public class ManipulationRouter extends BaseRouter {
 				String[] arr = vertexEventID.split("\\_");
 				try {
 					Long time = Long.parseLong(arr[1]);
-					MChronoVertex v = (MChronoVertex) graph.getVertex(arr[0]);
+					Vertex v = graph.getVertex(arr[0]);
 					if (v == null) {
 						sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 						return;
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							MChronoVertexEvent.toJsonArray(ve.getVertexEvents(Direction.OUT, tr, label)).toString(),
-							200);
+							Util.toJsonArrayOfIDs(ve.getVertexEvents(Direction.OUT, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);
@@ -602,15 +596,14 @@ public class ManipulationRouter extends BaseRouter {
 				String[] arr = vertexEventID.split("\\_");
 				try {
 					Long time = Long.parseLong(arr[1]);
-					MChronoVertex v = (MChronoVertex) graph.getVertex(arr[0]);
+					Vertex v = graph.getVertex(arr[0]);
 					if (v == null) {
 						sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 						return;
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							MChronoVertexEvent.toJsonArray(ve.getVertexEvents(Direction.IN, tr, label)).toString(),
-							200);
+							Util.toJsonArrayOfIDs(ve.getVertexEvents(Direction.IN, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);

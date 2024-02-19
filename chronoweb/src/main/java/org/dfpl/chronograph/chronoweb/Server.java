@@ -4,20 +4,22 @@ import java.net.Inet4Address;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.dfpl.chronograph.chronoweb.router.memory.ManipulationRouter;
-import org.dfpl.chronograph.chronoweb.router.memory.SubscriptionRouter;
+import org.dfpl.chronograph.chronoweb.router.ManipulationRouter;
+import org.dfpl.chronograph.chronoweb.router.SubscriptionRouter;
 import org.dfpl.chronograph.kairos.KairosEngine;
 import org.dfpl.chronograph.khronos.memory.manipulation.MChronoGraph;
+import org.dfpl.chronograph.khronos.persistent.manipulation.PChronoGraph;
+
+import com.tinkerpop.blueprints.Graph;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 
@@ -46,8 +48,13 @@ import io.vertx.ext.web.handler.BodyHandler;
 public class Server extends AbstractVerticle {
 
 	public static Logger logger;
+	public static JsonObject configuration;
 	public static int port = 80;
-	private MChronoGraph graph;
+	public static String backendType;
+	public static String dbName;
+	public static String connectionString;
+	public static int numberOfVerticles;
+	private Graph graph;
 	private KairosEngine kairos;
 	private EventBus eventBus;
 	private Router router;
@@ -65,6 +72,15 @@ public class Server extends AbstractVerticle {
 
 	public static String baseDirectory = "d:\\kairos";
 
+	public void setModules() {
+		if(backendType.equals("memory")) {
+			graph = new MChronoGraph(eventBus);
+		}else {
+			graph = new PChronoGraph(connectionString, dbName, eventBus);
+		}
+		kairos = new KairosEngine(graph, eventBus);		
+	}
+	
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		super.start(startPromise);
@@ -73,15 +89,14 @@ public class Server extends AbstractVerticle {
 		this.router = Router.router(vertx);
 		router.route().handler(BodyHandler.create().setBodyLimit(BodyHandler.DEFAULT_BODY_LIMIT * 2)
 				.setDeleteUploadedFilesOnEnd(true));
-
 		this.eventBus = vertx.eventBus();
-		graph = new MChronoGraph(eventBus);
-		kairos = new KairosEngine(graph, eventBus);
+		
+		setModules();
 
 		registerManipulationRouter();
 		registerSubscriptionRouter();
 
-		server.requestHandler(router).listen(80);
+		server.requestHandler(router).listen(port);
 		logger.info(
 				"Chronoweb runs at http://" + Inet4Address.getLocalHost().getHostAddress() + ":" + port + "/chronoweb");
 	}
@@ -107,19 +122,13 @@ public class Server extends AbstractVerticle {
 	public void registerSubscriptionRouter() {
 		subscriptionRouter = new SubscriptionRouter(graph, kairos);
 		subscriptionRouter.registerSubscribeVertexEventRouter(router, eventBus);
-		
+
 		subscriptionRouter.registerGetSubscriptions(router, eventBus);
 		subscriptionRouter.registerGetGammaRouter(router, eventBus);
 	}
 
-	public static void setLogger() {
-		Configurator.setRootLevel(Level.OFF);
-		Configurator.setLevel(Server.class, Level.DEBUG);
-		logger = LogManager.getLogger(Server.class);
-	}
-
 	public static void main(String[] args) {
-		setLogger();
-		Vertx.vertx().deployVerticle(new Server());
+		Bootstrap.bootstrap(args);
+		Vertx.vertx().deployVerticle("org.dfpl.chronograph.chronoweb.Server", new DeploymentOptions().setInstances(Server.numberOfVerticles));
 	}
 }

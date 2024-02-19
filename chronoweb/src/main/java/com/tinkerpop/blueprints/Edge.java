@@ -2,6 +2,7 @@ package com.tinkerpop.blueprints;
 
 import java.util.NavigableSet;
 
+import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 
@@ -39,6 +40,8 @@ public interface Edge extends Element {
 	 * Remove the element from the graph.
 	 */
 	public void remove();
+	
+	public Document toDocument(boolean includeProperties);
 	
 	/**
 	 * Add an event valid at time. The caller (Element) keeps distinct events

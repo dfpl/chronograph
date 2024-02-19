@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.chronoweb.router.memory;
+package org.dfpl.chronograph.chronoweb.router;
 
 import java.util.List;
 

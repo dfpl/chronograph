@@ -2,6 +2,8 @@ package org.dfpl.chronograph.common;
 
 import java.util.Collection;
 
+import org.bson.Document;
+
 import com.tinkerpop.blueprints.Direction;
 
 /**
@@ -51,4 +53,5 @@ public interface VertexEvent extends Event {
 	 */
 	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label);
 
+	public Document toDocument(boolean includeProperties);
 }
