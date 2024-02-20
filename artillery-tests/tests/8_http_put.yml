@@ -1,0 +1,16 @@
+config:
+  target: http://localhost:80/chronoweb
+  phases:
+    - name: Put a number of neighbors
+      duration: 1
+      arrivalRate: 1
+  processor: "./processors/processor.js"
+scenarios:
+  - flow:
+      - loop:
+        - function: "setEdgeEventIdLoop"
+        - put:
+            url: "/graph/{{ edgeEventId }}"
+            json:
+              key: value
+        whileTrue: "hasNextEvent"
