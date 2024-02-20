@@ -8,7 +8,7 @@ public class MChronoEvent extends MChronoElement implements Event, Comparable<Ev
 
 	protected Element element;
 	protected Long time;
-	
+
 	@Override
 	public String getElementId() {
 		return element.getId();
@@ -22,21 +22,6 @@ public class MChronoEvent extends MChronoElement implements Event, Comparable<Ev
 	@Override
 	public Element getElement() {
 		return element;
-	}
-
-	@Override
-	public String toString() {
-		return id;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
 	}
 
 	@Override

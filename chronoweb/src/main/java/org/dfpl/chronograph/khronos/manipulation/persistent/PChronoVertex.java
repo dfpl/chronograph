@@ -11,6 +11,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.eventbus.EventBus;
+
 /**
  * The persistent implementation of temporal graph database with MongoDB.
  *
@@ -116,17 +118,19 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 
 	@Override
 	public VertexEvent addEvent(long time) {
-//		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
-//		if (event == null) {
-//			VertexEvent newVe = new PChronoVertexEvent(this, time);
-//			this.events.add(newVe);
-//			if (g.getEventBus() != null)
-//				g.getEventBus().send("addVertexEvent", newVe.getId());
-//			return newVe;
-//		} else
-//			return event;
-		// TODO
-		return null;
+
+		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
+		if (event != null) {
+			return event;
+		} else {
+			event = new PChronoVertexEvent(this, time);
+			PChronoGraph pg = (PChronoGraph) g;
+			pg.vertexEvents.insertOne(event.toDocument(false));
+			EventBus eb = pg.getEventBus();
+			if (eb != null)
+				eb.send("addVertexEvent", event.getId());
+			return event;
+		}
 	}
 
 	@Override
@@ -219,21 +223,18 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 
 	@Override
 	public VertexEvent getEvent(long time, TemporalRelation tr) {
-//		MChronoVertexEvent tve = new MChronoVertexEvent(this, time);
-//		if (tr.equals(TemporalRelation.isAfter)) {
-//			return events.higher(tve);
-//		} else if (tr.equals(TemporalRelation.isBefore)) {
-//			return events.lower(tve);
-//		} else {
-//			VertexEvent ve = events.floor(tve);
-//			if (ve == null)
-//				return null;
-//			else if (ve.equals(tve))
-//				return ve;
-//			else
-//				return null;
-//		}
-		// TODO
-		return null;
+		PChronoGraph pg = (PChronoGraph) g;
+		if (tr.equals(TemporalRelation.isAfter)) {
+			Document gt = pg.vertexEvents.find(new Document("_v", id).append("$gt", new Document("_t", time))).first();
+			return new PChronoVertexEvent(this, gt.getLong("_t"));
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			Document lt = pg.vertexEvents.find(new Document("_v", id).append("$lt", new Document("_t", time))).first();
+			return new PChronoVertexEvent(this, lt.getLong("_t"));
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			Document eq = pg.vertexEvents.find(new Document("_v", id).append("_t", time)).first();
+			return new PChronoVertexEvent(this, eq.getLong("_t"));
+		} else {
+			throw new IllegalArgumentException("Illegal temporal relation");
+		}
 	}
 }

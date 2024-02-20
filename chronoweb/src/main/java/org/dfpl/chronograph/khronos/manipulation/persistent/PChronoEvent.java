@@ -4,24 +4,29 @@ import org.dfpl.chronograph.common.Event;
 
 import com.tinkerpop.blueprints.Element;
 
-public class PChronoEvent extends PChronoElement implements Event {
+public class PChronoEvent extends PChronoElement implements Event, Comparable<Event> {
 	
+	protected Element element;
+	protected Long time;
+
 	@Override
 	public String getElementId() {
-		// TODO Auto-generated method stub
-		return null;
+		return element.getId();
 	}
 
 	@Override
 	public Long getTime() {
-		// TODO Auto-generated method stub
-		return null;
+		return time;
 	}
 
 	@Override
 	public Element getElement() {
-		// TODO Auto-generated method stub
-		return null;
+		return element;
+	}
+
+	@Override
+	public int compareTo(Event o) {
+		return time.compareTo(o.getTime());
 	}
 
 }
