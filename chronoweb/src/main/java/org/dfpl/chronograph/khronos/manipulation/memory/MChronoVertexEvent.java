@@ -42,14 +42,14 @@ public class MChronoVertexEvent extends MChronoEvent implements VertexEvent {
 	}
 
 	@Override
-	public Collection<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label) {
-		return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> e.getEvent(time, tr))
-				.toList();
+	public Iterable<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label) {
+		return ((Collection<Edge>) ((Vertex) element).getEdges(direction, List.of(label))).parallelStream()
+				.map(e -> e.getEvent(time, tr)).toList();
 	}
 
 	@Override
-	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
-		return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> {
+	public Iterable<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
+		return ((Collection<Edge>) ((Vertex) element).getEdges(direction, List.of(label))).parallelStream().map(e -> {
 			EdgeEvent neighborEe = e.getEvent(time, tr);
 			if (neighborEe == null)
 				return null;

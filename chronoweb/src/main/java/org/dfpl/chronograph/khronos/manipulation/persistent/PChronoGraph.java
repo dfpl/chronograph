@@ -2,7 +2,6 @@ package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
 
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
@@ -323,22 +322,23 @@ public class PChronoGraph implements Graph {
 
 	public Iterator<Entry<Long, HashSet<EdgeEvent>>> getEdgeEventIterator() {
 		// TODO
-		TreeMap<Long, HashSet<EdgeEvent>> eventMap = new TreeMap<Long, HashSet<EdgeEvent>>();
-		Collection<Edge> edges = getEdges();
-		edges.parallelStream().flatMap(e -> {
-			Stream<EdgeEvent> stream = e.getEvents().parallelStream();
-			return stream;
-		}).forEach(ee -> {
-			Long t = ee.getTime();
-			if (eventMap.containsKey(t)) {
-				eventMap.get(t).add(ee);
-			} else {
-				HashSet<EdgeEvent> newSet = new HashSet<EdgeEvent>();
-				newSet.add(ee);
-				eventMap.put(t, newSet);
-			}
-		});
-		return eventMap.entrySet().iterator();
+//		TreeMap<Long, HashSet<EdgeEvent>> eventMap = new TreeMap<Long, HashSet<EdgeEvent>>();
+//		Collection<Edge> edges = getEdges();
+//		edges.parallelStream().flatMap(e -> {
+//			Stream<EdgeEvent> stream = e.getEvents().parallelStream();
+//			return stream;
+//		}).forEach(ee -> {
+//			Long t = ee.getTime();
+//			if (eventMap.containsKey(t)) {
+//				eventMap.get(t).add(ee);
+//			} else {
+//				HashSet<EdgeEvent> newSet = new HashSet<EdgeEvent>();
+//				newSet.add(ee);
+//				eventMap.put(t, newSet);
+//			}
+//		});
+//		return eventMap.entrySet().iterator();
+		return null;
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package org.dfpl.chronograph.khronos.manipulation.memory;
 
-import java.util.Set;
-
 import org.bson.Document;
 
 import com.tinkerpop.blueprints.Element;
@@ -30,7 +28,7 @@ public class MChronoElement implements Element {
 	}
 
 	@Override
-	public Set<String> getPropertyKeys() {
+	public Iterable<String> getPropertyKeys() {
 		return this.properties.keySet();
 	}
 

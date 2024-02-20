@@ -1,8 +1,6 @@
 package com.tinkerpop.blueprints;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.NavigableSet;
 
 import org.bson.Document;
 import org.dfpl.chronograph.common.TemporalRelation;
@@ -31,7 +29,7 @@ public interface Vertex extends Element {
 	 * @param labels    the labels of the edges to retrieve
 	 * @return a collection of incident edges
 	 */
-	public Collection<Edge> getEdges(Direction direction, List<String> labels);
+	public Iterable<Edge> getEdges(Direction direction, List<String> labels);
 
 	/**
 	 * Return the vertices adjacent to the vertex according to the provided
@@ -44,7 +42,7 @@ public interface Vertex extends Element {
 	 * @param labels    the labels of the edges of the adjacent vertices
 	 * @return a collection of adjacent vertices
 	 */
-	public Collection<Vertex> getVertices(Direction direction, List<String> labels);
+	public Iterable<Vertex> getVertices(Direction direction, List<String> labels);
 
 	/**
 	 * Add a new outgoing edge from this vertex to the parameter vertex with
@@ -92,7 +90,7 @@ public interface Vertex extends Element {
 	 *                       events
 	 * @return NavigableSet of VertexEvent or EdgeEvent
 	 */
-	public NavigableSet<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents);
+	public Iterable<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents);
 
 	/**
 	 * Return an event of this element that are matched with tr for time
@@ -117,7 +115,7 @@ public interface Vertex extends Element {
 	 *                       events
 	 * @return NavigableSet of VertexEvent or EdgeEvent
 	 */
-	public NavigableSet<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
+	public Iterable<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
 			boolean awareInEvents);
 
 	/**

@@ -1,6 +1,7 @@
 package org.dfpl.chronograph.chronoweb.router;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.bson.Document;
@@ -188,15 +189,18 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerGetElementsRouter(Router router, EventBus eventBus) {
+
 		router.get("/chronoweb/graph").handler(routingContext -> {
 			String target = getStringURLParameter(routingContext, "target");
 			target = target == null ? "vertices" : target;
 			if (target.equals("vertices")) {
-				JsonArray result = new JsonArray(graph.getVertices().parallelStream().map(v -> v.getId()).toList());
+				JsonArray result = new JsonArray(
+						((Collection<Vertex>) graph.getVertices()).parallelStream().map(v -> v.getId()).toList());
 				sendResult(routingContext, "application/json", result.toString(), 200);
 				return;
 			} else {
-				JsonArray result = new JsonArray(graph.getEdges().parallelStream().map(e -> e.getId()).toList());
+				JsonArray result = new JsonArray(
+						((Collection<Edge>) graph.getEdges()).parallelStream().map(e -> e.getId()).toList());
 				sendResult(routingContext, "application/json", result.toString(), 200);
 				return;
 			}
@@ -213,7 +217,8 @@ public class ManipulationRouter extends BaseRouter {
 				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(v.getEdges(Direction.OUT, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<Edge>) v.getEdges(Direction.OUT, labels)).toString(),
+							200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -232,7 +237,7 @@ public class ManipulationRouter extends BaseRouter {
 				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(v.getEdges(Direction.IN, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<Edge>) v.getEdges(Direction.IN, labels)).toString(), 200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -253,7 +258,8 @@ public class ManipulationRouter extends BaseRouter {
 				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(v.getVertices(Direction.OUT, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<Vertex>) v.getVertices(Direction.OUT, labels)).toString(),
+							200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -272,7 +278,8 @@ public class ManipulationRouter extends BaseRouter {
 				Vertex v = graph.getVertex(vertexID);
 				if (v != null) {
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(v.getVertices(Direction.IN, labels)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<Vertex>) v.getVertices(Direction.IN, labels)).toString(),
+							200);
 				} else
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -404,15 +411,18 @@ public class ManipulationRouter extends BaseRouter {
 					Vertex v = graph.getVertex(resource);
 					if (time == null || tr == null) {
 						sendResult(routingContext, "application/json",
-								Util.toJsonArrayOfIDs(
-										v.getEvents(awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
+								Util.toJsonArrayOfIDs((Collection<VertexEvent>) v
+										.getEvents(awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
 										.toString(),
 								200);
 						return;
 					} else {
-						sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs(
-								v.getEvents(time, tr, awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
-								.toString(), 200);
+						sendResult(
+								routingContext, "application/json", Util
+										.toJsonArrayOfIDs((Collection<VertexEvent>) v.getEvents(time, tr,
+												awareOutEvents.booleanValue(), awareInEvents.booleanValue()))
+										.toString(),
+								200);
 						return;
 					}
 				} catch (IllegalArgumentException e) {
@@ -423,12 +433,12 @@ public class ManipulationRouter extends BaseRouter {
 				try {
 					Edge e = graph.getEdge(resource);
 					if (time == null || tr == null) {
-						sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs(e.getEvents()).toString(),
+						sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs((Collection<EdgeEvent>)e.getEvents()).toString(),
 								200);
 						return;
 					} else {
 						sendResult(routingContext, "application/json",
-								Util.toJsonArrayOfIDs(e.getEvents(time, tr)).toString(), 200);
+								Util.toJsonArrayOfIDs((Collection<EdgeEvent>)e.getEvents(time, tr)).toString(), 200);
 						return;
 					}
 				} catch (IllegalArgumentException e) {
@@ -472,7 +482,7 @@ public class ManipulationRouter extends BaseRouter {
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(ve.getEdgeEvents(Direction.OUT, tr, label)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<EdgeEvent>)ve.getEdgeEvents(Direction.OUT, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);
@@ -515,7 +525,7 @@ public class ManipulationRouter extends BaseRouter {
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(ve.getEdgeEvents(Direction.IN, tr, label)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<EdgeEvent>)ve.getEdgeEvents(Direction.IN, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);
@@ -560,7 +570,7 @@ public class ManipulationRouter extends BaseRouter {
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(ve.getVertexEvents(Direction.OUT, tr, label)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<VertexEvent>)ve.getVertexEvents(Direction.OUT, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);
@@ -603,7 +613,7 @@ public class ManipulationRouter extends BaseRouter {
 					}
 					VertexEvent ve = v.getEvent(time);
 					sendResult(routingContext, "application/json",
-							Util.toJsonArrayOfIDs(ve.getVertexEvents(Direction.IN, tr, label)).toString(), 200);
+							Util.toJsonArrayOfIDs((Collection<VertexEvent>)ve.getVertexEvents(Direction.IN, tr, label)).toString(), 200);
 					return;
 				} catch (Exception e) {
 					sendResult(routingContext, 500);

@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
+import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.TimeInstant;
@@ -45,7 +46,7 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 	}
 
 	@Override
-	public Collection<Edge> getEdges(Direction direction, List<String> labels) {
+	public Iterable<Edge> getEdges(Direction direction, List<String> labels) {
 		HashMap<String, HashSet<Edge>> edgeSet = null;
 		if (direction.equals(Direction.OUT))
 			edgeSet = ((MChronoGraph) g).getOutEdges();
@@ -69,7 +70,7 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 	}
 
 	@Override
-	public Collection<Vertex> getVertices(Direction direction, List<String> labels) {
+	public Iterable<Vertex> getVertices(Direction direction, List<String> labels) {
 		HashMap<String, HashSet<Edge>> edgeSet = null;
 		if (direction.equals(Direction.OUT))
 			edgeSet = ((MChronoGraph) g).getOutEdges();
@@ -134,7 +135,7 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 	}
 
 	@Override
-	public NavigableSet<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents) {
+	public Iterable<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents) {
 		NavigableSet<VertexEvent> resultSet = new TreeSet<>();
 
 		resultSet.addAll(events);
@@ -147,7 +148,7 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 
 		for (Direction direction : directions) {
 			for (Edge e : this.getEdges(direction, null)) {
-				e.getEvents().stream().map(Event::getTime).forEach(t -> {
+				((Collection<EdgeEvent>) e.getEvents()).stream().map(Event::getTime).forEach(t -> {
 					resultSet.add(new MChronoVertexEvent(this, t));
 				});
 			}
@@ -156,11 +157,11 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 	}
 
 	@Override
-	public NavigableSet<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
+	public Iterable<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
 			boolean awareInEvents) {
-		NavigableSet<VertexEvent> resultSet = new TreeSet<>();
-
-		resultSet.addAll(this.getEvents(time, tr));
+		TreeSet<VertexEvent> resultSet = new TreeSet<>();
+		Iterable<VertexEvent> col = this.getEvents(time, tr);
+		resultSet.addAll((Collection<VertexEvent>) col);
 
 		List<Direction> directions = new LinkedList<>();
 		if (awareOutEvents)
@@ -170,7 +171,7 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 
 		for (Direction direction : directions) {
 			for (Edge e : this.getEdges(direction, null)) {
-				e.getEvents(time, tr).stream().map(Event::getTime).forEach(t -> {
+				((Collection<EdgeEvent>) e.getEvents(time, tr)).stream().map(Event::getTime).forEach(t -> {
 					resultSet.add(new MChronoVertexEvent(this, t));
 				});
 			}
@@ -189,7 +190,7 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Event> NavigableSet<T> getEvents(long time, TemporalRelation... temporalRelations) {
+	public <T extends Event> Iterable<T> getEvents(long time, TemporalRelation... temporalRelations) {
 		NavigableSet<Event> validEvents = new TreeSet<>();
 		if (temporalRelations == null)
 			return (NavigableSet<T>) validEvents;

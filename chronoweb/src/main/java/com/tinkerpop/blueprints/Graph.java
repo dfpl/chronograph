@@ -1,7 +1,5 @@
 package com.tinkerpop.blueprints;
 
-import java.util.Collection;
-
 /**
  * A Graph is a container object for a collection of vertices and a collection
  * edges.
@@ -46,7 +44,7 @@ public interface Graph {
 	 *
 	 * @return an iterable reference to all vertices in the graph
 	 */
-	public Collection<Vertex> getVertices();
+	public Iterable<Vertex> getVertices();
 
 	/**
 	 * Return an iterable to all the vertices in the graph that have a particular
@@ -59,7 +57,7 @@ public interface Graph {
 	 * @param value the value of the vertex
 	 * @return an iterable of vertices with provided key and value
 	 */
-	public Collection<Vertex> getVertices(String key, Object value);
+	public Iterable<Vertex> getVertices(String key, Object value);
 
 	/**
 	 * Add an edge to the graph. The added edges requires a recommended identifier,
@@ -109,7 +107,7 @@ public interface Graph {
 	 *
 	 * @return an iterable reference to all edges in the graph
 	 */
-	public Collection<Edge> getEdges();
+	public Iterable<Edge> getEdges();
 
 	/**
 	 * Return an iterable to all the edges in the graph that have a particular
@@ -122,7 +120,7 @@ public interface Graph {
 	 * @param value the value of the edge
 	 * @return an iterable of edges with provided key and value
 	 */
-	public Collection<Edge> getEdges(String key, Object value);
+	public Iterable<Edge> getEdges(String key, Object value);
 
 	/**
 	 * A shutdown function is required to properly close the graph. This is

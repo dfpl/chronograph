@@ -1,7 +1,5 @@
 package com.tinkerpop.blueprints;
 
-import java.util.NavigableSet;
-
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
@@ -81,13 +79,13 @@ public interface Edge extends Element {
 	 * @param temporalRelation the temporal relation of time
 	 * @return NavigableSet of VertexEvent or EdgeEvent
 	 */
-	public NavigableSet<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation);
+	public Iterable<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation);
 	
 	/**
 	 * 
 	 * @return events of this element
 	 */
-	public NavigableSet<EdgeEvent> getEvents();
+	public Iterable<EdgeEvent> getEvents();
 	
 	/**
 	 * Return events of this element that are matched with tr for time

@@ -42,19 +42,21 @@ public class PChronoVertexEvent extends PChronoEvent implements VertexEvent {
 
 	@Override
 	public Collection<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label) {
-		return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> e.getEvent(time, tr))
-				.toList();
+		//return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> e.getEvent(time, tr))
+		//		.toList();
+		return null;
 	}
 
 	@Override
 	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
-		return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> {
-			EdgeEvent neighborEe = e.getEvent(time, tr);
-			if (neighborEe == null)
-				return null;
-			else
-				return neighborEe.getVertexEvent(direction.opposite());
-		}).toList();
+//		return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> {
+//			EdgeEvent neighborEe = e.getEvent(time, tr);
+//			if (neighborEe == null)
+//				return null;
+//			else
+//				return neighborEe.getVertexEvent(direction.opposite());
+//		}).toList();
+		return null;
 	}
 
 	public Document toDocument(boolean includeProperties) {

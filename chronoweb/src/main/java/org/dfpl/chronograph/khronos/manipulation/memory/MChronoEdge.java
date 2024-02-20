@@ -110,13 +110,13 @@ public class MChronoEdge extends MChronoElement implements Edge {
 	}
 
 	@Override
-	public NavigableSet<EdgeEvent> getEvents() {
+	public Iterable<EdgeEvent> getEvents() {
 		return events;
 	}
 
 	@Override
-	public NavigableSet<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation) {
-		NavigableSet<EdgeEvent> validEvents = new TreeSet<>();
+	public Iterable<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation) {
+		TreeSet<EdgeEvent> validEvents = new TreeSet<>();
 		if (temporalRelation == null)
 			return validEvents;
 
