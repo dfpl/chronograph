@@ -1,0 +1,23 @@
+config:
+  target: http://localhost:80/chronoweb
+  phases:
+    - name: Warm-up the API
+      duration: 60
+      arrivalRate: 5
+    - name: Ramp-up to peak load
+      duration: 60
+      arrivalRate: 10
+      rampTo: 50
+    - name: Sustained peak load
+      duration: 300
+      arrivalRate: 50
+  processor: "./processors/processor.js"
+scenarios:
+  - flow:
+      - function: "setEdgeEventId"
+      - put:
+          url: "/graph/{{ edgeEventId }}"
+          json:
+            key: value
+
+
