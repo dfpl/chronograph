@@ -8,10 +8,11 @@ import org.bson.Document;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.UpdateOptions;
 import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Graph;
 
 public class PChronoElement implements Element {
 
-	protected PChronoGraph g;
+	protected Graph g;
 	protected String id;
 	protected MongoCollection<Document> collection;
 
@@ -38,7 +39,6 @@ public class PChronoElement implements Element {
 			return null;
 		}
 	}
-
 
 	@Override
 	public Set<String> getPropertyKeys() {
@@ -70,15 +70,6 @@ public class PChronoElement implements Element {
 		}
 	}
 
-	public Document toDocument(boolean includeProperties) {
-		Document object = new Document();
-		object.put("_id", id);
-		if (includeProperties) {
-			object.put("properties", getProperties());
-		}
-		return object;
-	}
-
 	public void setProperties(Document properties, boolean isSet) {
 		if (!isSet) {
 			collection.updateOne(new Document("_id", id), new Document("$set", new Document("properties", properties)),
@@ -93,7 +84,8 @@ public class PChronoElement implements Element {
 					existingProperties.put(key, properties.get(key));
 				}
 				collection.updateOne(new Document("_id", id),
-						new Document("$set", new Document("properties", existingProperties)), new UpdateOptions().upsert(true));
+						new Document("$set", new Document("properties", existingProperties)),
+						new UpdateOptions().upsert(true));
 			}
 		}
 	}
@@ -111,6 +103,11 @@ public class PChronoElement implements Element {
 	@Override
 	public boolean equals(Object obj) {
 		return id.equals(obj.toString());
+	}
+
+	@Override
+	public Graph getGraph() {
+		return g;
 	}
 
 }

@@ -2,7 +2,6 @@ package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bson.Document;
@@ -16,7 +15,6 @@ import com.mongodb.client.MongoDatabase;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.json.JsonObject;
 
 /**
  * The persistent implementation of temporal graph database with MongoDB.
@@ -40,7 +38,6 @@ import io.vertx.core.json.JsonObject;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-@SuppressWarnings("unused")
 public class PChronoGraph implements Graph {
 
 	private MongoClient client;
@@ -320,8 +317,8 @@ public class PChronoGraph implements Graph {
 
 	@Override
 	public void clear() {
-		vertices.deleteMany(new Document());
-		edges.deleteMany(new Document());
+		database.drop();
+		createIndex();
 	}
 
 	public Iterator<Entry<Long, HashSet<EdgeEvent>>> getEdgeEventIterator() {

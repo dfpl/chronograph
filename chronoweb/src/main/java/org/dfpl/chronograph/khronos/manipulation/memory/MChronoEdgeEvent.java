@@ -1,10 +1,7 @@
 package org.dfpl.chronograph.khronos.manipulation.memory;
 
-import java.util.Set;
-
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
-import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.VertexEvent;
 
 import com.tinkerpop.blueprints.*;
@@ -31,126 +28,44 @@ import com.tinkerpop.blueprints.*;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class MChronoEdgeEvent implements EdgeEvent, Comparable<MChronoEdgeEvent> {
-	private final Edge edge;
-	private final Long time;
-	private Document properties;
+public class MChronoEdgeEvent extends MChronoEvent implements EdgeEvent {
 
 	public MChronoEdgeEvent(Edge e, Long time) {
-		this.edge = e;
+		this.g = e.getGraph();
+		this.element = e;
 		this.time = time;
+		this.id = e + "_" + time;
 		this.properties = new Document();
 	}
 
 	@Override
 	public VertexEvent getVertexEvent(Direction direction) {
-		return edge.getVertex(direction).getEvent(time);
-	}
-
-	/**
-	 * Checks the difference of two events by comparing the element, and then the
-	 * element
-	 *
-	 * @param event the event to be compared
-	 * @return Integer difference
-	 */
-	@Override
-	public int compareTo(MChronoEdgeEvent event) {
-		int elementComparison = this.getElement().getId().compareTo(event.getElement().getId());
-
-		if (elementComparison != 0)
-			return elementComparison;
-
-		return this.getTime().compareTo(event.getTime());
-	}
-
-	@Override
-	public Long getTime() {
-		return time;
-	}
-
-	@Override
-	public Element getElement() {
-		return edge;
-	}
-
-	@Override
-	public String getId() {
-		return edge.getId() + "_" + time;
-	}
-
-	@Override
-	public Document getProperties() {
-		return properties;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getProperty(String key) {
-		return (T) properties.get(key);
-	}
-
-	@Override
-	public Set<String> getPropertyKeys() {
-		return properties.keySet();
-	}
-
-	@Override
-	public void setProperty(String key, Object value) {
-		properties.put(key, value);
-	}
-
-	public void setProperties(Document properties, boolean isSet) {
-		if (!isSet) {
-			this.properties = properties;
-		} else {
-			for (String key : properties.keySet()) {
-				this.properties.put(key, properties.get(key));
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T removeProperty(String key) {
-		return (T) properties.remove(key);
+		return ((Edge) element).getVertex(direction).getEvent(time);
 	}
 
 	@Override
 	public Vertex getVertex(Direction direction) {
-		return edge.getVertex(direction);
+		return ((Edge) element).getVertex(direction);
 	}
 
 	@Override
 	public String getLabel() {
-		return edge.getLabel();
-	}
-
-	@Override
-	public String getElementId() {
-		return edge.getId();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof EdgeEvent))
-			return false;
-		return this.edge.equals(((Event) obj).getElement()) && this.getTime().equals(((Event) obj).getTime());
-	}
-
-	@Override
-	public String toString() {
-		return edge.getId() + "_" + time;
+		return ((Edge) element).getLabel();
 	}
 
 	public Document toDocument(boolean includeProperties) {
-		Document object = ((MChronoEdge) edge).toDocument(false);
-		object.put("_id", edge.getId() + "_" + time);
-		object.put("_e", edge.getId());
+		Document object = ((Edge) element).toDocument(false);
+		object.put("_id", id);
+		object.put("_e", element.getId());
 		object.put("_t", time);
 		if (includeProperties)
 			object.put("properties", properties);
 
 		return object;
+	}
+
+	@Override
+	public Graph getGraph() {
+		return element.getGraph();
 	}
 }

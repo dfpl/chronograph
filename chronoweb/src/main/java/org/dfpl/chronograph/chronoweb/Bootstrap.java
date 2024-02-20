@@ -87,10 +87,14 @@ public class Bootstrap {
 			String type = Server.configuration.getString("data_storage_type");
 			if (type.equals("memory")) {
 				Server.backendType = "memory";
+				System.out.println("backendType:memory");
 			} else if (type.equals("persistent")) {
 				Server.backendType = "persistent";
 				Server.dbName = Server.configuration.getString("db_name");
 				Server.connectionString = Server.configuration.getString("db_connection_string");
+				System.out.println("backendType:persistent");
+				System.out.println("dbName:" + Server.dbName);
+				System.out.println("connectionString:" + Server.connectionString);
 			} else {
 				System.out.println("Invalid data_storage_type. System Terminated.");
 				System.exit(1);

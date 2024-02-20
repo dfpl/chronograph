@@ -59,10 +59,10 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 			query.append("_l", new Document("$in", labels));
 		}
 		HashSet<Edge> edges = new HashSet<Edge>();
-		MongoCursor<Document> cursor = g.edges.find(query).iterator();
+		MongoCursor<Document> cursor = ((PChronoGraph) g).edges.find(query).iterator();
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
-			edges.add(new PChronoEdge(g, doc.getString("_id"), collection));
+			edges.add(new PChronoEdge((PChronoGraph) g, doc.getString("_id"), collection));
 		}
 		return edges;
 	}
@@ -84,13 +84,13 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 			query.append("_l", new Document("$in", labels));
 		}
 		HashSet<Vertex> vertices = new HashSet<Vertex>();
-		MongoCursor<Document> cursor = g.edges.find(query).iterator();
+		MongoCursor<Document> cursor = ((PChronoGraph) g).edges.find(query).iterator();
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
 			if (direction.equals(Direction.OUT))
-				vertices.add(new PChronoVertex(g, doc.getString("_i"), collection));
+				vertices.add(new PChronoVertex((PChronoGraph) g, doc.getString("_i"), collection));
 			else if (direction.equals(Direction.IN))
-				vertices.add(new PChronoVertex(g, doc.getString("_o"), collection));
+				vertices.add(new PChronoVertex((PChronoGraph) g, doc.getString("_o"), collection));
 		}
 		return vertices;
 	}
@@ -118,7 +118,7 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 	public VertexEvent addEvent(long time) {
 //		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
 //		if (event == null) {
-//			VertexEvent newVe = new MChronoVertexEvent(this, time);
+//			VertexEvent newVe = new PChronoVertexEvent(this, time);
 //			this.events.add(newVe);
 //			if (g.getEventBus() != null)
 //				g.getEventBus().send("addVertexEvent", newVe.getId());

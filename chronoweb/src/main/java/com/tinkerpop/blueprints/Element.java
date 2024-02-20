@@ -56,4 +56,6 @@ public interface Element {
 	public <T> T removeProperty(String key);
 
 	public void setProperties(Document properties, boolean isSet);
+
+	public Graph getGraph();
 }

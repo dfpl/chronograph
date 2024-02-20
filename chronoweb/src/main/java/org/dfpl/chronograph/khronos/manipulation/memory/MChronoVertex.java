@@ -48,9 +48,9 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 	public Collection<Edge> getEdges(Direction direction, List<String> labels) {
 		HashMap<String, HashSet<Edge>> edgeSet = null;
 		if (direction.equals(Direction.OUT))
-			edgeSet = g.getOutEdges();
+			edgeSet = ((MChronoGraph) g).getOutEdges();
 		else if (direction.equals(Direction.IN))
-			edgeSet = g.getInEdges();
+			edgeSet = ((MChronoGraph) g).getInEdges();
 
 		if (edgeSet == null || !edgeSet.containsKey(id))
 			return new HashSet<>();
@@ -72,9 +72,9 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 	public Collection<Vertex> getVertices(Direction direction, List<String> labels) {
 		HashMap<String, HashSet<Edge>> edgeSet = null;
 		if (direction.equals(Direction.OUT))
-			edgeSet = g.getOutEdges();
+			edgeSet = ((MChronoGraph) g).getOutEdges();
 		else if (direction.equals(Direction.IN))
-			edgeSet = g.getInEdges();
+			edgeSet = ((MChronoGraph) g).getInEdges();
 
 		if (edgeSet == null || !edgeSet.containsKey(id))
 			return new HashSet<>();
@@ -117,8 +117,8 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 		if (event == null) {
 			VertexEvent newVe = new MChronoVertexEvent(this, time);
 			this.events.add(newVe);
-			if (g.getEventBus() != null)
-				g.getEventBus().send("addVertexEvent", newVe.getId());
+			if (((MChronoGraph) g).getEventBus() != null)
+				((MChronoGraph) g).getEventBus().send("addVertexEvent", newVe.getId());
 			return newVe;
 		} else
 			return event;
