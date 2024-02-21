@@ -8,7 +8,6 @@ import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.tinkerpop.blueprints.*;
 
 import io.vertx.core.eventbus.EventBus;
@@ -44,7 +43,7 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 	}
 
 	@Override
-	public Collection<Edge> getEdges(Direction direction, List<String> labels) {
+	public Iterable<Edge> getEdges(Direction direction, List<String> labels) {
 
 		Document query = new Document();
 
@@ -60,17 +59,14 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 		} else {
 			query.append("_l", new Document("$in", labels));
 		}
-		HashSet<Edge> edges = new HashSet<Edge>();
-		MongoCursor<Document> cursor = ((PChronoGraph) g).edges.find(query).iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			edges.add(new PChronoEdge((PChronoGraph) g, doc.getString("_id"), collection));
-		}
-		return edges;
+
+		return ((PChronoGraph) g).edges.find(query).map(doc -> {
+			return new PChronoEdge((PChronoGraph) g, doc.getString("_id"), collection);
+		});
 	}
 
 	@Override
-	public Collection<Vertex> getVertices(Direction direction, List<String> labels) {
+	public Iterable<Vertex> getVertices(Direction direction, List<String> labels) {
 		Document query = new Document();
 
 		if (direction.equals(Direction.OUT))
@@ -85,16 +81,14 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 		} else {
 			query.append("_l", new Document("$in", labels));
 		}
-		HashSet<Vertex> vertices = new HashSet<Vertex>();
-		MongoCursor<Document> cursor = ((PChronoGraph) g).edges.find(query).iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
+
+		return ((PChronoGraph) g).edges.find(query).map(doc -> {
 			if (direction.equals(Direction.OUT))
-				vertices.add(new PChronoVertex((PChronoGraph) g, doc.getString("_i"), collection));
+				return new PChronoVertex((PChronoGraph) g, doc.getString("_i"), collection);
 			else if (direction.equals(Direction.IN))
-				vertices.add(new PChronoVertex((PChronoGraph) g, doc.getString("_o"), collection));
-		}
-		return vertices;
+				return new PChronoVertex((PChronoGraph) g, doc.getString("_o"), collection);
+			return null;
+		});
 	}
 
 	@Override

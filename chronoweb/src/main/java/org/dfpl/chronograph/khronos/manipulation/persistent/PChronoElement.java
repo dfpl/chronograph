@@ -1,7 +1,6 @@
 package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import org.bson.Document;
 
@@ -41,7 +40,7 @@ public class PChronoElement implements Element {
 	}
 
 	@Override
-	public Set<String> getPropertyKeys() {
+	public Iterable<String> getPropertyKeys() {
 		try {
 			return collection.find(new Document("_id", id)).first().get("properties", Document.class).keySet();
 		} catch (Exception e) {

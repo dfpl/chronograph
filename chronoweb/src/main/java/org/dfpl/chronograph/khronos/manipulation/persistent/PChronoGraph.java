@@ -9,7 +9,6 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.tinkerpop.blueprints.*;
 
@@ -138,14 +137,10 @@ public class PChronoGraph implements Graph {
 	 * @return an iterable reference to all vertices in the graph
 	 */
 	@Override
-	public Collection<Vertex> getVertices() {
-		HashSet<Vertex> vertices = new HashSet<Vertex>();
-		MongoCursor<Document> cursor = this.vertices.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			vertices.add(new PChronoVertex(this, doc.getString("_id"), this.vertices));
-		}
-		return vertices;
+	public Iterable<Vertex> getVertices() {
+		return this.vertices.find().map(doc -> {
+			return new PChronoVertex(this, doc.getString("_id"), this.vertices);
+		});
 	}
 
 	/**
@@ -160,21 +155,18 @@ public class PChronoGraph implements Graph {
 	 * @return an iterable of vertices with provided key and value
 	 */
 	@Override
-	public Collection<Vertex> getVertices(String key, Object value) {
-		HashSet<Vertex> vertices = new HashSet<Vertex>();
-		MongoCursor<Document> cursor = this.vertices.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
+	public Iterable<Vertex> getVertices(String key, Object value) {
+		return this.vertices.find().map(doc -> {
 			Document properties = doc.get("properties", Document.class);
 			if (properties == null)
-				continue;
+				return null;
 			if (!properties.containsKey(key))
-				continue;
+				return null;
 			if (properties.get(key).equals(value))
-				vertices.add(new PChronoVertex(this, doc.getString("_id"), this.vertices));
-		}
-
-		return vertices;
+				return new PChronoVertex(this, doc.getString("_id"), this.vertices);
+			else
+				return null;
+		});
 	}
 
 	/**
@@ -256,14 +248,10 @@ public class PChronoGraph implements Graph {
 	 * @return an iterable reference to all edges in the graph
 	 */
 	@Override
-	public Collection<Edge> getEdges() {
-		HashSet<Edge> edges = new HashSet<Edge>();
-		MongoCursor<Document> cursor = this.edges.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			edges.add(new PChronoEdge(this, doc.getString("_id"), this.edges));
-		}
-		return edges;
+	public Iterable<Edge> getEdges() {
+		return this.edges.find().map(doc -> {
+			return new PChronoEdge(this, doc.getString("_id"), this.edges);
+		});
 	}
 
 	/**
@@ -278,21 +266,17 @@ public class PChronoGraph implements Graph {
 	 * @return an iterable of edges with provided key and value
 	 */
 	@Override
-	public Collection<Edge> getEdges(String key, Object value) {
-		HashSet<Edge> edges = new HashSet<Edge>();
-		MongoCursor<Document> cursor = this.edges.find().iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
+	public Iterable<Edge> getEdges(String key, Object value) {
+		return this.edges.find().map(doc -> {
 			Document properties = doc.get("properties", Document.class);
 			if (properties == null)
-				continue;
+				return null;
 			if (!properties.containsKey(key))
-				continue;
+				return null;
 			if (properties.get(key).equals(value))
-				edges.add(new PChronoEdge(this, doc.getString("_id"), this.edges));
-		}
-
-		return edges;
+				new PChronoEdge(this, doc.getString("_id"), this.edges);
+			return null;
+		});
 	}
 
 	/**
