@@ -35,8 +35,8 @@ public class KairosEngine {
 			kairosPrograms.forEach((start, programs) -> {
 				programs.forEach(program -> {
 					String vString = v.body().toString();
-					Vertex e = graph.getVertex(vString);
-					// TODO
+					Vertex addedVertex = graph.getVertex(vString);
+					program.onAddVertex(addedVertex);
 				});
 			});
 		});
@@ -46,8 +46,8 @@ public class KairosEngine {
 			kairosPrograms.forEach((start, programs) -> {
 				programs.forEach(program -> {
 					String eString = e.body().toString();
-					Edge edge = graph.getEdge(eString);
-					// TODO
+					Edge addedEdge = graph.getEdge(eString);
+					program.onAddEdge(addedEdge);
 				});
 			});
 		});
@@ -57,8 +57,8 @@ public class KairosEngine {
 			kairosPrograms.forEach((start, programs) -> {
 				programs.forEach(program -> {
 					String vString = v.body().toString();
-					Vertex e = graph.getVertex(vString);
-					// TODO
+					Vertex removedVertex = graph.getVertex(vString);
+					program.onRemoveVertex(removedVertex);
 				});
 			});
 		});
@@ -68,8 +68,8 @@ public class KairosEngine {
 			kairosPrograms.forEach((start, programs) -> {
 				programs.forEach(program -> {
 					String eString = e.body().toString();
-					Edge edge = graph.getEdge(eString);
-					// TODO
+					Edge removedEdge = graph.getEdge(eString);
+					program.onRemoveEdge(removedEdge);
 				});
 			});
 		});
@@ -81,9 +81,8 @@ public class KairosEngine {
 					String veString = ve.body().toString();
 					String[] arr = veString.split("_");
 					Vertex v = graph.getVertex(arr[0]);
-					VertexEvent vertexEvent = v.getEvent(Long.parseLong(arr[1]));
-					// TODO
-					// program.onAddVertexEvent(vertexEvent);
+					VertexEvent addedVertexEvent = v.getEvent(Long.parseLong(arr[1]));
+					program.onAddVertexEvent(addedVertexEvent);
 				});
 			});
 		});
@@ -95,8 +94,8 @@ public class KairosEngine {
 					String eeString = ee.body().toString();
 					String[] arr = eeString.split("_");
 					Edge e = graph.getEdge(arr[0]);
-					EdgeEvent edgeEvent = e.getEvent(Long.parseLong(arr[1]));
-					program.onAddEdgeEvent(edgeEvent);
+					EdgeEvent addedEdgeEvent = e.getEvent(Long.parseLong(arr[1]));
+					program.onAddEdgeEvent(addedEdgeEvent);
 				});
 			});
 		});
@@ -108,9 +107,8 @@ public class KairosEngine {
 					String veString = ve.body().toString();
 					String[] arr = veString.split("_");
 					Vertex v = graph.getVertex(arr[0]);
-					VertexEvent vertexEvent = v.getEvent(Long.parseLong(arr[1]));
-					// TODO
-					// program.onAddVertexEvent(vertexEvent);
+					VertexEvent removedVertexEvent = v.getEvent(Long.parseLong(arr[1]));
+					program.onRemoveVertexEvent(removedVertexEvent);
 				});
 			});
 		});
@@ -122,8 +120,8 @@ public class KairosEngine {
 					String eeString = ee.body().toString();
 					String[] arr = eeString.split("_");
 					Edge e = graph.getEdge(arr[0]);
-					EdgeEvent edgeEvent = e.getEvent(Long.parseLong(arr[1]));
-					program.onRemoveEdgeEvent(edgeEvent);
+					EdgeEvent removedEdgeEvent = e.getEvent(Long.parseLong(arr[1]));
+					program.onRemoveEdgeEvent(removedEdgeEvent);
 				});
 			});
 		});

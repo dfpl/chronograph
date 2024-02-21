@@ -47,6 +47,20 @@ public class PChronoGraph implements Graph {
 
 	private EventBus eventBus;
 
+	public MongoCollection<Document> getVertexCollection() {
+		return vertices;
+	}
+	
+	
+
+	public MongoCollection<Document> getVertexEventCollection() {
+		return vertexEvents;
+	}
+
+
+
+
+
 	public void createIndex() {
 		List<Document> edgeIndexes = new ArrayList<Document>();
 		edges.listIndexes().into(edgeIndexes);

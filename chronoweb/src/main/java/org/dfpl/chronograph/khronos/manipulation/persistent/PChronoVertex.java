@@ -35,7 +35,7 @@ import io.vertx.core.eventbus.EventBus;
  */
 public class PChronoVertex extends PChronoElement implements Vertex {
 
-	PChronoVertex(Graph g, String id, MongoCollection<Document> collection) {
+	public PChronoVertex(Graph g, String id, MongoCollection<Document> collection) {
 		this.id = id;
 		this.g = g;
 		this.collection = collection;

@@ -38,7 +38,7 @@ public class MChronoVertex extends MChronoElement implements Vertex {
 
 	private NavigableSet<VertexEvent> events;
 
-	MChronoVertex(MChronoGraph g, String id) {
+	public MChronoVertex(Graph g, String id) {
 		this.id = id;
 		this.g = g;
 		this.properties = new Document();

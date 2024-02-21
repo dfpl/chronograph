@@ -3,7 +3,7 @@
 	"port" : 80,
 
 	"_data_storage_type" : "{memory|persistent}",
-	"data_storage_type" : "persistent",
+	"data_storage_type" : "memory",
 
 	"_db_name" : "mongodb database name to be used if data_storage_type is persistent",
 	"db_name" : "chronoweb",
@@ -12,5 +12,8 @@
 	"db_connection_string" : "mongodb://localhost:27017",
 
 	"_number_of_verticles" : "The number of cores (default is cores + 1) as integer value",
-	"number_of_verticles" : 1
+	"number_of_verticles" : 1,
+	
+	"_gamma_base_directory" : "The root directory for gamma tables",
+	"gamma_base_directory" : "d:\\kairos"
 }
