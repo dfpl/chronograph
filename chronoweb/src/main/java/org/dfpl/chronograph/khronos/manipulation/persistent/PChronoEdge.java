@@ -5,11 +5,13 @@ import java.util.*;
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
+import org.dfpl.chronograph.common.VertexEvent;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.UpdateOptions;
 import com.tinkerpop.blueprints.*;
 
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -112,71 +114,86 @@ public class PChronoEdge extends PChronoElement implements Edge {
 
 	@Override
 	public EdgeEvent addEvent(long time) {
-//		EdgeEvent event = getEvent(time);
-//		if (event == null) {
-//			EdgeEvent newEe = new MChronoEdgeEvent(this, time);
-//			this.events.add(newEe);
-//			if (((MChronoGraph) g).getEventBus() != null)
-//				((MChronoGraph) g).getEventBus().send("addEdgeEvent", newEe.getId());
-//			return newEe;
-//		} else
-//			return event;
-		// TODO
-		return null;
+		EdgeEvent event = getEvent(time, TemporalRelation.cotemporal);
+		if (event != null) {
+			return event;
+		} else {
+			PChronoGraph pg = (PChronoGraph) g;
+
+			event = new PChronoEdgeEvent(g, id, outId, label, inId, time, pg.edgeEvents);
+			pg.edgeEvents.insertOne(event.toDocument(false));
+			EventBus eb = pg.getEventBus();
+			if (eb != null)
+				eb.send("addEdgeEvent", event.getId());
+			return event;
+		}
 	}
 
 	@Override
 	public EdgeEvent getEvent(long time) {
-//		EdgeEvent event = events.floor(new MChronoEdgeEvent(this, time));
-//		if (event == null)
-//			return null;
-//		else if (event.getTime() != time)
-//			return null;
-//		else
-//			return event;
-		// TODO
-		return null;
+		EdgeEvent event = getEvent(time, TemporalRelation.cotemporal);
+		if (event == null)
+			return new PChronoEdgeEvent(g, id, outId, label, inId, time, ((PChronoGraph) g).edgeEvents);
+		else
+			return event;
 	}
 
 	@Override
-	public NavigableSet<EdgeEvent> getEvents() {
-		// return events;
-		// TODO
-		return null;
+	public Iterable<EdgeEvent> getEvents() {
+		PChronoGraph pg = (PChronoGraph) g;
+		return pg.edgeEvents.find(new Document("_v", id)).sort(new Document("_t", 1)).map(doc -> {
+			return new PChronoEdgeEvent(g, id, outId, label, inId, doc.getLong("_t"), collection);
+		});
 	}
 
 	@Override
-	public NavigableSet<EdgeEvent> getEvents(long time, TemporalRelation temporalRelation) {
-//		NavigableSet<EdgeEvent> validEvents = new TreeSet<>();
-//		if (temporalRelation == null)
-//			return validEvents;
-//
-//		for (EdgeEvent event : this.events) {
-//			if (TimeInstant.getTemporalRelation(time, event.getTime()).equals(temporalRelation))
-//				validEvents.add(event);
-//		}
-//		return validEvents;
-		// TODO
-		return null;
+	public Iterable<EdgeEvent> getEvents(long time, TemporalRelation tr) {
+		Document query = new Document("_e", id);
+		if (tr.equals(TemporalRelation.isAfter)) {
+			query.append("_t", new Document("$gt", time));
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			query.append("_t", new Document("$lt", time));
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			query.append("_t", time);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		PChronoGraph pg = (PChronoGraph) g;
+		return pg.edgeEvents.find(query).sort(new Document("_t", 1)).map(doc -> {
+			return new PChronoEdgeEvent(pg, id, outId, label, inId, doc.getLong("_t"), collection);
+		});
 	}
 
 	@Override
-	public EdgeEvent getEvent(long time, TemporalRelation temporalRelation) {
-//		if (temporalRelation.equals(TemporalRelation.isAfter)) {
-//			return events.higher(new MChronoEdgeEvent(this, time));
-//		} else if (temporalRelation.equals(TemporalRelation.isBefore)) {
-//			return events.lower(new MChronoEdgeEvent(this, time));
-//		} else {
-//			return getEvent(time);
-//		}
-		// TODO
-		return null;
+	public EdgeEvent getEvent(long time, TemporalRelation tr) {
+		PChronoGraph pg = (PChronoGraph) g;
+		Document result = null;
+		if (tr.equals(TemporalRelation.isAfter)) {
+			result = pg.edgeEvents.find(new Document("_e", id).append("$gt", new Document("_t", time))).first();		
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			result = pg.edgeEvents.find(new Document("_e", id).append("$lt", new Document("_t", time))).first();
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			result = pg.edgeEvents.find(new Document("_e", id).append("_t", time)).first();
+		} else {
+			throw new IllegalArgumentException("Illegal temporal relation");
+		}
+		if(result == null)
+			return null;
+		return new PChronoEdgeEvent(pg, id, outId, label, inId, result.getLong("_t"), collection);
 	}
 
 	@Override
-	public void removeEvents(long time, TemporalRelation temporalRelation) {
-		// this.events.removeIf(event -> TimeInstant.getTemporalRelation(time,
-		// event.getTime()).equals(temporalRelation));
-		// TODO
+	public void removeEvents(long time, TemporalRelation tr) {
+		PChronoGraph pg = (PChronoGraph) g;
+		if (tr.equals(TemporalRelation.isAfter)) {
+			pg.edgeEvents.deleteMany(new Document("_t", new Document("$gt", time)));
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			pg.edgeEvents.deleteMany(new Document("_t", new Document("$lt", time)));
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			pg.edgeEvents.deleteMany(new Document("_t", time));
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 }

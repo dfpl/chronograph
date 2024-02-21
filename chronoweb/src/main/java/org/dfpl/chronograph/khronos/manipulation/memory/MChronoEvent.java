@@ -10,17 +10,12 @@ public class MChronoEvent extends MChronoElement implements Event, Comparable<Ev
 	protected Long time;
 
 	@Override
-	public String getElementId() {
-		return element.getId();
-	}
-
-	@Override
 	public Long getTime() {
 		return time;
 	}
 
 	@Override
-	public Element getElement() {
+	public Object getElement() {
 		return element;
 	}
 

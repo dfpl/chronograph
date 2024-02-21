@@ -2,17 +2,10 @@ package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import org.dfpl.chronograph.common.Event;
 
-import com.tinkerpop.blueprints.Element;
-
 public class PChronoEvent extends PChronoElement implements Event, Comparable<Event> {
-	
-	protected Element element;
-	protected Long time;
 
-	@Override
-	public String getElementId() {
-		return element.getId();
-	}
+	protected String element;
+	protected Long time;
 
 	@Override
 	public Long getTime() {
@@ -20,7 +13,7 @@ public class PChronoEvent extends PChronoElement implements Event, Comparable<Ev
 	}
 
 	@Override
-	public Element getElement() {
+	public Object getElement() {
 		return element;
 	}
 

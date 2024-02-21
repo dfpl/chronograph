@@ -50,9 +50,20 @@ public class PChronoGraph implements Graph {
 	public void createIndex() {
 		List<Document> edgeIndexes = new ArrayList<Document>();
 		edges.listIndexes().into(edgeIndexes);
-		if (edgeIndexes.size() == 1) {
+		if (edgeIndexes.size() <= 1) {
 			edges.createIndex(new Document("_o", 1).append("_l", 1).append("_i", 1));
 			edges.createIndex(new Document("_i", 1).append("_l", 1).append("_o", 1));
+		}
+		List<Document> vertexEventIndexes = new ArrayList<Document>();
+		vertexEvents.listIndexes().into(vertexEventIndexes);
+		if (vertexEventIndexes.size() <= 1) {
+			vertexEvents.createIndex(new Document("_v", 1).append("_t", 1));
+		}
+		List<Document> edgeEventIndexes = new ArrayList<Document>();
+		edgeEvents.listIndexes().into(edgeEventIndexes);
+		if (edgeEventIndexes.size() <= 1) {
+			edgeEvents.createIndex(new Document("_o", 1).append("_l", 1).append("_t", 1).append("_i", 1));
+			edgeEvents.createIndex(new Document("_i", 1).append("_l", 1).append("_t", 1).append("_o", 1));
 		}
 	}
 
@@ -289,13 +300,17 @@ public class PChronoGraph implements Graph {
 	public void removeVertex(Vertex vertex) {
 		String id = vertex.getId();
 		vertices.deleteOne(new Document("_id", id));
+		vertexEvents.deleteMany(new Document("_v", id));
 		edges.deleteMany(new Document("_o", id));
 		edges.deleteMany(new Document("_i", id));
+		edgeEvents.deleteMany(new Document("_o", id));
+		edgeEvents.deleteMany(new Document("_i", id));
 	}
 
 	@Override
 	public void removeEdge(Edge edge) {
 		edges.deleteOne(new Document("_id", edge.getId()));
+		edgeEvents.deleteMany(new Document("_e", edge.getId()));
 	}
 
 	@Override

@@ -1,16 +1,15 @@
 package org.dfpl.chronograph.khronos.manipulation.persistent;
 
-import java.util.*;
-
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 
+import com.mongodb.client.MongoCollection;
 import com.tinkerpop.blueprints.*;
 
 /**
- * The in-memory implementation of temporal graph database.
+ * The persistent implementation of temporal graph database.
  *
  * @author Jaewook Byun, Ph.D., Assistant Professor, DFPL, Department of
  *         Software, Sejong University
@@ -33,36 +32,78 @@ import com.tinkerpop.blueprints.*;
  */
 public class PChronoVertexEvent extends PChronoEvent implements VertexEvent {
 
-	public PChronoVertexEvent(Vertex v, Long time) {
-		this.g = v.getGraph();
+	public PChronoVertexEvent(Graph g, String v, Long time, MongoCollection<Document> collection) {
+		this.g = g;
 		this.element = v;
 		this.time = time;
 		this.id = v + "_" + time;
+		this.collection = collection;
 	}
 
 	@Override
-	public Collection<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label) {
-		//return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> e.getEvent(time, tr))
-		//		.toList();
-		return null;
+	public Iterable<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label) {
+
+		PChronoGraph pg = (PChronoGraph) g;
+		Document query = new Document();
+		if (direction.equals(Direction.OUT)) {
+			query.append("_o", element);
+		} else if (direction.equals(Direction.IN)) {
+			query.append("_i", element);
+		} else {
+			throw new IllegalArgumentException();
+		}
+		query.append("_l", label);
+		if (tr.equals(TemporalRelation.isAfter)) {
+			query.append("_t", new Document("$gt", time));
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			query.append("_t", new Document("$lt", time));
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			query.append("_t", time);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		return pg.edgeEvents.find(query).map(doc -> {
+			return new PChronoEdgeEvent(g, doc.getString("_e"), doc.getString("_o"), doc.getString("_l"),
+					doc.getString("_i"), doc.getLong("_t"), pg.edgeEvents);
+		});
 	}
 
 	@Override
-	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
-//		return ((Vertex) element).getEdges(direction, List.of(label)).parallelStream().map(e -> {
-//			EdgeEvent neighborEe = e.getEvent(time, tr);
-//			if (neighborEe == null)
-//				return null;
-//			else
-//				return neighborEe.getVertexEvent(direction.opposite());
-//		}).toList();
-		return null;
+	public Iterable<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label) {
+		PChronoGraph pg = (PChronoGraph) g;
+		Document query = new Document();
+		if (direction.equals(Direction.OUT)) {
+			query.append("_o", element);
+		} else if (direction.equals(Direction.IN)) {
+			query.append("_i", element);
+		} else {
+			throw new IllegalArgumentException();
+		}
+		query.append("_l", label);
+		if (tr.equals(TemporalRelation.isAfter)) {
+			query.append("_t", new Document("$gt", time));
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			query.append("_t", new Document("$lt", time));
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			query.append("_t", time);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		return pg.edgeEvents.find(query).map(doc -> {
+			if (direction.equals(Direction.OUT)) {
+				return new PChronoVertexEvent(g, doc.getString("_i"), doc.getLong("_t"), pg.edgeEvents);
+			} else {
+				return new PChronoVertexEvent(g, doc.getString("_o"), doc.getLong("_t"), pg.edgeEvents);
+			}
+		});
 	}
 
 	public Document toDocument(boolean includeProperties) {
 		Document object = new Document();
 		object.put("_id", id);
-		object.put("_v", element.getId());
+		object.put("_v", element);
 		object.put("_t", time);
 		if (includeProperties) {
 			object.put("properties", getProperties());
