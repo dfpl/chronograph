@@ -25,10 +25,10 @@ function setEdgeEventId(context, events, done){
     return done();
 }
 
-let maxNeighbors = 1;
+let maxNeighbors = 1000;
 let currNeighborId = 1;
 function hasNextEvent(context, next) {
-    const continueLooping = currNeighborId < maxNeighbors;
+    const continueLooping = currNeighborId <= maxNeighbors;
     // While `continueLooping` is true, the `next` function will
     // continue the loop in the test scenario.
     return next(continueLooping);
