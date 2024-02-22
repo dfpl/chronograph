@@ -64,7 +64,7 @@ public class PChronoEdge extends PChronoElement implements Edge {
 
 	public PChronoEdge(PChronoGraph g, String id, MongoCollection<Document> collection) {
 		this.g = g;
-		String[] arr = id.split("|");
+		String[] arr = id.split("\\|");
 		this.outId = arr[0];
 		this.label = arr[1];
 		this.inId = arr[2];

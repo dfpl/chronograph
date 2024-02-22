@@ -251,7 +251,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+			Vertex v = graph.getVertex(vertexID);
 			if (v == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -304,7 +304,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			MChronoVertex source = (MChronoVertex) graph.getVertex(sourceID);
+			Vertex source = graph.getVertex(sourceID);
 			if (source == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -316,7 +316,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			MChronoVertex destination = (MChronoVertex) graph.getVertex(destinationID);
+			Vertex destination = graph.getVertex(destinationID);
 			if (destination == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;

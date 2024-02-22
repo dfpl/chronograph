@@ -64,6 +64,7 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 		synchronized (gammaTable) {
 			gammaTable.update(addedEvent.getVertex(Direction.OUT).getId(), sourceTest,
 					addedEvent.getVertex(Direction.IN).getId(), new LongGammaElement(addedEvent.getTime()), targetTest);
+			gammaTable.print();
 		}
 	}
 

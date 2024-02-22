@@ -3,7 +3,7 @@
 	"port" : 80,
 
 	"_data_storage_type" : "{memory|persistent}",
-	"data_storage_type" : "memory",
+	"data_storage_type" : "persistent",
 
 	"_db_name" : "mongodb database name to be used if data_storage_type is persistent",
 	"db_name" : "chronoweb",
