@@ -1,14 +1,13 @@
 package org.dfpl.chronograph.khronos.manipulation.memory;
 
-import java.util.Set;
-
 import org.bson.Document;
 
 import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Graph;
 
 public class MChronoElement implements Element {
 
-	protected MChronoGraph g;
+	protected Graph g;
 	protected String id;
 	protected Document properties;
 
@@ -29,7 +28,7 @@ public class MChronoElement implements Element {
 	}
 
 	@Override
-	public Set<String> getPropertyKeys() {
+	public Iterable<String> getPropertyKeys() {
 		return this.properties.keySet();
 	}
 
@@ -42,11 +41,6 @@ public class MChronoElement implements Element {
 	@Override
 	public <T> T removeProperty(String key) {
 		return (T) properties.remove(key);
-	}
-
-	public Document toDocument(boolean includeProperties) {
-		// Should be override
-		return null;
 	}
 
 	public void setProperties(Document properties, boolean isSet) {
@@ -72,6 +66,11 @@ public class MChronoElement implements Element {
 	@Override
 	public boolean equals(Object obj) {
 		return id.equals(obj.toString());
+	}
+
+	@Override
+	public Graph getGraph() {
+		return g;
 	}
 
 }

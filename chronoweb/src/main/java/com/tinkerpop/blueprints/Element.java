@@ -1,7 +1,5 @@
 package com.tinkerpop.blueprints;
 
-import java.util.Set;
-
 import org.bson.Document;
 
 public interface Element {
@@ -35,7 +33,7 @@ public interface Element {
 	 *
 	 * @return the set of all string keys associated with the element
 	 */
-	public Set<String> getPropertyKeys();
+	public Iterable<String> getPropertyKeys();
 
 	/**
 	 * Assign a key/value property to the element. If a value already exists for
@@ -56,4 +54,6 @@ public interface Element {
 	public <T> T removeProperty(String key);
 
 	public void setProperties(Document properties, boolean isSet);
+
+	public Graph getGraph();
 }

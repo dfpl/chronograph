@@ -26,10 +26,8 @@ import com.tinkerpop.blueprints.Element;
  */
 public interface Event extends Element {
 
-	public String getElementId();
-
 	public Long getTime();
 
-	public Element getElement();
+	public Object getElement();
 
 }

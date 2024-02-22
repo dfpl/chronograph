@@ -3,13 +3,13 @@ package org.dfpl.chronograph.khronos.manipulation.persistent;
 import java.util.*;
 
 import org.bson.Document;
-import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.tinkerpop.blueprints.*;
+
+import io.vertx.core.eventbus.EventBus;
 
 /**
  * The persistent implementation of temporal graph database with MongoDB.
@@ -35,14 +35,14 @@ import com.tinkerpop.blueprints.*;
  */
 public class PChronoVertex extends PChronoElement implements Vertex {
 
-	PChronoVertex(PChronoGraph g, String id, MongoCollection<Document> collection) {
+	public PChronoVertex(Graph g, String id, MongoCollection<Document> collection) {
 		this.id = id;
 		this.g = g;
 		this.collection = collection;
 	}
 
 	@Override
-	public Collection<Edge> getEdges(Direction direction, List<String> labels) {
+	public Iterable<Edge> getEdges(Direction direction, List<String> labels) {
 
 		Document query = new Document();
 
@@ -58,17 +58,14 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 		} else {
 			query.append("_l", new Document("$in", labels));
 		}
-		HashSet<Edge> edges = new HashSet<Edge>();
-		MongoCursor<Document> cursor = g.edges.find(query).iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
-			edges.add(new PChronoEdge(g, doc.getString("_id"), collection));
-		}
-		return edges;
+
+		return ((PChronoGraph) g).edges.find(query).map(doc -> {
+			return new PChronoEdge((PChronoGraph) g, doc.getString("_id"), collection);
+		});
 	}
 
 	@Override
-	public Collection<Vertex> getVertices(Direction direction, List<String> labels) {
+	public Iterable<Vertex> getVertices(Direction direction, List<String> labels) {
 		Document query = new Document();
 
 		if (direction.equals(Direction.OUT))
@@ -83,16 +80,14 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 		} else {
 			query.append("_l", new Document("$in", labels));
 		}
-		HashSet<Vertex> vertices = new HashSet<Vertex>();
-		MongoCursor<Document> cursor = g.edges.find(query).iterator();
-		while (cursor.hasNext()) {
-			Document doc = cursor.next();
+
+		return ((PChronoGraph) g).edges.find(query).map(doc -> {
 			if (direction.equals(Direction.OUT))
-				vertices.add(new PChronoVertex(g, doc.getString("_i"), collection));
+				return new PChronoVertex((PChronoGraph) g, doc.getString("_i"), collection);
 			else if (direction.equals(Direction.IN))
-				vertices.add(new PChronoVertex(g, doc.getString("_o"), collection));
-		}
-		return vertices;
+				return new PChronoVertex((PChronoGraph) g, doc.getString("_o"), collection);
+			return null;
+		});
 	}
 
 	@Override
@@ -116,124 +111,119 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 
 	@Override
 	public VertexEvent addEvent(long time) {
-//		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
-//		if (event == null) {
-//			VertexEvent newVe = new MChronoVertexEvent(this, time);
-//			this.events.add(newVe);
-//			if (g.getEventBus() != null)
-//				g.getEventBus().send("addVertexEvent", newVe.getId());
-//			return newVe;
-//		} else
-//			return event;
-		// TODO
-		return null;
+		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
+		if (event != null) {
+			return event;
+		} else {
+			event = new PChronoVertexEvent(g, id, time, ((PChronoGraph) g).vertexEvents);
+			PChronoGraph pg = (PChronoGraph) g;
+			pg.vertexEvents.insertOne(event.toDocument(false));
+			EventBus eb = pg.getEventBus();
+			if (eb != null)
+				eb.send("addVertexEvent", event.getId());
+			return event;
+		}
 	}
 
 	@Override
 	public VertexEvent getEvent(long time) {
-//		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
-//		if (event == null)
-//			return new MChronoVertexEvent(this, time);
-//		else
-//			return event;
-		// TODO
-		return null;
+		VertexEvent event = getEvent(time, TemporalRelation.cotemporal);
+		if (event == null)
+			return new PChronoVertexEvent(g, id, time, ((PChronoGraph) g).vertexEvents);
+		else
+			return event;
 	}
 
 	@Override
-	public NavigableSet<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents) {
-//		NavigableSet<VertexEvent> resultSet = new TreeSet<>();
-//
-//		resultSet.addAll(events);
-//
-//		List<Direction> directions = new LinkedList<>();
-//		if (awareOutEvents)
-//			directions.add(Direction.OUT);
-//		if (awareInEvents)
-//			directions.add(Direction.IN);
-//
-//		for (Direction direction : directions) {
-//			for (Edge e : this.getEdges(direction, null)) {
-//				e.getEvents().stream().map(Event::getTime).forEach(t -> {
-//					resultSet.add(new MChronoVertexEvent(this, t));
-//				});
-//			}
-//		}
-//		return resultSet;
-		// TODO
-		return null;
+	public Iterable<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents) {
+
+		PChronoGraph pg = (PChronoGraph) g;
+		return pg.vertexEvents.find(new Document("_v", id)).sort(new Document("_t", 1)).map(doc -> {
+
+			return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+		});
+		// TODO: awareOutEvents, awareInEvents
 	}
 
 	@Override
-	public NavigableSet<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
+	public Iterable<VertexEvent> getEvents(long time, TemporalRelation tr, boolean awareOutEvents,
 			boolean awareInEvents) {
-//		NavigableSet<VertexEvent> resultSet = new TreeSet<>();
-//
-//		resultSet.addAll(this.getEvents(time, tr));
-//
-//		List<Direction> directions = new LinkedList<>();
-//		if (awareOutEvents)
-//			directions.add(Direction.OUT);
-//		if (awareInEvents)
-//			directions.add(Direction.IN);
-//
-//		for (Direction direction : directions) {
-//			for (Edge e : this.getEdges(direction, null)) {
-//				e.getEvents(time, tr).stream().map(Event::getTime).forEach(t -> {
-//					resultSet.add(new MChronoVertexEvent(this, t));
-//				});
-//			}
-//		}
-//		return resultSet;
-		// TODO
-		return null;
+
+		Document query = new Document("_v", id);
+		if (tr.equals(TemporalRelation.isAfter)) {
+			query.append("_t", new Document("$gt", time));
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			query.append("_t", new Document("$lt", time));
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			query.append("_t", time);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		PChronoGraph pg = (PChronoGraph) g;
+		return pg.vertexEvents.find(query).sort(new Document("_t", 1)).map(doc -> {
+			return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+		});
+		// TODO: awareOutEvents, awareInEvents
 	}
 
 	@Override
 	public void removeEvents(long time, TemporalRelation tr) {
-//		this.events.removeIf(event -> {
-//			if (TimeInstant.getTemporalRelation(time, event.getTime()).equals(tr))
-//				return true;
-//			else
-//				return false;
-//		});
-		// TODO
+		PChronoGraph pg = (PChronoGraph) g;
+		if (tr.equals(TemporalRelation.isAfter)) {
+			pg.vertexEvents.deleteMany(new Document("_t", new Document("$gt", time)));
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			pg.vertexEvents.deleteMany(new Document("_t", new Document("$lt", time)));
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			pg.vertexEvents.deleteMany(new Document("_t", time));
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
-	public <T extends Event> NavigableSet<T> getEvents(long time, TemporalRelation... temporalRelations) {
-//		NavigableSet<Event> validEvents = new TreeSet<>();
-//		if (temporalRelations == null)
-//			return (NavigableSet<T>) validEvents;
-//
-//		for (Event event : this.events) {
-//			for (TemporalRelation tr : temporalRelations) {
-//				if (TimeInstant.checkTemporalRelation(event.getTime(), time, tr))
-//					validEvents.add(event);
-//			}
-//
-//		}
-//		return (NavigableSet<T>) validEvents;
-		// TODO
-		return null;
+	public Iterable<VertexEvent> getEvents(long time, TemporalRelation... temporalRelations) {
+
+		Document query = new Document("_v", id);
+		Document timeQuery = new Document();
+		for (TemporalRelation tr : temporalRelations) {
+			if (tr.equals(TemporalRelation.isAfter)) {
+				timeQuery.append("$gt", time);
+			} else if (tr.equals(TemporalRelation.isBefore)) {
+				timeQuery.append("$lt", time);
+			} else if (tr.equals(TemporalRelation.cotemporal)) {
+				timeQuery.append("$eq", time);
+			} else {
+				throw new IllegalArgumentException();
+			}
+		}
+		if (!timeQuery.isEmpty()) {
+			query.append("_t", timeQuery);
+		}
+
+		PChronoGraph pg = (PChronoGraph) g;
+		return pg.vertexEvents.find(query).sort(new Document("_t", 1)).map(doc -> {
+			return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+		});
 	}
 
 	@Override
 	public VertexEvent getEvent(long time, TemporalRelation tr) {
-//		MChronoVertexEvent tve = new MChronoVertexEvent(this, time);
-//		if (tr.equals(TemporalRelation.isAfter)) {
-//			return events.higher(tve);
-//		} else if (tr.equals(TemporalRelation.isBefore)) {
-//			return events.lower(tve);
-//		} else {
-//			VertexEvent ve = events.floor(tve);
-//			if (ve == null)
-//				return null;
-//			else if (ve.equals(tve))
-//				return ve;
-//			else
-//				return null;
-//		}
-		// TODO
-		return null;
+		PChronoGraph pg = (PChronoGraph) g;
+		Document result = null;
+		if (tr.equals(TemporalRelation.isAfter)) {
+			result = pg.vertexEvents.find(new Document("_v", id).append("$gt", new Document("_t", time))).first();
+
+		} else if (tr.equals(TemporalRelation.isBefore)) {
+			result = pg.vertexEvents.find(new Document("_v", id).append("$lt", new Document("_t", time))).first();
+
+		} else if (tr.equals(TemporalRelation.cotemporal)) {
+			result = pg.vertexEvents.find(new Document("_v", id).append("_t", time)).first();
+
+		} else {
+			throw new IllegalArgumentException("Illegal temporal relation");
+		}
+		if (result == null)
+			return null;
+		return new PChronoVertexEvent(g, id, result.getLong("_t"), ((PChronoGraph) g).vertexEvents);
 	}
 }

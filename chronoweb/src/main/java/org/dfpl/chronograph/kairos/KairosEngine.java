@@ -32,22 +32,59 @@ public class KairosEngine {
 
 		this.mainEventBus.consumer("addVertex", v -> {
 			Server.logger.debug("kairos addVertex: " + v.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String vString = v.body().toString();
+					Vertex addedVertex = graph.getVertex(vString);
+					program.onAddVertex(addedVertex);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("addEdge", e -> {
 			Server.logger.debug("kairos addEdge: " + e.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String eString = e.body().toString();
+					Edge addedEdge = graph.getEdge(eString);
+					program.onAddEdge(addedEdge);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("removeVertex", v -> {
 			Server.logger.debug("kairos removeVertex: " + v.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String vString = v.body().toString();
+					Vertex removedVertex = graph.getVertex(vString);
+					program.onRemoveVertex(removedVertex);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("removeEdge", e -> {
 			Server.logger.debug("kairos removeEdge: " + e.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String eString = e.body().toString();
+					Edge removedEdge = graph.getEdge(eString);
+					program.onRemoveEdge(removedEdge);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("addVertexEvent", ve -> {
 			Server.logger.debug("kairos addVertexEvent: " + ve.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String veString = ve.body().toString();
+					String[] arr = veString.split("_");
+					Vertex v = graph.getVertex(arr[0]);
+					VertexEvent addedVertexEvent = v.getEvent(Long.parseLong(arr[1]));
+					program.onAddVertexEvent(addedVertexEvent);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("addEdgeEvent", ee -> {
@@ -57,18 +94,36 @@ public class KairosEngine {
 					String eeString = ee.body().toString();
 					String[] arr = eeString.split("_");
 					Edge e = graph.getEdge(arr[0]);
-					EdgeEvent edgeEvent = e.getEvent(Long.parseLong(arr[1]));
-					program.onAddEdgeEvent(edgeEvent);
+					EdgeEvent addedEdgeEvent = e.getEvent(Long.parseLong(arr[1]));
+					program.onAddEdgeEvent(addedEdgeEvent);
 				});
 			});
 		});
 
 		this.mainEventBus.consumer("removeVertexEvent", ve -> {
 			Server.logger.debug("kairos removeVertexEvent: " + ve.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String veString = ve.body().toString();
+					String[] arr = veString.split("_");
+					Vertex v = graph.getVertex(arr[0]);
+					VertexEvent removedVertexEvent = v.getEvent(Long.parseLong(arr[1]));
+					program.onRemoveVertexEvent(removedVertexEvent);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("removeEdgeEvent", ee -> {
-			Server.logger.debug("kairos removeEdgeEvent: " + ee.body());
+			Server.logger.debug("kairos addEdgeEvent: " + ee.body());
+			kairosPrograms.forEach((start, programs) -> {
+				programs.forEach(program -> {
+					String eeString = ee.body().toString();
+					String[] arr = eeString.split("_");
+					Edge e = graph.getEdge(arr[0]);
+					EdgeEvent removedEdgeEvent = e.getEvent(Long.parseLong(arr[1]));
+					program.onRemoveEdgeEvent(removedEdgeEvent);
+				});
+			});
 		});
 
 		this.mainEventBus.consumer("clear", e -> {

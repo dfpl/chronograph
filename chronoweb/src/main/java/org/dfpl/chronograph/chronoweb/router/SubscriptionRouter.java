@@ -18,8 +18,12 @@ import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
 import org.dfpl.chronograph.kairos.program.IsAfterReachability;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoVertex;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoVertexEvent;
 
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
 
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonArray;
@@ -81,10 +85,11 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
-			if (v == null) {
-				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
-				return;
+			Vertex v = null;
+			if (Server.backendType.equals("memory"))
+				v = new MChronoVertex(graph, vertexID);
+			else {
+				v = new PChronoVertex(graph, vertexID, ((PChronoGraph) graph).getVertexCollection());
 			}
 
 			try {
@@ -97,26 +102,36 @@ public class SubscriptionRouter extends BaseRouter {
 
 			}
 
-			MChronoVertexEvent ve = (MChronoVertexEvent) v.getEvent(time);
+			VertexEvent ve = null;
+			if (Server.backendType.equals("memory"))
+				ve = new MChronoVertexEvent(v, time);
+			else {
+				ve = new PChronoVertexEvent(graph, vertexID, time, ((PChronoGraph) graph).getVertexEventCollection());
+			}
 
-			if (kairosProgram.equals("IsAfterReachability")) {
-				AbstractKairosProgram<?> existing = kairos.getProgram(time, "IsAfterReachability");
-				if (existing != null) {
-					GammaTable<String, Long> gammaTable = existing.getGammaTable();
-					if (gammaTable.getSources().contains(v.getId())) {
-						sendResult(routingContext, 406);
-						return;
-					} else {
+			AbstractKairosProgram<?> existing = kairos.getProgram(time, kairosProgram);
+			if (existing != null) {
+				GammaTable<String, Long> gammaTable = existing.getGammaTable();
+				if (gammaTable.getSources().contains(v.getId())) {
+					sendResult(routingContext, 406);
+					return;
+				} else {
+					if(kairosProgram.equals("IsAfterReachability")) {
 						kairos.addSubscription(v, ve.getTime(), new IsAfterReachability(graph, gammaTable));
 						sendResult(routingContext, 200);
 						return;
+					}else {
+						sendResult(routingContext, 500);
+						return;
 					}
-				} else {
-					String subDirectoryName = Server.baseDirectory + "\\" + ve.getTime() + "_" + kairosProgram;
-					File subDirectory = new File(subDirectoryName);
-					if (!subDirectory.exists())
-						subDirectory.mkdirs();
+				}
+			} else {
+				String subDirectoryName = Server.gammaBaseDirectory + "\\" + ve.getTime() + "_" + kairosProgram;
+				File subDirectory = new File(subDirectoryName);
+				if (!subDirectory.exists())
+					subDirectory.mkdirs();
 
+				if(kairosProgram.equals("IsAfterReachability")) {
 					SparseGammaTable<String, Long> gammaTable = null;
 					try {
 						gammaTable = new SparseGammaTable<String, Long>(subDirectoryName, LongGammaElement.class);
@@ -127,9 +142,10 @@ public class SubscriptionRouter extends BaseRouter {
 					kairos.addSubscription(v, ve.getTime(), new IsAfterReachability(graph, gammaTable));
 					sendResult(routingContext, 200);
 					return;
+				}else {
+					sendResult(routingContext, 500);
+					return;
 				}
-			} else {
-
 			}
 
 		});
@@ -235,7 +251,7 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			MChronoVertex v = (MChronoVertex) graph.getVertex(vertexID);
+			Vertex v = graph.getVertex(vertexID);
 			if (v == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -266,8 +282,7 @@ public class SubscriptionRouter extends BaseRouter {
 		});
 
 		Server.logger.info("GET /chronoweb/graph/:time/:kairosProgram/:vertexID router added");
-		
-		
+
 		router.get("/chronoweb/gammaTable/:time/:kairosProgram/:source/:destination").handler(routingContext -> {
 			long time;
 			try {
@@ -289,19 +304,19 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
-			MChronoVertex source = (MChronoVertex) graph.getVertex(sourceID);
+			Vertex source = graph.getVertex(sourceID);
 			if (source == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
 			}
-			
+
 			String destinationID = routingContext.pathParam("destination");
 			if (!vPattern.matcher(destinationID).matches()) {
 				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException, 400);
 				return;
 			}
 
-			MChronoVertex destination = (MChronoVertex) graph.getVertex(destinationID);
+			Vertex destination = graph.getVertex(destinationID);
 			if (destination == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
 				return;
@@ -313,10 +328,11 @@ public class SubscriptionRouter extends BaseRouter {
 				result.put("program", kairosProgram);
 				result.put("source", sourceID);
 				result.put("destination", destinationID);
-				
-				Object gammaElement = kairos.getProgram(time, kairosProgram).getGammaTable().getGamma(sourceID).getElement(destinationID);
+
+				Object gammaElement = kairos.getProgram(time, kairosProgram).getGammaTable().getGamma(sourceID)
+						.getElement(destinationID);
 				result.put("gammaElement", gammaElement);
-				
+
 				sendResult(routingContext, "application/json", result.toString(), 200);
 				return;
 			} catch (NullPointerException e) {
@@ -329,7 +345,7 @@ public class SubscriptionRouter extends BaseRouter {
 		});
 
 		Server.logger.info("GET /chronoweb/gammaTable/:time/:kairosProgram/:source/:destination router added");
-		
+
 	}
 
 }

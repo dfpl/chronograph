@@ -1,7 +1,5 @@
 package org.dfpl.chronograph.common;
 
-import java.util.Collection;
-
 import org.bson.Document;
 
 import com.tinkerpop.blueprints.Direction;
@@ -39,7 +37,7 @@ public interface VertexEvent extends Event {
 	 * @param label
 	 * @return
 	 */
-	public Collection<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label);
+	public Iterable<EdgeEvent> getEdgeEvents(Direction direction, TemporalRelation tr, String label);
 
 	/**
 	 * Return chronologically closest neighbor vertex events per a pair (out vertex,
@@ -51,7 +49,7 @@ public interface VertexEvent extends Event {
 	 * @param criteria
 	 * @return
 	 */
-	public Collection<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label);
+	public Iterable<VertexEvent> getVertexEvents(Direction direction, TemporalRelation tr, String label);
 
 	public Document toDocument(boolean includeProperties);
 }

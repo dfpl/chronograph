@@ -1,6 +1,7 @@
 package org.dfpl.chronograph.chronoweb;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,10 +88,14 @@ public class Bootstrap {
 			String type = Server.configuration.getString("data_storage_type");
 			if (type.equals("memory")) {
 				Server.backendType = "memory";
+				System.out.println("backendType:memory");
 			} else if (type.equals("persistent")) {
 				Server.backendType = "persistent";
 				Server.dbName = Server.configuration.getString("db_name");
 				Server.connectionString = Server.configuration.getString("db_connection_string");
+				System.out.println("backendType:persistent");
+				System.out.println("dbName:" + Server.dbName);
+				System.out.println("connectionString:" + Server.connectionString);
 			} else {
 				System.out.println("Invalid data_storage_type. System Terminated.");
 				System.exit(1);
@@ -110,11 +115,27 @@ public class Bootstrap {
 		}
 	}
 
+	public static void initializeGammaTable() {
+		try {
+			Server.gammaBaseDirectory = Server.configuration.getString("gamma_base_directory");
+			File base = new File(Server.gammaBaseDirectory);
+			if (!base.isDirectory()) {
+				System.out.println("Invalid gamma base directory. System Terminated.");
+				System.exit(1);
+			}
+			org.apache.commons.io.FileUtils.cleanDirectory(base);
+		} catch (Exception e) {
+			System.out.println("Invalid gamma base directory. System Terminated." + e.getMessage());
+			System.exit(1);
+		}
+	}
+
 	public static void bootstrap(String[] args) {
 		setLogger();
 		setConfiguration(args);
 		setPort();
 		setBackend();
 		setNumberOfCore();
+		initializeGammaTable();
 	}
 }

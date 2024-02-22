@@ -1,20 +1,21 @@
 package org.dfpl.chronograph.kairos.program;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
+import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -46,42 +47,91 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 	@Override
 	public void onInitialization(Set<Vertex> sources, Long startTime) {
 		synchronized (gammaTable) {
-			for(Vertex s: sources) {
+			for (Vertex s : sources) {
 				gammaTable.set(s.getId(), s.getId(), new LongGammaElement(startTime));
 			}
 			
-			Iterator<Entry<Long, HashSet<EdgeEvent>>> iter = ((MChronoGraph) graph).getEdgeEventIterator();
-			while (iter.hasNext()) {
-				Entry<Long, HashSet<EdgeEvent>> eventEntry = iter.next();
-				Long t = eventEntry.getKey();
-				HashSet<EdgeEvent> events = eventEntry.getValue();
-				for (EdgeEvent event : events) {
+			if (graph instanceof MChronoGraph mg) {
+				mg.getEdgeEvents().forEach(event -> {
+					System.out.println("\t\t" + event);
 					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
 							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
-							new LongGammaElement(t), targetTest);
-				}
+							new LongGammaElement(event.getTime()), targetTest);
+					gammaTable.print();
+				});
+			} else if (graph instanceof PChronoGraph pg) {
+				pg.getEdgeEvents().forEach(event -> {
+					System.out.println("\t\t" + event);
+					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
+							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
+							new LongGammaElement(event.getTime()), targetTest);
+					gammaTable.print();
+				});
 			}
 		}
 	}
 
 	@Override
-	public void onAddEdgeEvent(EdgeEvent newEvent) {
+	public void onAddEdgeEvent(EdgeEvent addedEvent) {
 		synchronized (gammaTable) {
-			gammaTable.update(newEvent.getVertex(Direction.OUT).getId(), sourceTest,
-					newEvent.getVertex(Direction.IN).getId(), new LongGammaElement(newEvent.getTime()), targetTest);
-			// gammaTable.print();
+			gammaTable.update(addedEvent.getVertex(Direction.OUT).getId(), sourceTest,
+					addedEvent.getVertex(Direction.IN).getId(), new LongGammaElement(addedEvent.getTime()), targetTest);
+			gammaTable.print();
 		}
 	}
 
 	@Override
-	public void onRemoveEdgeEvent(EdgeEvent eventToBeRemoved) {
+	public void onRemoveEdgeEvent(EdgeEvent removedEdge) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onAddVertex(Vertex addedVertex) {
 
 	}
 
 	@Override
-	public void onSetEdgeEventProperty(EdgeEvent event, String key, Object value) {
-		// TODO Auto-generated method stub
+	public void onAddEdge(Edge addedEdge) {
+
+	}
+
+	@Override
+	public void onUpdateVertexProperty(Document previous, Document updated) {
+
+	}
+
+	@Override
+	public void onUpdateEdgeProperty(Document previous, Document updated) {
+
+	}
+
+	@Override
+	public void onRemoveVertex(Vertex removedVertex) {
+
+	}
+
+	@Override
+	public void onRemoveEdge(Edge removedEdge) {
+
+	}
+
+	@Override
+	public void onAddVertexEvent(VertexEvent addedVertexEvent) {
+
+	}
+
+	@Override
+	public void onUpdateVertexEventProperty(Document previous, Document updated) {
+
+	}
+
+	@Override
+	public void onUpdateEdgeEventProperty(Document previous, Document updated) {
+
+	}
+
+	@Override
+	public void onRemoveVertexEvent(VertexEvent removedVertex) {
 
 	}
 

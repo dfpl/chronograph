@@ -1,9 +1,10 @@
-package org.dfpl.chronograph.khronos.manipulation.memory;
+package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.VertexEvent;
 
+import com.mongodb.client.MongoCollection;
 import com.tinkerpop.blueprints.*;
 
 /**
@@ -28,44 +29,67 @@ import com.tinkerpop.blueprints.*;
  *         Engineering 32.3 (2019): 424-437.
  * 
  */
-public class MChronoEdgeEvent extends MChronoEvent implements EdgeEvent {
+public class PChronoEdgeEvent extends PChronoEvent implements EdgeEvent {
 
-	public MChronoEdgeEvent(Edge e, Long time) {
-		this.g = e.getGraph();
+	private String outId;
+	private String label;
+	private String inId;
+
+	public PChronoEdgeEvent(Graph g, String e, String out, String label, String in, long time,
+			MongoCollection<Document> collection) {
+		this.g = g;
 		this.element = e;
-		this.time = time;
+		this.outId = out;
+		this.label = label;
+		this.inId = in;
 		this.id = e + "_" + time;
-		this.properties = new Document();
+		this.time = time;
+		this.collection = collection;
 	}
 
 	@Override
 	public VertexEvent getVertexEvent(Direction direction) {
-		return ((Edge) element).getVertex(direction).getEvent(time);
+		if (direction.equals(Direction.OUT)) {
+			return new PChronoVertexEvent(g, outId, time, ((PChronoGraph) g).vertexEvents);
+		} else if (direction.equals(Direction.IN)) {
+			return new PChronoVertexEvent(g, inId, time, ((PChronoGraph) g).vertexEvents);
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	@Override
 	public Vertex getVertex(Direction direction) {
-		return ((Edge) element).getVertex(direction);
+		if (direction.equals(Direction.OUT)) {
+			return new PChronoVertex(g, outId, ((PChronoGraph) g).vertices);
+		} else if (direction.equals(Direction.IN)) {
+			return new PChronoVertex(g, inId, ((PChronoGraph) g).vertices);
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	@Override
 	public String getLabel() {
-		return ((Edge) element).getLabel();
+		return label;
 	}
 
 	public Document toDocument(boolean includeProperties) {
-		Document object = ((Edge) element).toDocument(false);
+		Document object = new Document();
 		object.put("_id", id);
-		object.put("_e", element.getId());
+		object.put("_e", element);
+		object.put("_o", outId);
+		object.put("_l", label);
+		object.put("_i", inId);
 		object.put("_t", time);
 		if (includeProperties)
-			object.put("properties", properties);
+			object.put("properties", getProperties());
 
 		return object;
 	}
 
 	@Override
 	public Graph getGraph() {
-		return element.getGraph();
+		return g;
 	}
 }

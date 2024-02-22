@@ -126,7 +126,7 @@ public class MChronoGraph implements Graph {
 	 * @return an iterable reference to all vertices in the graph
 	 */
 	@Override
-	public Collection<Vertex> getVertices() {
+	public Iterable<Vertex> getVertices() {
 		return vertices.values();
 	}
 
@@ -142,7 +142,7 @@ public class MChronoGraph implements Graph {
 	 * @return an iterable of vertices with provided key and value
 	 */
 	@Override
-	public Collection<Vertex> getVertices(String key, Object value) {
+	public Iterable<Vertex> getVertices(String key, Object value) {
 		return vertices.values().parallelStream().filter(v -> {
 			Object val = v.getProperty(key);
 			return val == null ? false : val.equals(value) ? true : false;
@@ -231,7 +231,7 @@ public class MChronoGraph implements Graph {
 	 * @return an iterable reference to all edges in the graph
 	 */
 	@Override
-	public Collection<Edge> getEdges() {
+	public Iterable<Edge> getEdges() {
 		return edges.values();
 	}
 
@@ -247,7 +247,7 @@ public class MChronoGraph implements Graph {
 	 * @return an iterable of edges with provided key and value
 	 */
 	@Override
-	public Collection<Edge> getEdges(String key, Object value) {
+	public Iterable<Edge> getEdges(String key, Object value) {
 		return edges.values().parallelStream().filter(v -> {
 			Object val = v.getProperty(key);
 			return val == null ? false : val.equals(value) ? true : false;
@@ -330,30 +330,18 @@ public class MChronoGraph implements Graph {
 		inEdges.clear();
 	}
 
-	public Iterator<Entry<Long, HashSet<EdgeEvent>>> getEdgeEventIterator() {
-		TreeMap<Long, HashSet<EdgeEvent>> eventMap = new TreeMap<Long, HashSet<EdgeEvent>>();
-		Collection<Edge> edges = getEdges();
-		edges.parallelStream().flatMap(e -> {
-			Stream<EdgeEvent> stream = e.getEvents().parallelStream();
-			return stream;
-		}).forEach(ee -> {
-			Long t = ee.getTime();
-			if (eventMap.containsKey(t)) {
-				eventMap.get(t).add(ee);
-			} else {
-				HashSet<EdgeEvent> newSet = new HashSet<EdgeEvent>();
-				newSet.add(ee);
-				eventMap.put(t, newSet);
-			}
-		});
-		return eventMap.entrySet().iterator();
-	}
-
 	/**
 	 * Do Nothing in an in-memory graph
 	 */
 	@Override
 	public void shutdown() {
 		// Do Nothing
+	}
+
+	@Override
+	public Stream<EdgeEvent> getEdgeEvents() {
+		return edges.values().parallelStream().flatMap(e -> {
+			return ((TreeSet<EdgeEvent>) e.getEvents()).parallelStream();
+		}).sorted().sequential();
 	}
 }

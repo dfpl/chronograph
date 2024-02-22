@@ -188,16 +188,16 @@ public class ManipulationRouter extends BaseRouter {
 	}
 
 	public void registerGetElementsRouter(Router router, EventBus eventBus) {
+
 		router.get("/chronoweb/graph").handler(routingContext -> {
 			String target = getStringURLParameter(routingContext, "target");
 			target = target == null ? "vertices" : target;
 			if (target.equals("vertices")) {
-				JsonArray result = new JsonArray(graph.getVertices().parallelStream().map(v -> v.getId()).toList());
-				sendResult(routingContext, "application/json", result.toString(), 200);
+				sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs(graph.getVertices()).toString(),
+						200);
 				return;
 			} else {
-				JsonArray result = new JsonArray(graph.getEdges().parallelStream().map(e -> e.getId()).toList());
-				sendResult(routingContext, "application/json", result.toString(), 200);
+				sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs(graph.getEdges()).toString(), 200);
 				return;
 			}
 		});
@@ -422,6 +422,10 @@ public class ManipulationRouter extends BaseRouter {
 			} else if (ePattern.matcher(resource).matches()) {
 				try {
 					Edge e = graph.getEdge(resource);
+					if (e == null) {
+						sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
+						return;
+					}
 					if (time == null || tr == null) {
 						sendResult(routingContext, "application/json", Util.toJsonArrayOfIDs(e.getEvents()).toString(),
 								200);

@@ -70,7 +70,7 @@ public class Server extends AbstractVerticle {
 	private ManipulationRouter manipulationRouter;
 	private SubscriptionRouter subscriptionRouter;
 
-	public static String baseDirectory = "d:\\kairos";
+	public static String gammaBaseDirectory;
 
 	public void setModules() {
 		if(backendType.equals("memory")) {
