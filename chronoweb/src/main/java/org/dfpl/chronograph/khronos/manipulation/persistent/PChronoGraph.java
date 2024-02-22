@@ -1,7 +1,6 @@
 package org.dfpl.chronograph.khronos.manipulation.persistent;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
@@ -50,16 +49,10 @@ public class PChronoGraph implements Graph {
 	public MongoCollection<Document> getVertexCollection() {
 		return vertices;
 	}
-	
-	
 
 	public MongoCollection<Document> getVertexEventCollection() {
 		return vertexEvents;
 	}
-
-
-
-
 
 	public void createIndex() {
 		List<Document> edgeIndexes = new ArrayList<Document>();
@@ -333,29 +326,16 @@ public class PChronoGraph implements Graph {
 		createIndex();
 	}
 
-	public Iterator<Entry<Long, HashSet<EdgeEvent>>> getEdgeEventIterator() {
-		// TODO
-//		TreeMap<Long, HashSet<EdgeEvent>> eventMap = new TreeMap<Long, HashSet<EdgeEvent>>();
-//		Collection<Edge> edges = getEdges();
-//		edges.parallelStream().flatMap(e -> {
-//			Stream<EdgeEvent> stream = e.getEvents().parallelStream();
-//			return stream;
-//		}).forEach(ee -> {
-//			Long t = ee.getTime();
-//			if (eventMap.containsKey(t)) {
-//				eventMap.get(t).add(ee);
-//			} else {
-//				HashSet<EdgeEvent> newSet = new HashSet<EdgeEvent>();
-//				newSet.add(ee);
-//				eventMap.put(t, newSet);
-//			}
-//		});
-//		return eventMap.entrySet().iterator();
-		return null;
-	}
-
 	@Override
 	public void shutdown() {
 		client.close();
+	}
+
+	@Override
+	public Iterable<EdgeEvent> getEdgeEvents() {
+		return edges.find().sort(new Document("_t", 1)).map(doc -> {
+			return new PChronoEdgeEvent(this, doc.getString("_id"), doc.getString("_o"), doc.getString("_l"),
+					doc.getString("_i"), doc.getLong("_t"), edgeEvents);
+		});
 	}
 }

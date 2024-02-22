@@ -123,6 +123,14 @@ public interface Graph {
 	public Iterable<Edge> getEdges(String key, Object value);
 
 	/**
+	 * MChronoGraph returns Stream<EdgeEvent>
+	 * PchronoGraph returns Iterable<EdgeEvent>
+	 * 
+	 * @return
+	 */
+	public Object getEdgeEvents();
+
+	/**
 	 * A shutdown function is required to properly close the graph. This is
 	 * important for implementations that utilize disk-based serializations.
 	 */

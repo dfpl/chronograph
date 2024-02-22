@@ -3,6 +3,9 @@ package org.dfpl.chronograph.khronos.manipulation.memory;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.dfpl.chronograph.common.EdgeEvent;
 
 import com.tinkerpop.blueprints.*;
 
@@ -333,5 +336,12 @@ public class MChronoGraph implements Graph {
 	@Override
 	public void shutdown() {
 		// Do Nothing
+	}
+
+	@Override
+	public Stream<EdgeEvent> getEdgeEvents() {
+		return edges.values().parallelStream().flatMap(e -> {
+			return ((TreeSet<EdgeEvent>) e.getEvents()).parallelStream();
+		}).sorted().sequential();
 	}
 }

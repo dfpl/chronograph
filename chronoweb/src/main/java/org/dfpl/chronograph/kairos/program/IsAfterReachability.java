@@ -11,6 +11,8 @@ import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -48,13 +50,23 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 			for (Vertex s : sources) {
 				gammaTable.set(s.getId(), s.getId(), new LongGammaElement(startTime));
 			}
-
-			for (Edge e : graph.getEdges()) {
-				for (EdgeEvent event : e.getEvents()) {
+			
+			if (graph instanceof MChronoGraph mg) {
+				mg.getEdgeEvents().forEach(event -> {
+					System.out.println("\t\t" + event);
 					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
 							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
 							new LongGammaElement(event.getTime()), targetTest);
-				}
+					gammaTable.print();
+				});
+			} else if (graph instanceof PChronoGraph pg) {
+				pg.getEdgeEvents().forEach(event -> {
+					System.out.println("\t\t" + event);
+					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
+							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
+							new LongGammaElement(event.getTime()), targetTest);
+					gammaTable.print();
+				});
 			}
 		}
 	}
