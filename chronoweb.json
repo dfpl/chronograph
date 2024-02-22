@@ -1,5 +1,5 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "2.0",
   "info": {
     "title": "Chronoweb - OpenAPI 3.1",
     "description": "This is the API description of Chronoweb based on the OpenAPI 3.1 specification.  Chronoweb is an open-source web information system that analyzes temporal information diffusion with a unified RESTful web service. Users are able to create, retrieve, update, delete, and traverse graph elements such as vertices, edges, vertex events and edge events. Furthermore, the server allows subscribing a specific vertex source with an incremental computation program. \n\nRelated Article:\n- [Kairos, IEEE TKDE](https://ieeexplore.ieee.org/abstract/document/10374549)\n- [Time-centric engine, IEEE TKDE](https://ieeexplore.ieee.org/abstract/document/9128046)\n- [ChronoGraph, IEEE TKDE](https://ieeexplore.ieee.org/abstract/document/8606161/)",
