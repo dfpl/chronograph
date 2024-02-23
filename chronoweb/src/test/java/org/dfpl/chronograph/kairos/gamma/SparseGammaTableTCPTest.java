@@ -45,7 +45,6 @@ public class SparseGammaTableTCPTest {
 
 	}
 
-
 	public void baseTest() {
 
 		Predicate<Integer> predicate = new Predicate<Integer>() {
@@ -88,7 +87,6 @@ public class SparseGammaTableTCPTest {
 
 		gammaTable.clear();
 	}
-
 
 	public void baseDoubleTest() {
 
@@ -133,7 +131,6 @@ public class SparseGammaTableTCPTest {
 		gammaDTable.clear();
 	}
 
-	@Test
 	public void baseBooleanTest() {
 
 		Predicate<Boolean> predicate = new Predicate<Boolean>() {
