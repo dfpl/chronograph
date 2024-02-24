@@ -1,11 +1,11 @@
 package org.dfpl.chronograph.kairos.gamma;
 
-import org.dfpl.chronograph.kairos.gamma.persistent.IntegerGammaElement;
-import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.IntegerGammaElement;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.junit.*;
 
 public class SparseGammaTableTest {
-	SparseGammaTable<String, Integer> gammaTable;
+	FixedSizedGammaTable<String, Integer> gammaTable;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -17,7 +17,7 @@ public class SparseGammaTableTest {
 
 	@Before
 	public void setUp() throws Exception {
-		gammaTable = new SparseGammaTable<String, Integer>("d:\\g", IntegerGammaElement.class);
+		gammaTable = new FixedSizedGammaTable<String, Integer>("d:\\g", IntegerGammaElement.class);
 	}
 
 	@After

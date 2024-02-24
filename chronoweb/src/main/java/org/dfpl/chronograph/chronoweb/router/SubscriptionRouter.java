@@ -13,9 +13,9 @@ import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.KairosEngine;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
-import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
-import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
-import org.dfpl.chronograph.kairos.program.IsAfterReachability;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
+import org.dfpl.chronograph.kairos.program.reachability.IsAfterReachability;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
@@ -132,9 +132,9 @@ public class SubscriptionRouter extends BaseRouter {
 					subDirectory.mkdirs();
 
 				if(kairosProgram.equals("IsAfterReachability")) {
-					SparseGammaTable<String, Long> gammaTable = null;
+					FixedSizedGammaTable<String, Long> gammaTable = null;
 					try {
-						gammaTable = new SparseGammaTable<String, Long>(subDirectoryName, LongGammaElement.class);
+						gammaTable = new FixedSizedGammaTable<String, Long>(subDirectoryName, LongGammaElement.class);
 					} catch (NotDirectoryException | FileNotFoundException e) {
 						sendResult(routingContext, 500);
 						return;

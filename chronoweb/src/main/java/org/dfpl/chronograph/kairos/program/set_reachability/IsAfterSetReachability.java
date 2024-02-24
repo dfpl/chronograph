@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.kairos.program;
+package org.dfpl.chronograph.kairos.program.set_reachability;
 
 import java.util.Set;
 import java.util.function.BiPredicate;
@@ -10,7 +10,7 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
-import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
+import org.dfpl.chronograph.kairos.gamma.persistent.db.StringSetGammaElement;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
@@ -19,28 +19,29 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
-public class IsAfterReachability extends AbstractKairosProgram<Long> {
+public class IsAfterSetReachability extends AbstractKairosProgram<Set<String>> {
 
-	public IsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
-		super(graph, gammaTable, "IsAfterReachability");
+	public IsAfterSetReachability(Graph graph, GammaTable<String, Set<String>> gammaTable) {
+		super(graph, gammaTable, "IsAfterSetReachability");
 	}
 
-	Predicate<Long> sourceTest = new Predicate<Long>() {
+	Predicate<Set<String>> sourceTest = new Predicate<Set<String>>() {
 		@Override
-		public boolean test(Long t) {
-			if (t.longValue() == 9187201950435737471l)
+		public boolean test(Set<String> t) {
+			if (t.isEmpty())
 				return false;
 			return true;
 		}
 	};
 
-	BiPredicate<Long, Long> targetTest = new BiPredicate<Long, Long>() {
+	BiPredicate<Set<String>, Set<String>> targetTest = new BiPredicate<Set<String>, Set<String>>() {
 		@Override
-		public boolean test(Long t, Long u) {
-			if (u < t)
-				return true;
-
-			return false;
+		public boolean test(Set<String> t, Set<String> u) {
+			for (String uv : u) {
+				if (t.contains(uv))
+					return false;
+			}
+			return true;
 		}
 	};
 
@@ -48,15 +49,15 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 	public void onInitialization(Set<Vertex> sources, Long startTime) {
 		synchronized (gammaTable) {
 			for (Vertex s : sources) {
-				gammaTable.set(s.getId(), s.getId(), new LongGammaElement(startTime));
+				gammaTable.set(s.getId(), s.getId(), new StringSetGammaElement(s.getId()));
 			}
-			
+
 			if (graph instanceof MChronoGraph mg) {
 				mg.getEdgeEvents().forEach(event -> {
 					System.out.println("\t\t" + event);
 					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
 							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
-							new LongGammaElement(event.getTime()), targetTest);
+							new StringSetGammaElement(event.getVertex(Direction.IN).getId()), targetTest);
 					gammaTable.print();
 				});
 			} else if (graph instanceof PChronoGraph pg) {
@@ -64,7 +65,7 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 					System.out.println("\t\t" + event);
 					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
 							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
-							new LongGammaElement(event.getTime()), targetTest);
+							new StringSetGammaElement(event.getVertex(Direction.IN).getId()), targetTest);
 					gammaTable.print();
 				});
 			}
@@ -75,14 +76,15 @@ public class IsAfterReachability extends AbstractKairosProgram<Long> {
 	public void onAddEdgeEvent(EdgeEvent addedEvent) {
 		synchronized (gammaTable) {
 			gammaTable.update(addedEvent.getVertex(Direction.OUT).getId(), sourceTest,
-					addedEvent.getVertex(Direction.IN).getId(), new LongGammaElement(addedEvent.getTime()), targetTest);
+					addedEvent.getVertex(Direction.IN).getId(),
+					new StringSetGammaElement(addedEvent.getVertex(Direction.IN).getId()), targetTest);
 			gammaTable.print();
 		}
 	}
 
 	@Override
 	public void onRemoveEdgeEvent(EdgeEvent removedEdge) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
