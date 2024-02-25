@@ -298,4 +298,15 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 		}
 	}
 
+	@Override
+	public void append(K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void append(Set<K> sources, K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate) {
+		throw new UnsupportedOperationException();
+	}
 }

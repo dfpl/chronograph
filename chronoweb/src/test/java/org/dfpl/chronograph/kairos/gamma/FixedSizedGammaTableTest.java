@@ -4,7 +4,7 @@ import org.dfpl.chronograph.kairos.gamma.persistent.file.IntegerGammaElement;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.junit.*;
 
-public class SparseGammaTableTest {
+public class FixedSizedGammaTableTest {
 	FixedSizedGammaTable<String, Integer> gammaTable;
 
 	@BeforeClass

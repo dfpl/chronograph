@@ -12,7 +12,7 @@ import com.mongodb.client.model.ReplaceOptions;
 
 import io.vertx.core.json.JsonObject;
 
-public class ExpandableGamma<E> implements Gamma<String, E> {
+public class ExpandableGamma implements Gamma<String, Document> {
 
 	private MongoCollection<Document> col;
 
@@ -20,38 +20,35 @@ public class ExpandableGamma<E> implements Gamma<String, E> {
 		this.col = col;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public E getElement(String to) {
+	public Document getElement(String to) {
 		Document doc = col.find(new Document("_id", to)).first();
 		if (doc == null)
 			return null;
 		else
-			return (E) doc.get("_g");
+			return doc.get("_g", Document.class);
 	}
 
 	@Override
-	public void setElement(String to, GammaElement<E> element) {
+	public void setElement(String to, GammaElement<Document> element) {
 		col.replaceOne(new Document("_id", to), new Document("_id", to).append("_g", element.getElement()),
 				new ReplaceOptions().upsert(true));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, E> toMap(boolean setDefaultToNull) {
-		HashMap<String, E> map = new HashMap<String, E>();
+	public Map<String, Document> toMap(boolean setDefaultToNull) {
+		HashMap<String, Document> map = new HashMap<String, Document>();
 		for (Document doc : col.find()) {
-			map.put(doc.getString("_id"), (E) doc.get("_g"));
+			map.put(doc.getString("_id"), doc.get("_g", Document.class));
 		}
 		return map;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public JsonObject toJson(boolean setDefaultToNull) {
 		JsonObject obj = new JsonObject();
 		for (Document doc : col.find()) {
-			obj.put(doc.getString("_id"), (E) doc.get("_g"));
+			obj.put(doc.getString("_id"), doc.get("_g", Document.class));
 		}
 		return obj;
 	}

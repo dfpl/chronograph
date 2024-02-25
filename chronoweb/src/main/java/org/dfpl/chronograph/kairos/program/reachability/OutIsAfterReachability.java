@@ -19,10 +19,10 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
-public class IsAfterReachability extends AbstractKairosProgram<Long> {
+public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 
-	public IsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
-		super(graph, gammaTable, "IsAfterReachability");
+	public OutIsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
+		super(graph, gammaTable, "OutIsAfterReachability");
 	}
 
 	Predicate<Long> sourceTest = new Predicate<Long>() {

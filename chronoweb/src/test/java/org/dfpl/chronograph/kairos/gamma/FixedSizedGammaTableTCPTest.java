@@ -9,7 +9,7 @@ import org.dfpl.chronograph.kairos.gamma.persistent.file.IntegerGammaElement;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.junit.*;
 
-public class SparseGammaTableTCPTest {
+public class FixedSizedGammaTableTCPTest {
 	FixedSizedGammaTable<String, Integer> gammaTable;
 	FixedSizedGammaTable<String, Double> gammaDTable;
 	FixedSizedGammaTable<String, Boolean> gammaBTable;
