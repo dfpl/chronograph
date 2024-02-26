@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.kairos.program.set_reachability;
+package org.dfpl.chronograph.kairos.program.path_reachability;
 
 import java.util.List;
 import java.util.Set;
