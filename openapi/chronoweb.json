@@ -25,8 +25,8 @@
         "tags": [
           "vertex"
         ],
-        "summary": "create or update a vertex with a given 'vertexID'",
-        "description": "create or update a vertex with a given 'vertexID'.",
+        "summary": "Creates or updates a vertex with a given 'vertexID'",
+        "description": "Create or updates a vertex with a given 'vertexID'.",
         "parameters": [
           {
             "name": "vertexID",
@@ -48,7 +48,7 @@
           {
             "name": "updateOrReplaceProperties",
             "in": "query",
-            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "description": "Effect to properties: * update - updates given key-value properties for a resource  * replace - replaces current properties with the given ones\n",
             "schema": {
               "type": "string",
               "enum": [
@@ -61,7 +61,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -69,12 +69,12 @@
           }
         ],
         "requestBody": {
-          "description": "key-value properties for a given vertex",
+          "description": "Key-value properties for a given vertex",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "description": "key-value properties for a resource",
+                "description": "Key-value properties for a resource",
                 "type": "object",
                 "examples": [
                   {
@@ -88,7 +88,7 @@
         },
         "responses": {
           "200": {
-            "description": "the vertex created or updated successfully.",
+            "description": "The vertex created or updated successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -106,7 +106,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -194,8 +194,8 @@
         "tags": [
           "vertex"
         ],
-        "summary": "retrieve a vertex with a given 'vertexID'",
-        "description": "retrieve a vertex with a given 'vertexID'.",
+        "summary": "Retrieves a vertex with a given 'vertexID'",
+        "description": "Retrieves a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "vertexID",
@@ -217,7 +217,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -226,7 +226,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the vertex retrieved successfully",
+            "description": "The vertex retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -244,7 +244,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -346,8 +346,8 @@
         "tags": [
           "vertex"
         ],
-        "summary": "delete a vertex with a given 'vertexID'",
-        "description": "delete a vertex with a given 'vertexID'.",
+        "summary": "Deletes a vertex with a given 'vertexID'",
+        "description": "Deletes a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "vertexID",
@@ -369,7 +369,7 @@
         ],
         "responses": {
           "204": {
-            "description": "the vertex deleted successfully"
+            "description": "The vertex deleted successfully"
           },
           "400": {
             "description": "Syntax error in the request",
@@ -461,8 +461,8 @@
         "tags": [
           "edge"
         ],
-        "summary": "create or update an edge with a given 'edgeID'",
-        "description": "create or update an edge with a given 'edgeID'.",
+        "summary": "Creates or updates an edge with a given 'edgeID'",
+        "description": "Creates or updates an edge with a given 'edgeID'",
         "parameters": [
           {
             "name": "edgeID",
@@ -483,7 +483,7 @@
           {
             "name": "updateOrReplaceProperties",
             "in": "query",
-            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "description": "Effect to properties: * update - updates given key-value properties for a resource  * replace - replaces current properties with the given ones\n",
             "schema": {
               "type": "string",
               "enum": [
@@ -496,7 +496,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -504,12 +504,12 @@
           }
         ],
         "requestBody": {
-          "description": "key-value properties for a given edge",
+          "description": "Key-value properties for a given edge",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "description": "key-value properties for a resource",
+                "description": "Key-value properties for a resource",
                 "type": "object",
                 "examples": [
                   {
@@ -523,7 +523,7 @@
         },
         "responses": {
           "200": {
-            "description": "the edge created or updated successfully.",
+            "description": "The edge created or updated successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -573,7 +573,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -672,8 +672,8 @@
         "tags": [
           "edge"
         ],
-        "summary": "retrieve an edge with a given 'edgeID'",
-        "description": "retrieve an edge with a given 'edgeID'.",
+        "summary": "Retrieves an edge with a given 'edgeID'",
+        "description": "Retrieves an edge with a given 'edgeID'",
         "parameters": [
           {
             "name": "edgeID",
@@ -694,7 +694,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -703,7 +703,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the edge retrieved successfully",
+            "description": "The edge retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -753,7 +753,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -866,8 +866,8 @@
         "tags": [
           "edge"
         ],
-        "summary": "delete an edge with a given 'edgeID'",
-        "description": "delete an edge with a given 'edgeID'.",
+        "summary": "Deletes an edge with a given 'edgeID'",
+        "description": "Deletes an edge with a given 'edgeID'",
         "parameters": [
           {
             "name": "edgeID",
@@ -888,7 +888,7 @@
         ],
         "responses": {
           "204": {
-            "description": "the edge deleted successfully"
+            "description": "The edge deleted successfully"
           },
           "400": {
             "description": "Syntax error in the request",
@@ -980,8 +980,8 @@
         "tags": [
           "vertex event"
         ],
-        "summary": "create or update a vertex event with a given 'vertexEventID'",
-        "description": "create or update a vertex event with a given 'vertexEventID'.",
+        "summary": "Creates or updates a vertex event with a given 'vertexEventID'",
+        "description": "Creates or updates a vertex event with a given 'vertexEventID'",
         "parameters": [
           {
             "name": "vertexEventID",
@@ -1003,7 +1003,7 @@
           {
             "name": "updateOrReplaceProperties",
             "in": "query",
-            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "description": "Effect to properties: * update - updates given key-value properties for a resource  * replace - replaces current properties with the given ones\n",
             "schema": {
               "type": "string",
               "enum": [
@@ -1016,7 +1016,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1024,12 +1024,12 @@
           }
         ],
         "requestBody": {
-          "description": "key-value properties for a given vertex event",
+          "description": "Key-value properties for a given vertex event",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "description": "key-value properties for a resource",
+                "description": "Key-value properties for a resource",
                 "type": "object",
                 "examples": [
                   {
@@ -1043,11 +1043,12 @@
         },
         "responses": {
           "200": {
-            "description": "the vertex created or updated successfully.",
+            "description": "The vertex event created or updated successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "description": "A vertex valid at a specific time",
                   "properties": {
                     "_id": {
                       "description": "A vertex event identifier that is unique in a graph",
@@ -1082,7 +1083,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -1170,8 +1171,8 @@
         "tags": [
           "vertex event"
         ],
-        "summary": "retrieve a vertex event with a given 'vertexEventID'",
-        "description": "retrieve a vertex event with a given 'vertexEventID'.",
+        "summary": "Retrieves a vertex event with a given 'vertexEventID'",
+        "description": "Retrieves a vertex event with a given 'vertexEventID'",
         "parameters": [
           {
             "name": "vertexEventID",
@@ -1193,7 +1194,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1202,11 +1203,12 @@
         ],
         "responses": {
           "200": {
-            "description": "the vertex retrieved successfully",
+            "description": "The vertex event retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "description": "A vertex valid at a specific time",
                   "properties": {
                     "_id": {
                       "description": "A vertex event identifier that is unique in a graph",
@@ -1241,7 +1243,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -1343,8 +1345,8 @@
         "tags": [
           "vertex event"
         ],
-        "summary": "delete a vertex event with a given 'vertexEventID'",
-        "description": "delete a vertex event with a given 'vertexEventID'.",
+        "summary": "Deletes a vertex event with a given 'vertexEventID'",
+        "description": "Deletes a vertex event with a given 'vertexEventID'",
         "parameters": [
           {
             "name": "vertexEventID",
@@ -1366,7 +1368,7 @@
         ],
         "responses": {
           "204": {
-            "description": "the vertex event deleted successfully"
+            "description": "The vertex event deleted successfully"
           },
           "400": {
             "description": "Syntax error in the request",
@@ -1458,8 +1460,8 @@
         "tags": [
           "edge event"
         ],
-        "summary": "create or update an edge event with a given 'edgeID'",
-        "description": "create or update an edge event with a given 'edgeID'.",
+        "summary": "Creates or updates an edge event with a given 'edgeEventID'",
+        "description": "Creates or updates an edge event with a given 'edgeEventID'",
         "parameters": [
           {
             "name": "edgeEventID",
@@ -1480,7 +1482,7 @@
           {
             "name": "updateOrReplaceProperties",
             "in": "query",
-            "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+            "description": "Effect to properties: * update - updates given key-value properties for a resource  * replace - replaces current properties with the given ones\n",
             "schema": {
               "type": "string",
               "enum": [
@@ -1493,7 +1495,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1501,12 +1503,12 @@
           }
         ],
         "requestBody": {
-          "description": "key-value properties for a given edge event",
+          "description": "Key-value properties for a given edge event",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "description": "key-value properties for a resource",
+                "description": "Key-value properties for a resource",
                 "type": "object",
                 "examples": [
                   {
@@ -1520,11 +1522,12 @@
         },
         "responses": {
           "200": {
-            "description": "the edge event created or updated successfully.",
+            "description": "The edge event created or updated successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "description": "An edge valid at a specific time",
                   "properties": {
                     "_id": {
                       "description": "An edge event identifier that is unique in a graph",
@@ -1590,7 +1593,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -1603,7 +1606,7 @@
                   "examples": [
                     {
                       "_id": "Seoul|isConnectedTo|Incheon_1707375682",
-                      "__e": "Seoul|isConnectedTo|Incheon",
+                      "_e": "Seoul|isConnectedTo|Incheon",
                       "_o": "Seoul",
                       "_i": "Incheon",
                       "_l": "isConnectedTo",
@@ -1691,8 +1694,8 @@
         "tags": [
           "edge event"
         ],
-        "summary": "retrieve an edge event with a given 'edgeEventID'",
-        "description": "retrieve an edge event with a given 'edgeEventID'.",
+        "summary": "Retrieves an edge event with a given 'edgeEventID'",
+        "description": "Retrieves an edge event with a given 'edgeEventID'",
         "parameters": [
           {
             "name": "edgeEventID",
@@ -1713,7 +1716,7 @@
           {
             "name": "includeProperties",
             "in": "query",
-            "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+            "description": "Includes the key-value properties in the response when set to true",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1722,11 +1725,12 @@
         ],
         "responses": {
           "200": {
-            "description": "the edge event retrieved successfully",
+            "description": "The edge event retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "description": "An edge valid at a specific time",
                   "properties": {
                     "_id": {
                       "description": "An edge event identifier that is unique in a graph",
@@ -1792,7 +1796,7 @@
                       ]
                     },
                     "properties": {
-                      "description": "key-value properties for a resource",
+                      "description": "Key-value properties for a resource",
                       "type": "object",
                       "examples": [
                         {
@@ -1805,7 +1809,7 @@
                   "examples": [
                     {
                       "_id": "Seoul|isConnectedTo|Incheon_1707375682",
-                      "__e": "Seoul|isConnectedTo|Incheon",
+                      "_e": "Seoul|isConnectedTo|Incheon",
                       "_o": "Seoul",
                       "_i": "Incheon",
                       "_l": "isConnectedTo",
@@ -1907,8 +1911,8 @@
         "tags": [
           "edge event"
         ],
-        "summary": "delete an edge event with a given 'edgeID'",
-        "description": "delete an edge event with a given 'edgeID'.",
+        "summary": "Deletes an edge event with a given 'edgeEventID'",
+        "description": "Deletes an edge event with a given 'edgeEventID'",
         "parameters": [
           {
             "name": "edgeEventID",
@@ -1929,7 +1933,7 @@
         ],
         "responses": {
           "204": {
-            "description": "the edge event deleted successfully"
+            "description": "The edge event deleted successfully"
           },
           "400": {
             "description": "Syntax error in the request",
@@ -2021,13 +2025,13 @@
         "tags": [
           "graph"
         ],
-        "summary": "retrieve vertices or edges in a graph",
-        "description": "retrieve vertices or edges in a graph",
+        "summary": "Retrieves vertices or edges in a graph",
+        "description": "Retrieves vertices or edges in a graph",
         "parameters": [
           {
             "name": "target",
             "in": "query",
-            "description": "'vertices' returns all the vertices while 'edges' returns all the edges",
+            "description": "Return behavior: * vertices - returns all the vertices  * edges - returns all the edges\n",
             "schema": {
               "type": "string",
               "enum": [
@@ -2040,7 +2044,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the vertices retrieved successfully",
+            "description": "The vertices or edges retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2086,11 +2090,11 @@
         "tags": [
           "graph"
         ],
-        "summary": "clear a graph",
-        "description": "clear a graph",
+        "summary": "Clears a graph",
+        "description": "Clears a graph",
         "responses": {
           "204": {
-            "description": "a graph cleared successfully"
+            "description": "A graph cleared successfully"
           }
         }
       }
@@ -2100,8 +2104,8 @@
         "tags": [
           "static traversal"
         ],
-        "summary": "retrieve out-going edges from a vertex with a given 'vertexID'",
-        "description": "retrieve out-going edges from a vertex with a given 'vertexID'",
+        "summary": "Retrieves out-going edges from a vertex with a given 'vertexID'",
+        "description": "Retrieves out-going edges from a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "vertexID",
@@ -2143,7 +2147,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the out-going edges of a vertex retrieved successfully",
+            "description": "The out-going edges of a vertex retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2186,7 +2190,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -2258,8 +2262,8 @@
         "tags": [
           "static traversal"
         ],
-        "summary": "retrieve in-going edges from a vertex with a given 'vertexID'",
-        "description": "retrieve in-going edges from a vertex with a given 'vertexID'",
+        "summary": "Retrieves in-going edges from a vertex with a given 'vertexID'",
+        "description": "Retrieves in-going edges from a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "vertexID",
@@ -2301,7 +2305,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the in-going edges of a vertex retrieved successfully",
+            "description": "The in-going edges of a vertex retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2344,7 +2348,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -2416,8 +2420,8 @@
         "tags": [
           "static traversal"
         ],
-        "summary": "retrieve out-going vertices from a vertex with a given 'vertexID'",
-        "description": "retrieve out-going vertices from a vertex with a given 'vertexID'",
+        "summary": "Retrieves out-going vertices from a vertex with a given 'vertexID'",
+        "description": "Retrieves out-going vertices from a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "vertexID",
@@ -2459,7 +2463,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the out-going vertices of a vertex retrieved successfully",
+            "description": "The out-going vertices of a vertex retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2502,7 +2506,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -2574,8 +2578,8 @@
         "tags": [
           "static traversal"
         ],
-        "summary": "retrieve in-going vertices from a vertex with a given 'vertexID'",
-        "description": "retrieve in-going vertices from a vertex with a given 'vertexID'",
+        "summary": "Retrieves in-going vertices from a vertex with a given 'vertexID'",
+        "description": "Retrieves in-going vertices from a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "vertexID",
@@ -2617,7 +2621,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the in-going vertices of a vertex retrieved successfully",
+            "description": "The in-going vertices of a vertex retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2660,7 +2664,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -2732,8 +2736,8 @@
         "tags": [
           "temporal traversal"
         ],
-        "summary": "retrieve out-going edge events from a vertex event with a given 'vertexEventID'",
-        "description": "retrieve out-going edge events from a vertex event with a given 'vertexEventID'",
+        "summary": "Retrieves out-going edge events from a vertex event with a given 'vertexEventID'",
+        "description": "Retrieves out-going edge events from a vertex event with a given 'vertexEventID'",
         "parameters": [
           {
             "name": "vertexEventID",
@@ -2794,7 +2798,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the out-going edge events of a vertex retrieved successfully",
+            "description": "The out-going edge events of a vertex event retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2837,7 +2841,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                            "The syntax of resource identifier should be ^[^|_]+_[0-9]+$"
                           ]
                         },
                         "status": {
@@ -2963,8 +2967,8 @@
         "tags": [
           "temporal traversal"
         ],
-        "summary": "retrieve in-going edge events from a vertex event with a given 'vertexEventID'",
-        "description": "retrieve in-going edge events from a vertex event with a given 'vertexEventID'",
+        "summary": "Retrieves in-going edge events from a vertex event with a given 'vertexEventID'",
+        "description": "Retrieves in-going edge events from a vertex event with a given 'vertexEventID'",
         "parameters": [
           {
             "name": "vertexEventID",
@@ -3025,7 +3029,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the in-going edge events of a vertex retrieved successfully",
+            "description": "The in-going edge events of a vertex event retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -3068,7 +3072,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                            "The syntax of resource identifier should be ^[^|_]+_[0-9]+$"
                           ]
                         },
                         "status": {
@@ -3194,8 +3198,8 @@
         "tags": [
           "temporal traversal"
         ],
-        "summary": "retrieve out-going vertex events from a vertex event with a given 'vertexEventID'",
-        "description": "retrieve out-going Vertex events from a vertex event with a given 'vertexEventID'",
+        "summary": "Retrieves out-going vertex events from a vertex event with a given 'vertexEventID'",
+        "description": "Retrieves out-going vertex events from a vertex event with a given 'vertexEventID'",
         "parameters": [
           {
             "name": "vertexEventID",
@@ -3256,7 +3260,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the out-going vertex events of a vertex retrieved successfully",
+            "description": "The out-going vertex events of a vertex event retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -3299,7 +3303,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                            "The syntax of resource identifier should be ^[^|_]+_[0-9]+$"
                           ]
                         },
                         "status": {
@@ -3425,8 +3429,8 @@
         "tags": [
           "temporal traversal"
         ],
-        "summary": "retrieve in-going vertex events from a vertex event with a given 'vertexEventID'",
-        "description": "retrieve in-going Vertex events from a vertex event with a given 'vertexEventID'",
+        "summary": "Retrieves in-going vertex events from a vertex event with a given 'vertexEventID'",
+        "description": "Retrieves in-going vertex events from a vertex event with a given 'vertexEventID'",
         "parameters": [
           {
             "name": "vertexEventID",
@@ -3487,7 +3491,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the in-going vertex events of a vertex retrieved successfully",
+            "description": "The in-going vertex events of a vertex event retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -3530,7 +3534,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+                            "The syntax of resource identifier should be ^[^|_]+_[0-9]+$"
                           ]
                         },
                         "status": {
@@ -3656,8 +3660,8 @@
         "tags": [
           "temporal traversal"
         ],
-        "summary": "retrieve existing vertex events of a vertex with a given 'vertexID'",
-        "description": "retrieve existing vertex events of a vertex with a given 'vertexID'",
+        "summary": "Retrieves existing vertex events of a vertex with a given 'vertexID'",
+        "description": "Retrieves existing vertex events of a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "vertexID",
@@ -3715,7 +3719,7 @@
             "schema": {
               "name": "awareOutEvents",
               "in": "query",
-              "description": "include vertex events that have out-going edge events from their vertex if true",
+              "description": "Includes vertex events that have out-going edge events from their vertex if set to true",
               "schema": {
                 "type": "boolean",
                 "default": false
@@ -3728,7 +3732,7 @@
             "schema": {
               "name": "awareInEvents",
               "in": "query",
-              "description": "include vertex events that have in-going edge events from their vertex if true",
+              "description": "Includes vertex events that have in-going edge events from their vertex if set to true",
               "schema": {
                 "type": "boolean",
                 "default": false
@@ -3781,7 +3785,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -3853,8 +3857,8 @@
         "tags": [
           "temporal traversal"
         ],
-        "summary": "retrieve existing edge events of a vertex with a given 'vertexID'",
-        "description": "retrieve existing edge events of a vertex with a given 'vertexID'",
+        "summary": "Retrieves existing edge events of a vertex with a given 'vertexID'",
+        "description": "Retrieves existing edge events of a vertex with a given 'vertexID'",
         "parameters": [
           {
             "name": "edgeID",
@@ -3911,7 +3915,7 @@
             "schema": {
               "name": "awareOutEvents",
               "in": "query",
-              "description": "include vertex events that have out-going edge events from their vertex if true",
+              "description": "Includes vertex events that have out-going edge events from their vertex if set to true",
               "schema": {
                 "type": "boolean",
                 "default": false
@@ -3924,7 +3928,7 @@
             "schema": {
               "name": "awareInEvents",
               "in": "query",
-              "description": "include vertex events that have in-going edge events from their vertex if true",
+              "description": "Includes vertex events that have in-going edge events from their vertex if set to true",
               "schema": {
                 "type": "boolean",
                 "default": false
@@ -3934,7 +3938,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the edge event identifiers retrieved successfully",
+            "description": "The edge event identifiers retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -3977,7 +3981,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -4049,8 +4053,8 @@
         "tags": [
           "incremental computation"
         ],
-        "summary": "subscribe a source (vertex event) with a Kairos program",
-        "description": "subscribe a source (vertex event) with a Kairos program",
+        "summary": "Subscribes a source (vertex event) with a Kairos program",
+        "description": "Subscribes a source (vertex event) with a Kairos program",
         "parameters": [
           {
             "name": "time",
@@ -4072,7 +4076,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "description": "a name of Kairos program",
+              "description": "A name of Kairos program",
               "schema": {
                 "type": "string"
               },
@@ -4101,7 +4105,7 @@
         ],
         "responses": {
           "202": {
-            "description": "the vertex event subscribed successfully."
+            "description": "The vertex event subscribed successfully"
           },
           "400": {
             "description": "Syntax error in the request",
@@ -4121,7 +4125,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -4151,7 +4155,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                            "The value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4262,8 +4266,8 @@
         "tags": [
           "incremental computation"
         ],
-        "summary": "unsubscribe a source from a Kairos program",
-        "description": "unsubscribe a source from a Kairos program",
+        "summary": "Unsubscribes a source from a Kairos program",
+        "description": "Unsubscribes a source from a Kairos program",
         "parameters": [
           {
             "name": "time",
@@ -4285,7 +4289,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "description": "a name of Kairos program",
+              "description": "A name of Kairos program",
               "schema": {
                 "type": "string"
               },
@@ -4314,7 +4318,7 @@
         ],
         "responses": {
           "204": {
-            "description": "the vertex event unsubscribed successfully."
+            "description": "The vertex event unsubscribed successfully"
           },
           "400": {
             "description": "Syntax error in the request",
@@ -4334,7 +4338,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -4364,7 +4368,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                            "The value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4436,11 +4440,11 @@
         "tags": [
           "incremental computation"
         ],
-        "summary": "retrieve a set of time-instants for gamma tables",
-        "description": "retrieve a set of time-instants for gamma tables",
+        "summary": "Retrieves a set of time-instants for gamma tables",
+        "description": "Retrieves a set of time-instants for gamma tables",
         "responses": {
           "200": {
-            "description": "the set of time-instants retrieved successfully",
+            "description": "The set of time-instants retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -4473,8 +4477,8 @@
         "tags": [
           "incremental computation"
         ],
-        "summary": "retrieve a set of Kairos program of gamma tables for a given time",
-        "description": "retrieve a set of Kairos program of gamma tables for a given time",
+        "summary": "Retrieves a set of Kairos program of gamma tables for a given time",
+        "description": "Retrieves a set of Kairos program of gamma tables for a given time",
         "parameters": [
           {
             "name": "time",
@@ -4494,7 +4498,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the set of time-instants retrieved successfully",
+            "description": "The set of time-instants retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -4536,7 +4540,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                            "The value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4608,8 +4612,8 @@
         "tags": [
           "incremental computation"
         ],
-        "summary": "retrieve a gamma table for {time} and {kairosProgram}",
-        "description": "retrieve a gamma table for {time} and {kairosProgram}",
+        "summary": "Retrieves a gamma table for {time} and {kairosProgram}",
+        "description": "Retrieves a gamma table for {time} and {kairosProgram}",
         "parameters": [
           {
             "name": "time",
@@ -4631,7 +4635,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "description": "a name of Kairos program",
+              "description": "A name of Kairos program",
               "schema": {
                 "type": "string"
               },
@@ -4643,13 +4647,13 @@
         ],
         "responses": {
           "200": {
-            "description": "source-gamma pairs for an intermedaite information diffusion result",
+            "description": "Source-gamma pairs for an intermedaite information diffusion result",
             "content": {
               "application/json": {
                 "schema": {
                   "oneOf": [
                     {
-                      "description": "source-gamma pairs for an intermedaite information diffusion result",
+                      "description": "Source-gamma pairs for an intermedaite information diffusion result",
                       "schema": {
                         "type": "object",
                         "properties": {
@@ -4692,7 +4696,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                            "The value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4764,8 +4768,8 @@
         "tags": [
           "incremental computation"
         ],
-        "summary": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
-        "description": "retrieve a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
+        "summary": "Retrieves a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
+        "description": "Retrieves a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
         "parameters": [
           {
             "name": "time",
@@ -4787,7 +4791,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "description": "a name of Kairos program",
+              "description": "A name of Kairos program",
               "schema": {
                 "type": "string"
               },
@@ -4816,13 +4820,13 @@
         ],
         "responses": {
           "200": {
-            "description": "target-value pairs for an intermediate information diffusion result from a source",
+            "description": "Target-value pairs for an intermediate information diffusion result from a source",
             "content": {
               "application/json": {
                 "schema": {
                   "oneOf": [
                     {
-                      "description": "target-value pairs for an intermediate information diffusion result from a source",
+                      "description": "Target-value pairs for an intermediate information diffusion result from a source",
                       "schema": {
                         "type": "object",
                         "properties": {
@@ -4867,7 +4871,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -4897,7 +4901,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                            "The value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -4969,8 +4973,8 @@
         "tags": [
           "incremental computation"
         ],
-        "summary": "retrieve an gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
-        "description": "retrieve an gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+        "summary": "Retrieves a gamma element from a source to a destination in a Gamma Table for {time} and {kairosProgram}",
+        "description": "Retrieves a gamma element from a source to a destination in a Gamma Table for {time} and {kairosProgram}",
         "parameters": [
           {
             "name": "time",
@@ -4992,7 +4996,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "description": "a name of Kairos program",
+              "description": "A name of Kairos program",
               "schema": {
                 "type": "string"
               },
@@ -5038,13 +5042,13 @@
         ],
         "responses": {
           "200": {
-            "description": "an gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+            "description": "A gamma element from a source to a destination in a Gamma Table for {time} and {kairosProgram}",
             "content": {
               "application/json": {
                 "schema": {
                   "oneOf": [
                     {
-                      "description": "An gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+                      "description": "A gamma element from a source to a destination in a Gamma Table for {time} and {kairosProgram}",
                       "schema": {
                         "type": "object",
                         "properties": {
@@ -5109,7 +5113,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the syntax of resource identifier should be ^[^|_]+$"
+                            "The syntax of resource identifier should be ^[^|_]+$"
                           ]
                         },
                         "status": {
@@ -5139,7 +5143,7 @@
                         "reason": {
                           "type": "string",
                           "enum": [
-                            "the value of time should be from -9223372036854775808 to 9223372036854775807"
+                            "The value of time should be from -9223372036854775808 to 9223372036854775807"
                           ]
                         },
                         "status": {
@@ -5366,7 +5370,7 @@
       "UpdateOrReplaceProperties": {
         "name": "updateOrReplaceProperties",
         "in": "query",
-        "description": "'update' updates given key-value properties for a resource while 'replace' replaces current properties to the given ones",
+        "description": "Effect to properties: * update - updates given key-value properties for a resource  * replace - replaces current properties with the given ones\n",
         "schema": {
           "type": "string",
           "enum": [
@@ -5379,7 +5383,7 @@
       "IncludeProperties": {
         "name": "includeProperties",
         "in": "query",
-        "description": "The return message  would include key-value properties for a resource when includeProperties=true.",
+        "description": "Includes the key-value properties in the response when set to true",
         "schema": {
           "type": "boolean",
           "default": false
@@ -5388,7 +5392,7 @@
       "AwareOutEvents": {
         "name": "awareOutEvents",
         "in": "query",
-        "description": "include vertex events that have out-going edge events from their vertex if true",
+        "description": "Includes vertex events that have out-going edge events from their vertex if set to true",
         "schema": {
           "type": "boolean",
           "default": false
@@ -5397,7 +5401,7 @@
       "AwareInEvents": {
         "name": "awareInEvents",
         "in": "query",
-        "description": "include vertex events that have in-going edge events from their vertex if true",
+        "description": "Includes vertex events that have in-going edge events from their vertex if set to true",
         "schema": {
           "type": "boolean",
           "default": false
@@ -5418,7 +5422,7 @@
             ]
           },
           "properties": {
-            "description": "key-value properties for a resource",
+            "description": "Key-value properties for a resource",
             "type": "object",
             "examples": [
               {
@@ -5431,6 +5435,7 @@
       },
       "VertexEvent": {
         "type": "object",
+        "description": "A vertex valid at a specific time",
         "properties": {
           "_id": {
             "description": "A vertex event identifier that is unique in a graph",
@@ -5465,7 +5470,7 @@
             ]
           },
           "properties": {
-            "description": "key-value properties for a resource",
+            "description": "Key-value properties for a resource",
             "type": "object",
             "examples": [
               {
@@ -5523,7 +5528,7 @@
             ]
           },
           "properties": {
-            "description": "key-value properties for a resource",
+            "description": "Key-value properties for a resource",
             "type": "object",
             "examples": [
               {
@@ -5547,6 +5552,7 @@
       },
       "EdgeEvent": {
         "type": "object",
+        "description": "An edge valid at a specific time",
         "properties": {
           "_id": {
             "description": "An edge event identifier that is unique in a graph",
@@ -5612,7 +5618,7 @@
             ]
           },
           "properties": {
-            "description": "key-value properties for a resource",
+            "description": "Key-value properties for a resource",
             "type": "object",
             "examples": [
               {
@@ -5625,7 +5631,7 @@
         "examples": [
           {
             "_id": "Seoul|isConnectedTo|Incheon_1707375682",
-            "__e": "Seoul|isConnectedTo|Incheon",
+            "_e": "Seoul|isConnectedTo|Incheon",
             "_o": "Seoul",
             "_i": "Incheon",
             "_l": "isConnectedTo",
@@ -5637,7 +5643,7 @@
         ]
       },
       "Properties": {
-        "description": "key-value properties for a resource",
+        "description": "Key-value properties for a resource",
         "type": "object",
         "examples": [
           {
@@ -5649,7 +5655,7 @@
       "Target": {
         "name": "target",
         "in": "query",
-        "description": "'vertices' returns all the vertices while 'edges' returns all the edges",
+        "description": "Return behavior: * vertices - returns all the vertices  * edges - returns all the edges\n",
         "schema": {
           "type": "string",
           "enum": [
@@ -5660,7 +5666,7 @@
         }
       },
       "KairosProgram": {
-        "description": "a name of Kairos program",
+        "description": "A name of Kairos program",
         "schema": {
           "type": "string"
         },
@@ -5683,7 +5689,7 @@
         ]
       },
       "Gamma": {
-        "description": "target-value pairs for an intermediate information diffusion result from a source",
+        "description": "Target-value pairs for an intermediate information diffusion result from a source",
         "schema": {
           "type": "object",
           "properties": {
@@ -5706,7 +5712,7 @@
         ]
       },
       "GammaElement": {
-        "description": "An gamma element from a source to a destination in a gamma table for {time} and {kairosProgram}",
+        "description": "A gamma element from a source to a destination in a Gamma Table for {time} and {kairosProgram}",
         "schema": {
           "type": "object",
           "properties": {
@@ -5749,7 +5755,7 @@
         ]
       },
       "GammaTable": {
-        "description": "source-gamma pairs for an intermedaite information diffusion result",
+        "description": "Source-gamma pairs for an intermedaite information diffusion result",
         "schema": {
           "type": "object",
           "properties": {
@@ -5895,7 +5901,7 @@
           "reason": {
             "type": "string",
             "enum": [
-              "the syntax of resource identifier should be ^[^|_]+$"
+              "The syntax of resource identifier should be ^[^|_]+$"
             ]
           },
           "status": {
@@ -5925,7 +5931,7 @@
           "reason": {
             "type": "string",
             "enum": [
-              "the value of time should be from -9223372036854775808 to 9223372036854775807"
+              "The value of time should be from -9223372036854775808 to 9223372036854775807"
             ]
           },
           "status": {
@@ -5955,7 +5961,7 @@
           "reason": {
             "type": "string",
             "enum": [
-              "the syntax of resource identifier should be ^[^|_]+_[0-9]+$"
+              "The syntax of resource identifier should be ^[^|_]+_[0-9]+$"
             ]
           },
           "status": {
