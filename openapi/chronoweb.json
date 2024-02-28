@@ -26,7 +26,7 @@
           "vertex"
         ],
         "summary": "Creates or updates a vertex with a given 'vertexID'",
-        "description": "Create or updates a vertex with a given 'vertexID'.",
+        "description": "Creates or updates a vertex with a given 'vertexID'.",
         "parameters": [
           {
             "name": "vertexID",
