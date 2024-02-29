@@ -1,0 +1,4751 @@
+{
+  "aggregate": {
+    "counters": {
+      "vusers.created_by_name.0": 17100,
+      "vusers.created": 17100,
+      "http.requests": 17100,
+      "http.codes.200": 424,
+      "http.responses": 17100,
+      "http.downloaded_bytes": 1932841,
+      "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 424,
+      "vusers.failed": 0,
+      "vusers.completed": 17100,
+      "http.codes.500": 16676,
+      "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 16676
+    },
+    "rates": {
+      "http.request_rate": 50
+    },
+    "firstCounterAt": 1708416644603,
+    "firstHistogramAt": 1708416644628,
+    "lastCounterAt": 1708417064899,
+    "lastHistogramAt": 1708417064899,
+    "firstMetricAt": 1708416644603,
+    "lastMetricAt": 1708417064899,
+    "period": 1708417060000,
+    "summaries": {
+      "http.response_time": {
+        "min": 0,
+        "max": 7,
+        "count": 17100,
+        "mean": 0.4,
+        "p50": 0,
+        "median": 0,
+        "p75": 1,
+        "p90": 1,
+        "p95": 1,
+        "p99": 1,
+        "p999": 2
+      },
+      "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+        "min": 0,
+        "max": 7,
+        "count": 17100,
+        "mean": 0.4,
+        "p50": 0,
+        "median": 0,
+        "p75": 1,
+        "p90": 1,
+        "p95": 1,
+        "p99": 1,
+        "p999": 2
+      },
+      "vusers.session_length": {
+        "min": 1.3,
+        "max": 28.2,
+        "count": 17100,
+        "mean": 1.8,
+        "p50": 1.7,
+        "median": 1.7,
+        "p75": 1.8,
+        "p90": 2,
+        "p95": 2.2,
+        "p99": 2.9,
+        "p999": 21.1
+      }
+    },
+    "histograms": {
+      "http.response_time": {
+        "min": 0,
+        "max": 7,
+        "count": 17100,
+        "mean": 0.4,
+        "p50": 0,
+        "median": 0,
+        "p75": 1,
+        "p90": 1,
+        "p95": 1,
+        "p99": 1,
+        "p999": 2
+      },
+      "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+        "min": 0,
+        "max": 7,
+        "count": 17100,
+        "mean": 0.4,
+        "p50": 0,
+        "median": 0,
+        "p75": 1,
+        "p90": 1,
+        "p95": 1,
+        "p99": 1,
+        "p999": 2
+      },
+      "vusers.session_length": {
+        "min": 1.3,
+        "max": 28.2,
+        "count": 17100,
+        "mean": 1.8,
+        "p50": 1.7,
+        "median": 1.7,
+        "p75": 1.8,
+        "p90": 2,
+        "p95": 2.2,
+        "p99": 2.9,
+        "p999": 21.1
+      }
+    }
+  },
+  "intermediate": [
+    {
+      "counters": {
+        "vusers.created_by_name.0": 30,
+        "vusers.created": 30,
+        "http.requests": 30,
+        "http.codes.200": 16,
+        "http.responses": 30,
+        "http.downloaded_bytes": 130092,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 16,
+        "vusers.failed": 0,
+        "vusers.completed": 30,
+        "http.codes.500": 14,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 14
+      },
+      "rates": {
+        "http.request_rate": 5
+      },
+      "firstCounterAt": 1708416644603,
+      "firstHistogramAt": 1708416644628,
+      "lastCounterAt": 1708416649845,
+      "lastHistogramAt": 1708416649845,
+      "firstMetricAt": 1708416644603,
+      "lastMetricAt": 1708416649845,
+      "period": "1708416640000",
+      "http.request_rate": null,
+      "summaries": {
+        "http.response_time": {
+          "min": 1,
+          "max": 7,
+          "count": 30,
+          "mean": 1.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 2,
+          "p90": 2,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 1,
+          "max": 7,
+          "count": 30,
+          "mean": 1.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 2,
+          "p90": 2,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "vusers.session_length": {
+          "min": 2.9,
+          "max": 28.2,
+          "count": 30,
+          "mean": 7.1,
+          "p50": 3.6,
+          "median": 3.6,
+          "p75": 4.1,
+          "p90": 23.3,
+          "p95": 23.3,
+          "p99": 24.3,
+          "p999": 24.3
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 1,
+          "max": 7,
+          "count": 30,
+          "mean": 1.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 2,
+          "p90": 2,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 1,
+          "max": 7,
+          "count": 30,
+          "mean": 1.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 2,
+          "p90": 2,
+          "p95": 3,
+          "p99": 3,
+          "p999": 3
+        },
+        "vusers.session_length": {
+          "min": 2.9,
+          "max": 28.2,
+          "count": 30,
+          "mean": 7.1,
+          "p50": 3.6,
+          "median": 3.6,
+          "p75": 4.1,
+          "p90": 23.3,
+          "p95": 23.3,
+          "p99": 24.3,
+          "p999": 24.3
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 50,
+        "vusers.created": 50,
+        "http.requests": 50,
+        "http.codes.500": 25,
+        "http.responses": 50,
+        "http.downloaded_bytes": 141104,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 25,
+        "vusers.failed": 0,
+        "vusers.completed": 50,
+        "http.codes.200": 25,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 25
+      },
+      "rates": {
+        "http.request_rate": 5
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416650603,
+      "firstHistogramAt": 1708416650606,
+      "lastCounterAt": 1708416659844,
+      "lastHistogramAt": 1708416659844,
+      "firstMetricAt": 1708416650603,
+      "lastMetricAt": 1708416659844,
+      "period": "1708416650000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 1,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 1,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "vusers.session_length": {
+          "min": 2.3,
+          "max": 5.1,
+          "count": 50,
+          "mean": 3,
+          "p50": 2.6,
+          "median": 2.6,
+          "p75": 3.4,
+          "p90": 3.9,
+          "p95": 4.8,
+          "p99": 4.9,
+          "p999": 4.9
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 1,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 1,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "vusers.session_length": {
+          "min": 2.3,
+          "max": 5.1,
+          "count": 50,
+          "mean": 3,
+          "p50": 2.6,
+          "median": 2.6,
+          "p75": 3.4,
+          "p90": 3.9,
+          "p95": 4.8,
+          "p99": 4.9,
+          "p999": 4.9
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 50,
+        "vusers.created": 50,
+        "http.requests": 50,
+        "http.codes.500": 33,
+        "http.responses": 50,
+        "http.downloaded_bytes": 96367,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 33,
+        "vusers.failed": 0,
+        "vusers.completed": 50,
+        "http.codes.200": 17,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 17
+      },
+      "rates": {
+        "http.request_rate": 5
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416660602,
+      "firstHistogramAt": 1708416660605,
+      "lastCounterAt": 1708416669844,
+      "lastHistogramAt": 1708416669844,
+      "firstMetricAt": 1708416660602,
+      "lastMetricAt": 1708416669844,
+      "period": "1708416660000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "vusers.session_length": {
+          "min": 2.2,
+          "max": 2.8,
+          "count": 50,
+          "mean": 2.4,
+          "p50": 2.4,
+          "median": 2.4,
+          "p75": 2.5,
+          "p90": 2.6,
+          "p95": 2.7,
+          "p99": 2.7,
+          "p999": 2.7
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 2,
+          "p999": 2
+        },
+        "vusers.session_length": {
+          "min": 2.2,
+          "max": 2.8,
+          "count": 50,
+          "mean": 2.4,
+          "p50": 2.4,
+          "median": 2.4,
+          "p75": 2.5,
+          "p90": 2.6,
+          "p95": 2.7,
+          "p99": 2.7,
+          "p999": 2.7
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 50,
+        "vusers.created": 50,
+        "http.requests": 50,
+        "http.codes.200": 13,
+        "http.responses": 50,
+        "http.downloaded_bytes": 64461,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 13,
+        "vusers.failed": 0,
+        "vusers.completed": 50,
+        "http.codes.500": 37,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 37
+      },
+      "rates": {
+        "http.request_rate": 5
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416670602,
+      "firstHistogramAt": 1708416670609,
+      "lastCounterAt": 1708416679844,
+      "lastHistogramAt": 1708416679844,
+      "firstMetricAt": 1708416670602,
+      "lastMetricAt": 1708416679844,
+      "period": "1708416670000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 5,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 5,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.2,
+          "max": 6.8,
+          "count": 50,
+          "mean": 2.4,
+          "p50": 2.2,
+          "median": 2.2,
+          "p75": 2.3,
+          "p90": 2.4,
+          "p95": 2.4,
+          "p99": 2.5,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 5,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 5,
+          "count": 50,
+          "mean": 0.9,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.2,
+          "max": 6.8,
+          "count": 50,
+          "mean": 2.4,
+          "p50": 2.2,
+          "median": 2.2,
+          "p75": 2.3,
+          "p90": 2.4,
+          "p95": 2.4,
+          "p99": 2.5,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 50,
+        "vusers.created": 50,
+        "http.requests": 50,
+        "http.codes.500": 35,
+        "http.responses": 50,
+        "http.downloaded_bytes": 78387,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 35,
+        "vusers.failed": 0,
+        "vusers.completed": 50,
+        "http.codes.200": 15,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 15
+      },
+      "rates": {
+        "http.request_rate": 5
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416680602,
+      "firstHistogramAt": 1708416680605,
+      "lastCounterAt": 1708416689844,
+      "lastHistogramAt": 1708416689844,
+      "firstMetricAt": 1708416680602,
+      "lastMetricAt": 1708416689844,
+      "period": "1708416680000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.2,
+          "max": 3.4,
+          "count": 50,
+          "mean": 2.3,
+          "p50": 2.3,
+          "median": 2.3,
+          "p75": 2.4,
+          "p90": 2.4,
+          "p95": 2.5,
+          "p99": 2.7,
+          "p999": 2.7
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.2,
+          "max": 3.4,
+          "count": 50,
+          "mean": 2.3,
+          "p50": 2.3,
+          "median": 2.3,
+          "p75": 2.4,
+          "p90": 2.4,
+          "p95": 2.5,
+          "p99": 2.7,
+          "p999": 2.7
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 50,
+        "vusers.created": 50,
+        "http.requests": 50,
+        "http.codes.500": 37,
+        "http.responses": 50,
+        "http.downloaded_bytes": 72661,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 37,
+        "vusers.failed": 0,
+        "vusers.completed": 50,
+        "http.codes.200": 13,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 13
+      },
+      "rates": {
+        "http.request_rate": 5
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416690602,
+      "firstHistogramAt": 1708416690605,
+      "lastCounterAt": 1708416699844,
+      "lastHistogramAt": 1708416699844,
+      "firstMetricAt": 1708416690602,
+      "lastMetricAt": 1708416699844,
+      "period": "1708416690000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.1,
+          "max": 2.6,
+          "count": 50,
+          "mean": 2.3,
+          "p50": 2.3,
+          "median": 2.3,
+          "p75": 2.4,
+          "p90": 2.5,
+          "p95": 2.5,
+          "p99": 2.5,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 50,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.1,
+          "max": 2.6,
+          "count": 50,
+          "mean": 2.3,
+          "p50": 2.3,
+          "median": 2.3,
+          "p75": 2.4,
+          "p90": 2.5,
+          "p95": 2.5,
+          "p99": 2.5,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 83,
+        "vusers.created": 83,
+        "http.requests": 83,
+        "http.codes.500": 52,
+        "http.responses": 83,
+        "http.downloaded_bytes": 147922,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 52,
+        "vusers.failed": 0,
+        "vusers.completed": 83,
+        "http.codes.200": 31,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 31
+      },
+      "rates": {
+        "http.request_rate": 14
+      },
+      "firstCounterAt": 1708416700603,
+      "firstHistogramAt": 1708416700605,
+      "lastCounterAt": 1708416709948,
+      "lastHistogramAt": 1708416709948,
+      "firstMetricAt": 1708416700603,
+      "lastMetricAt": 1708416709948,
+      "period": "1708416700000",
+      "http.request_rate": null,
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 83,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 83,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.1,
+          "max": 23.8,
+          "count": 83,
+          "mean": 4.5,
+          "p50": 2.4,
+          "median": 2.4,
+          "p75": 3.3,
+          "p90": 3.6,
+          "p95": 22,
+          "p99": 22.4,
+          "p999": 22.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 83,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 83,
+          "mean": 0.8,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 2.1,
+          "max": 23.8,
+          "count": 83,
+          "mean": 4.5,
+          "p50": 2.4,
+          "median": 2.4,
+          "p75": 3.3,
+          "p90": 3.6,
+          "p95": 22,
+          "p99": 22.4,
+          "p999": 22.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 164,
+        "vusers.created": 164,
+        "http.requests": 164,
+        "http.codes.500": 146,
+        "http.responses": 164,
+        "http.downloaded_bytes": 92866,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 146,
+        "vusers.failed": 0,
+        "vusers.completed": 164,
+        "http.codes.200": 18,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 18
+      },
+      "rates": {
+        "http.request_rate": 21
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416710005,
+      "firstHistogramAt": 1708416710008,
+      "lastCounterAt": 1708416719981,
+      "lastHistogramAt": 1708416719981,
+      "firstMetricAt": 1708416710005,
+      "lastMetricAt": 1708416719981,
+      "period": "1708416710000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 164,
+          "mean": 0.7,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 2
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 164,
+          "mean": 0.7,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 2
+        },
+        "vusers.session_length": {
+          "min": 1.8,
+          "max": 23.2,
+          "count": 164,
+          "mean": 3.4,
+          "p50": 2.6,
+          "median": 2.6,
+          "p75": 3,
+          "p90": 3.6,
+          "p95": 4.7,
+          "p99": 22.4,
+          "p999": 22.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 164,
+          "mean": 0.7,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 2
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 164,
+          "mean": 0.7,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 2
+        },
+        "vusers.session_length": {
+          "min": 1.8,
+          "max": 23.2,
+          "count": 164,
+          "mean": 3.4,
+          "p50": 2.6,
+          "median": 2.6,
+          "p75": 3,
+          "p90": 3.6,
+          "p95": 4.7,
+          "p99": 22.4,
+          "p999": 22.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 239,
+        "vusers.created": 239,
+        "http.requests": 239,
+        "http.codes.500": 219,
+        "http.responses": 239,
+        "http.downloaded_bytes": 79917,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 219,
+        "vusers.failed": 0,
+        "vusers.completed": 239,
+        "http.codes.200": 20,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 20
+      },
+      "rates": {
+        "http.request_rate": 25
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416720039,
+      "firstHistogramAt": 1708416720042,
+      "lastCounterAt": 1708416729958,
+      "lastHistogramAt": 1708416729958,
+      "firstMetricAt": 1708416720039,
+      "lastMetricAt": 1708416729958,
+      "period": "1708416720000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 5,
+          "count": 239,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 5,
+          "count": 239,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.8,
+          "max": 7,
+          "count": 239,
+          "mean": 2.3,
+          "p50": 2.1,
+          "median": 2.1,
+          "p75": 2.3,
+          "p90": 2.6,
+          "p95": 2.9,
+          "p99": 4.3,
+          "p999": 4.8
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 5,
+          "count": 239,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 5,
+          "count": 239,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.8,
+          "max": 7,
+          "count": 239,
+          "mean": 2.3,
+          "p50": 2.1,
+          "median": 2.1,
+          "p75": 2.3,
+          "p90": 2.6,
+          "p95": 2.9,
+          "p99": 4.3,
+          "p999": 4.8
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 305,
+        "vusers.created": 305,
+        "http.requests": 305,
+        "http.codes.500": 285,
+        "http.responses": 305,
+        "http.downloaded_bytes": 77887,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 285,
+        "vusers.failed": 0,
+        "vusers.completed": 305,
+        "http.codes.200": 20,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 20
+      },
+      "rates": {
+        "http.request_rate": 31
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416730016,
+      "firstHistogramAt": 1708416730017,
+      "lastCounterAt": 1708416739992,
+      "lastHistogramAt": 1708416739992,
+      "firstMetricAt": 1708416730016,
+      "lastMetricAt": 1708416739992,
+      "period": "1708416730000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 305,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 305,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.8,
+          "max": 2.9,
+          "count": 305,
+          "mean": 2,
+          "p50": 2,
+          "median": 2,
+          "p75": 2.1,
+          "p90": 2.3,
+          "p95": 2.5,
+          "p99": 2.6,
+          "p999": 2.8
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 305,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 305,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.8,
+          "max": 2.9,
+          "count": 305,
+          "mean": 2,
+          "p50": 2,
+          "median": 2,
+          "p75": 2.1,
+          "p90": 2.3,
+          "p95": 2.5,
+          "p99": 2.6,
+          "p999": 2.8
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 368,
+        "vusers.created": 368,
+        "http.requests": 368,
+        "http.codes.500": 334,
+        "http.responses": 368,
+        "http.downloaded_bytes": 125895,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 334,
+        "vusers.failed": 0,
+        "vusers.completed": 368,
+        "http.codes.200": 34,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 34
+      },
+      "rates": {
+        "http.request_rate": 38
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416740035,
+      "firstHistogramAt": 1708416740037,
+      "lastCounterAt": 1708416749968,
+      "lastHistogramAt": 1708416749968,
+      "firstMetricAt": 1708416740035,
+      "lastMetricAt": 1708416749968,
+      "period": "1708416740000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 368,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 368,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.7,
+          "max": 2.8,
+          "count": 368,
+          "mean": 2,
+          "p50": 2,
+          "median": 2,
+          "p75": 2.1,
+          "p90": 2.3,
+          "p95": 2.4,
+          "p99": 2.5,
+          "p999": 2.7
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 368,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 368,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.7,
+          "max": 2.8,
+          "count": 368,
+          "mean": 2,
+          "p50": 2,
+          "median": 2,
+          "p75": 2.1,
+          "p90": 2.3,
+          "p95": 2.4,
+          "p99": 2.5,
+          "p999": 2.7
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 443,
+        "vusers.created": 443,
+        "http.requests": 442,
+        "http.codes.500": 421,
+        "http.responses": 442,
+        "http.downloaded_bytes": 75285,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 421,
+        "vusers.failed": 0,
+        "vusers.completed": 442,
+        "http.codes.200": 21,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 21
+      },
+      "rates": {
+        "http.request_rate": 45
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416750011,
+      "firstHistogramAt": 1708416750012,
+      "lastCounterAt": 1708416759999,
+      "lastHistogramAt": 1708416759986,
+      "firstMetricAt": 1708416750011,
+      "lastMetricAt": 1708416759999,
+      "period": "1708416750000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 442,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 442,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.7,
+          "max": 3,
+          "count": 442,
+          "mean": 2,
+          "p50": 2,
+          "median": 2,
+          "p75": 2.2,
+          "p90": 2.4,
+          "p95": 2.5,
+          "p99": 2.7,
+          "p999": 2.9
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 442,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 442,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.7,
+          "max": 3,
+          "count": 442,
+          "mean": 2,
+          "p50": 2,
+          "median": 2,
+          "p75": 2.2,
+          "p90": 2.4,
+          "p95": 2.5,
+          "p99": 2.7,
+          "p999": 2.9
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 493,
+        "vusers.created": 493,
+        "http.requests": 494,
+        "http.codes.500": 469,
+        "http.responses": 493,
+        "http.downloaded_bytes": 86886,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 469,
+        "vusers.failed": 0,
+        "vusers.completed": 493,
+        "http.codes.200": 24,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 24
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416760000,
+      "firstHistogramAt": 1708416760001,
+      "lastCounterAt": 1708416769999,
+      "lastHistogramAt": 1708416769967,
+      "firstMetricAt": 1708416760000,
+      "lastMetricAt": 1708416769999,
+      "period": "1708416760000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 493,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 493,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.6,
+          "max": 5.9,
+          "count": 493,
+          "mean": 2,
+          "p50": 1.9,
+          "median": 1.9,
+          "p75": 2,
+          "p90": 2.2,
+          "p95": 2.3,
+          "p99": 2.9,
+          "p999": 5.8
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 493,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 493,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.6,
+          "max": 5.9,
+          "count": 493,
+          "mean": 2,
+          "p50": 1.9,
+          "median": 1.9,
+          "p75": 2,
+          "p90": 2.2,
+          "p95": 2.3,
+          "p99": 2.9,
+          "p999": 5.8
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 480,
+        "http.responses": 500,
+        "http.downloaded_bytes": 84615,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 480,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 20,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 20
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416770001,
+      "firstHistogramAt": 1708416770001,
+      "lastCounterAt": 1708416779999,
+      "lastHistogramAt": 1708416779967,
+      "firstMetricAt": 1708416770001,
+      "lastMetricAt": 1708416779999,
+      "period": "1708416770000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.6,
+          "max": 2.8,
+          "count": 500,
+          "mean": 1.9,
+          "p50": 1.9,
+          "median": 1.9,
+          "p75": 2,
+          "p90": 2,
+          "p95": 2.1,
+          "p99": 2.3,
+          "p999": 2.7
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.6,
+          "max": 2.8,
+          "count": 500,
+          "mean": 1.9,
+          "p50": 1.9,
+          "median": 1.9,
+          "p75": 2,
+          "p90": 2,
+          "p95": 2.1,
+          "p99": 2.3,
+          "p999": 2.7
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 496,
+        "http.responses": 500,
+        "http.downloaded_bytes": 16993,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 496,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 4,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 4
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416780001,
+      "firstHistogramAt": 1708416780001,
+      "lastCounterAt": 1708416789999,
+      "lastHistogramAt": 1708416789967,
+      "firstMetricAt": 1708416780001,
+      "lastMetricAt": 1708416789999,
+      "period": "1708416780000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.6,
+          "max": 2.7,
+          "count": 500,
+          "mean": 1.9,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.9,
+          "p90": 2,
+          "p95": 2.1,
+          "p99": 2.3,
+          "p999": 2.7
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.6,
+          "max": 2.7,
+          "count": 500,
+          "mean": 1.9,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.9,
+          "p90": 2,
+          "p95": 2.1,
+          "p99": 2.3,
+          "p999": 2.7
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 486,
+        "http.responses": 500,
+        "http.downloaded_bytes": 69911,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 486,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 14,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 14
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416790001,
+      "firstHistogramAt": 1708416790001,
+      "lastCounterAt": 1708416799999,
+      "lastHistogramAt": 1708416799967,
+      "firstMetricAt": 1708416790001,
+      "lastMetricAt": 1708416799999,
+      "period": "1708416790000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 2.8,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.9,
+          "p90": 2,
+          "p95": 2.1,
+          "p99": 2.3,
+          "p999": 2.7
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.6,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 2.8,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.9,
+          "p90": 2,
+          "p95": 2.1,
+          "p99": 2.3,
+          "p999": 2.7
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 489,
+        "http.responses": 500,
+        "http.downloaded_bytes": 45095,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 489,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 11,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 11
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416800001,
+      "firstHistogramAt": 1708416800001,
+      "lastCounterAt": 1708416809999,
+      "lastHistogramAt": 1708416809967,
+      "firstMetricAt": 1708416800001,
+      "lastMetricAt": 1708416809999,
+      "period": "1708416800000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 3.2,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.9,
+          "p90": 2,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 3.2,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.9,
+          "p90": 2,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 490,
+        "http.responses": 500,
+        "http.downloaded_bytes": 49031,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 490,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 10,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 10
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416810001,
+      "firstHistogramAt": 1708416810001,
+      "lastCounterAt": 1708416819999,
+      "lastHistogramAt": 1708416819967,
+      "firstMetricAt": 1708416810001,
+      "lastMetricAt": 1708416819999,
+      "period": "1708416810000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.5,
+          "p50": 1,
+          "median": 1,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 492,
+        "http.responses": 500,
+        "http.downloaded_bytes": 36342,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 492,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 8,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 8
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416820000,
+      "firstHistogramAt": 1708416820000,
+      "lastCounterAt": 1708416829999,
+      "lastHistogramAt": 1708416829967,
+      "firstMetricAt": 1708416820000,
+      "lastMetricAt": 1708416829999,
+      "period": "1708416820000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.1,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.5,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.8,
+          "median": 1.8,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.1,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 493,
+        "http.responses": 500,
+        "http.downloaded_bytes": 29302,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 493,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 7,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 7
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416830001,
+      "firstHistogramAt": 1708416830001,
+      "lastCounterAt": 1708416839999,
+      "lastHistogramAt": 1708416839967,
+      "firstMetricAt": 1708416830001,
+      "lastMetricAt": 1708416839999,
+      "period": "1708416830000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3.4,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3.4,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 495,
+        "http.responses": 500,
+        "http.downloaded_bytes": 20672,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 495,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 5,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 5
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416840001,
+      "firstHistogramAt": 1708416840001,
+      "lastCounterAt": 1708416849999,
+      "lastHistogramAt": 1708416849967,
+      "firstMetricAt": 1708416840001,
+      "lastMetricAt": 1708416849999,
+      "period": "1708416840000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3.1,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.9
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3.1,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.9
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 496,
+        "http.responses": 500,
+        "http.downloaded_bytes": 17748,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 496,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 4,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 4
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416850001,
+      "firstHistogramAt": 1708416850001,
+      "lastCounterAt": 1708416859999,
+      "lastHistogramAt": 1708416859967,
+      "firstMetricAt": 1708416850001,
+      "lastMetricAt": 1708416859999,
+      "period": "1708416850000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.7,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.4,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.7,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.4,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 496,
+        "http.responses": 500,
+        "http.downloaded_bytes": 15933,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 496,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 4,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 4
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416860001,
+      "firstHistogramAt": 1708416860001,
+      "lastCounterAt": 1708416869999,
+      "lastHistogramAt": 1708416869967,
+      "firstMetricAt": 1708416860001,
+      "lastMetricAt": 1708416869999,
+      "period": "1708416860000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 496,
+        "http.responses": 500,
+        "http.downloaded_bytes": 19026,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 496,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 4,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 4
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416870000,
+      "firstHistogramAt": 1708416870000,
+      "lastCounterAt": 1708416879999,
+      "lastHistogramAt": 1708416879967,
+      "firstMetricAt": 1708416870000,
+      "lastMetricAt": 1708416879999,
+      "period": "1708416870000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 2,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 2,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 496,
+        "http.responses": 500,
+        "http.downloaded_bytes": 14608,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 496,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 4,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 4
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416880000,
+      "firstHistogramAt": 1708416880000,
+      "lastCounterAt": 1708416889999,
+      "lastHistogramAt": 1708416889967,
+      "firstMetricAt": 1708416880000,
+      "lastMetricAt": 1708416889999,
+      "period": "1708416880000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 494,
+        "http.responses": 500,
+        "http.downloaded_bytes": 23063,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 494,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 6,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 6
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416890000,
+      "firstHistogramAt": 1708416890000,
+      "lastCounterAt": 1708416899999,
+      "lastHistogramAt": 1708416899967,
+      "firstMetricAt": 1708416890000,
+      "lastMetricAt": 1708416899999,
+      "period": "1708416890000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 494,
+        "http.responses": 500,
+        "http.downloaded_bytes": 23416,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 494,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 6,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 6
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416900000,
+      "firstHistogramAt": 1708416900000,
+      "lastCounterAt": 1708416909999,
+      "lastHistogramAt": 1708416909967,
+      "firstMetricAt": 1708416900000,
+      "lastMetricAt": 1708416909999,
+      "period": "1708416900000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 500,
+        "http.responses": 500,
+        "http.downloaded_bytes": 0,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 500,
+        "vusers.failed": 0,
+        "vusers.completed": 500
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416910000,
+      "firstHistogramAt": 1708416910000,
+      "lastCounterAt": 1708416919999,
+      "lastHistogramAt": 1708416919966,
+      "firstMetricAt": 1708416910000,
+      "lastMetricAt": 1708416919999,
+      "period": "1708416910000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 497,
+        "http.responses": 500,
+        "http.downloaded_bytes": 12423,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 497,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 3,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 3
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416920000,
+      "firstHistogramAt": 1708416920000,
+      "lastCounterAt": 1708416929999,
+      "lastHistogramAt": 1708416929966,
+      "firstMetricAt": 1708416920000,
+      "lastMetricAt": 1708416929999,
+      "period": "1708416920000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 499,
+        "http.responses": 500,
+        "http.downloaded_bytes": 2556,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 499,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 1,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 1
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416930000,
+      "firstHistogramAt": 1708416930000,
+      "lastCounterAt": 1708416939999,
+      "lastHistogramAt": 1708416939967,
+      "firstMetricAt": 1708416930000,
+      "lastMetricAt": 1708416939999,
+      "period": "1708416930000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 493,
+        "http.responses": 500,
+        "http.downloaded_bytes": 32133,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 493,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 7,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 7
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416940000,
+      "firstHistogramAt": 1708416940000,
+      "lastCounterAt": 1708416949999,
+      "lastHistogramAt": 1708416949966,
+      "firstMetricAt": 1708416940000,
+      "lastMetricAt": 1708416949999,
+      "period": "1708416940000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.2,
+          "p999": 2.5
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 495,
+        "http.responses": 500,
+        "http.downloaded_bytes": 23594,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 495,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 5,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 5
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416950000,
+      "firstHistogramAt": 1708416950000,
+      "lastCounterAt": 1708416959999,
+      "lastHistogramAt": 1708416959966,
+      "firstMetricAt": 1708416950000,
+      "lastMetricAt": 1708416959999,
+      "period": "1708416950000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.3,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.2,
+          "p999": 2.6
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.3,
+          "max": 2.6,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.2,
+          "p999": 2.6
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 492,
+        "http.responses": 500,
+        "http.downloaded_bytes": 31138,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 492,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 8,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 8
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416960000,
+      "firstHistogramAt": 1708416960000,
+      "lastCounterAt": 1708416969999,
+      "lastHistogramAt": 1708416969966,
+      "firstMetricAt": 1708416960000,
+      "lastMetricAt": 1708416969999,
+      "period": "1708416960000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 2,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.8,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 2,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 499,
+        "http.responses": 500,
+        "http.downloaded_bytes": 3459,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 499,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 1,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 1
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416970000,
+      "firstHistogramAt": 1708416970000,
+      "lastCounterAt": 1708416979999,
+      "lastHistogramAt": 1708416979966,
+      "firstMetricAt": 1708416970000,
+      "lastMetricAt": 1708416979999,
+      "period": "1708416970000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.6
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 3,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.8,
+          "p90": 1.9,
+          "p95": 2,
+          "p99": 2.3,
+          "p999": 2.6
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 497,
+        "http.responses": 500,
+        "http.downloaded_bytes": 11305,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 497,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 3,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 3
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416980000,
+      "firstHistogramAt": 1708416980000,
+      "lastCounterAt": 1708416989999,
+      "lastHistogramAt": 1708416989966,
+      "firstMetricAt": 1708416980000,
+      "lastMetricAt": 1708416989999,
+      "period": "1708416980000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.8,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.7,
+          "median": 1.7,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.8,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 494,
+        "http.responses": 500,
+        "http.downloaded_bytes": 24411,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 494,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 6,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 6
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708416990000,
+      "firstHistogramAt": 1708416990000,
+      "lastCounterAt": 1708416999998,
+      "lastHistogramAt": 1708416999966,
+      "firstMetricAt": 1708416990000,
+      "lastMetricAt": 1708416999998,
+      "period": "1708416990000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.8,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.7,
+          "p99": 2,
+          "p999": 2.6
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 2,
+          "count": 500,
+          "mean": 0.2,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.8,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.7,
+          "p99": 2,
+          "p999": 2.6
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 497,
+        "http.responses": 501,
+        "http.downloaded_bytes": 16087,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 497,
+        "vusers.failed": 0,
+        "vusers.completed": 501,
+        "http.codes.200": 4,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 4
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708417000000,
+      "firstHistogramAt": 1708417000000,
+      "lastCounterAt": 1708417009999,
+      "lastHistogramAt": 1708417009999,
+      "firstMetricAt": 1708417000000,
+      "lastMetricAt": 1708417009999,
+      "period": "1708417000000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 501,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 501,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.6,
+          "count": 501,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 501,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 501,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.6,
+          "count": 501,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2.1,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 498,
+        "http.responses": 500,
+        "http.downloaded_bytes": 7556,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 498,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 2,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 2
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708417010024,
+      "firstHistogramAt": 1708417010025,
+      "lastCounterAt": 1708417019999,
+      "lastHistogramAt": 1708417019999,
+      "firstMetricAt": 1708417010024,
+      "lastMetricAt": 1708417019999,
+      "period": "1708417010000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.6,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2,
+          "p999": 2.2
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.6,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2,
+          "p999": 2.2
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 498,
+        "http.responses": 500,
+        "http.downloaded_bytes": 5854,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 498,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 2,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 2
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708417020024,
+      "firstHistogramAt": 1708417020025,
+      "lastCounterAt": 1708417029999,
+      "lastHistogramAt": 1708417029999,
+      "firstMetricAt": 1708417020024,
+      "lastMetricAt": 1708417029999,
+      "period": "1708417020000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 1.9,
+          "p999": 2.3
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.4,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 1.9,
+          "p999": 2.3
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 500,
+        "http.responses": 500,
+        "http.downloaded_bytes": 0,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 500,
+        "vusers.failed": 0,
+        "vusers.completed": 500
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708417030024,
+      "firstHistogramAt": 1708417030025,
+      "lastCounterAt": 1708417039999,
+      "lastHistogramAt": 1708417039999,
+      "firstMetricAt": 1708417030024,
+      "lastMetricAt": 1708417039999,
+      "period": "1708417030000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2.2,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2.2,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 499,
+        "http.responses": 500,
+        "http.downloaded_bytes": 3646,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 499,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 1,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 1
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708417040024,
+      "firstHistogramAt": 1708417040025,
+      "lastCounterAt": 1708417049999,
+      "lastHistogramAt": 1708417049999,
+      "firstMetricAt": 1708417040024,
+      "lastMetricAt": 1708417049999,
+      "period": "1708417040000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.7,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.4,
+          "p999": 2.6
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.7,
+          "count": 500,
+          "mean": 1.7,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2.4,
+          "p999": 2.6
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 500,
+        "vusers.created": 500,
+        "http.requests": 500,
+        "http.codes.500": 495,
+        "http.responses": 500,
+        "http.downloaded_bytes": 15527,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 495,
+        "vusers.failed": 0,
+        "vusers.completed": 500,
+        "http.codes.200": 5,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 5
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708417050024,
+      "firstHistogramAt": 1708417050025,
+      "lastCounterAt": 1708417059999,
+      "lastHistogramAt": 1708417059999,
+      "firstMetricAt": 1708417050024,
+      "lastMetricAt": 1708417059999,
+      "period": "1708417050000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2,
+          "p999": 2.4
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 500,
+          "mean": 0.3,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.5,
+          "count": 500,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.7,
+          "p95": 1.8,
+          "p99": 2,
+          "p999": 2.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 225,
+        "vusers.created": 225,
+        "http.requests": 225,
+        "http.codes.500": 223,
+        "http.responses": 225,
+        "http.downloaded_bytes": 7667,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.500": 223,
+        "vusers.failed": 0,
+        "vusers.completed": 225,
+        "http.codes.200": 2,
+        "plugins.metrics-by-endpoint./chronoweb/graph/0_9999/outEe.codes.200": 2
+      },
+      "rates": {
+        "http.request_rate": 50
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1708417060024,
+      "firstHistogramAt": 1708417060025,
+      "lastCounterAt": 1708417064899,
+      "lastHistogramAt": 1708417064899,
+      "firstMetricAt": 1708417060024,
+      "lastMetricAt": 1708417064899,
+      "period": "1708417060000",
+      "summaries": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 225,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 225,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.3,
+          "count": 225,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2,
+          "p999": 2.3
+        }
+      },
+      "histograms": {
+        "http.response_time": {
+          "min": 0,
+          "max": 1,
+          "count": 225,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "plugins.metrics-by-endpoint.response_time./chronoweb/graph/0_9999/outEe": {
+          "min": 0,
+          "max": 1,
+          "count": 225,
+          "mean": 0.4,
+          "p50": 0,
+          "median": 0,
+          "p75": 1,
+          "p90": 1,
+          "p95": 1,
+          "p99": 1,
+          "p999": 1
+        },
+        "vusers.session_length": {
+          "min": 1.4,
+          "max": 2.3,
+          "count": 225,
+          "mean": 1.6,
+          "p50": 1.6,
+          "median": 1.6,
+          "p75": 1.7,
+          "p90": 1.8,
+          "p95": 1.9,
+          "p99": 2,
+          "p999": 2.3
+        }
+      }
+    }
+  ]
+}

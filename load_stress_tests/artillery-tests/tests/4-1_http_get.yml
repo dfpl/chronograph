@@ -1,0 +1,18 @@
+# Capture 1_3 via postman first
+config:
+  target: http://localhost:80/chronoweb
+  phases:
+    - name: Warm-up the API
+      duration: 60
+      arrivalRate: 5
+    - name: Ramp-up to peak load
+      duration: 60
+      arrivalRate: 10
+      rampTo: 50
+    - name: Sustained peak load
+      duration: 300
+      arrivalRate: 50
+scenarios:
+  - flow:
+      - get:
+          url: "/graph/1_3"
