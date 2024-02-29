@@ -12,15 +12,16 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class NaiveReachabilityTest {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		// INPUT
-		Integer sourceVertex = 9;
+		Integer sourceVertex = 960;
 		Integer sourceTime = 0;
-		String filePath = "D:\\chronoweb\\results\\naive-bitcoin-alpha.txt"; // results
-		String graphFile = "D:\\chronoweb\\datasets\\bitcoin-alpha.txt"; // input graph
+		String filePath = "D:\\chronoweb\\results\\email_api8.txt"; // results
+		String graphFile = "D:\\chronoweb\\datasets\\email.txt"; // input graph
 
 		// Constants
 		String host = "http://localhost/chronoweb";
@@ -41,9 +42,7 @@ public class NaiveReachabilityTest {
 
 			postEdgeEvent(host, from, to, time);
 
-			Long startTime = System.currentTimeMillis();
-			getReachability(host, sourceVertex, sourceTime);
-			Long computationTime = System.currentTimeMillis() - startTime;
+			Long computationTime = getReachability(host, sourceVertex, sourceTime);
 
 			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true));
 			writer.append(computationTime.toString()).append("\n");
@@ -78,13 +77,16 @@ public class NaiveReachabilityTest {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void getReachability(String host, Integer sourceVertex, Integer sourceTime) throws IOException {
+	public static Long getReachability(String host, Integer sourceVertex, Integer sourceTime)
+			throws IOException, InterruptedException {
 		List<Integer> queue = new LinkedList<>();
 		queue.add(sourceVertex);
 		List<Integer> reachableVertices = new LinkedList<>();
-
+		Long totalTime = (long) 0;
 		while (queue.size() > 0) {
 			Integer currVertex = queue.removeFirst();
+			TimeUnit.MILLISECONDS.sleep(10);
+			Long startTime = System.currentTimeMillis();
 			String getURLString = String.format("%s/graph/%s_%s/outEe?temporalRelation=isAfter&label=label", host,
 					currVertex, sourceTime);
 //			System.out.println("\tGET " + getURLString);
@@ -113,7 +115,10 @@ public class NaiveReachabilityTest {
 					}
 				}
 			}
+			Long computationTime = System.currentTimeMillis() - startTime;
+			totalTime += computationTime;
 			getCon.disconnect();
 		}
+		return totalTime;
 	}
 }

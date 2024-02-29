@@ -8,15 +8,16 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 public class IncrementalReachabilityTest {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		// INPUT
-		Integer sourceVertex = 9;
+		Integer sourceVertex = 960;
 		Integer sourceTime = 0;
-		String filePath = "D:\\chronoweb\\results\\incr_8_4.txt"; // results
-		String graphFile = "D:\\chronoweb\\datasets\\bitcoin-alpha.txt"; // input graph
+		String filePath = "D:\\chronoweb\\results\\email_api10.txt"; // results
+		String graphFile = "D:\\chronoweb\\datasets\\email.txt"; // input graph
 
 		String host = "http://localhost/chronoweb";
 
@@ -38,6 +39,7 @@ public class IncrementalReachabilityTest {
 			Integer time = Integer.parseInt(arr[2]);
 
 			// 2. POST
+			TimeUnit.MILLISECONDS.sleep(100);
 			postEdgeEvent(host, from, to, time);
 
 			Long startTime = System.currentTimeMillis();
@@ -65,8 +67,8 @@ public class IncrementalReachabilityTest {
 
 		HttpURLConnection getCon = (HttpURLConnection) getURL.openConnection();
 		getCon.setRequestMethod("GET");
-		System.out.println("\tGET " + getURLString + " " + getCon.getResponseCode());
-
+//		System.out.println("\tGET " + getURLString + " " + getCon.getResponseCode());
+		getCon.getResponseCode();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -83,7 +85,8 @@ public class IncrementalReachabilityTest {
 		osw.write("{ \"k\": \"v\"}");
 		osw.flush();
 		osw.close();
-		System.out.println("POST " + postURLString + " " + postCon.getResponseCode());
+		postCon.getResponseCode();
+//		System.out.println("POST " + postURLString + " " + postCon.getResponseCode());
 
 		postCon.disconnect();
 	}
