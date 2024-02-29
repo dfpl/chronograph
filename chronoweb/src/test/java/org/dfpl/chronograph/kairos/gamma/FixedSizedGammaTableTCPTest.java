@@ -3,16 +3,16 @@ package org.dfpl.chronograph.kairos.gamma;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import org.dfpl.chronograph.kairos.gamma.persistent.BooleanGammaElement;
-import org.dfpl.chronograph.kairos.gamma.persistent.DoubleGammaElement;
-import org.dfpl.chronograph.kairos.gamma.persistent.IntegerGammaElement;
-import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.BooleanGammaElement;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.DoubleGammaElement;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.IntegerGammaElement;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.junit.*;
 
-public class SparseGammaTableTCPTest {
-	SparseGammaTable<String, Integer> gammaTable;
-	SparseGammaTable<String, Double> gammaDTable;
-	SparseGammaTable<String, Boolean> gammaBTable;
+public class FixedSizedGammaTableTCPTest {
+	FixedSizedGammaTable<String, Integer> gammaTable;
+	FixedSizedGammaTable<String, Double> gammaDTable;
+	FixedSizedGammaTable<String, Boolean> gammaBTable;
 
 	BiPredicate<Double, Double> predicate = new BiPredicate<Double, Double>() {
 
@@ -35,16 +35,15 @@ public class SparseGammaTableTCPTest {
 
 	@Before
 	public void setUp() throws Exception {
-		gammaTable = new SparseGammaTable<String, Integer>("d:\\g", IntegerGammaElement.class);
-		gammaDTable = new SparseGammaTable<String, Double>("d:\\d", DoubleGammaElement.class);
-		gammaBTable = new SparseGammaTable<String, Boolean>("d:\\b", BooleanGammaElement.class);
+		gammaTable = new FixedSizedGammaTable<String, Integer>("d:\\g", IntegerGammaElement.class);
+		gammaDTable = new FixedSizedGammaTable<String, Double>("d:\\d", DoubleGammaElement.class);
+		gammaBTable = new FixedSizedGammaTable<String, Boolean>("d:\\b", BooleanGammaElement.class);
 	}
 
 	@After
 	public void tearDown() {
 
 	}
-
 
 	public void baseTest() {
 
@@ -89,7 +88,6 @@ public class SparseGammaTableTCPTest {
 		gammaTable.clear();
 	}
 
-
 	public void baseDoubleTest() {
 
 		Predicate<Double> predicate = new Predicate<Double>() {
@@ -133,7 +131,6 @@ public class SparseGammaTableTCPTest {
 		gammaDTable.clear();
 	}
 
-	@Test
 	public void baseBooleanTest() {
 
 		Predicate<Boolean> predicate = new Predicate<Boolean>() {

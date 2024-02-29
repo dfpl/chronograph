@@ -52,6 +52,7 @@ public class Server extends AbstractVerticle {
 	public static int port = 80;
 	public static String backendType;
 	public static String dbName;
+	public static String gammaDBName;
 	public static String connectionString;
 	public static int numberOfVerticles;
 	private Graph graph;
@@ -73,14 +74,14 @@ public class Server extends AbstractVerticle {
 	public static String gammaBaseDirectory;
 
 	public void setModules() {
-		if(backendType.equals("memory")) {
+		if (backendType.equals("memory")) {
 			graph = new MChronoGraph(eventBus);
-		}else {
+		} else {
 			graph = new PChronoGraph(connectionString, dbName, eventBus);
 		}
-		kairos = new KairosEngine(graph, eventBus);		
+		kairos = new KairosEngine(graph, eventBus, connectionString, gammaDBName);
 	}
-	
+
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		super.start(startPromise);
@@ -90,7 +91,7 @@ public class Server extends AbstractVerticle {
 		router.route().handler(BodyHandler.create().setBodyLimit(BodyHandler.DEFAULT_BODY_LIMIT * 2)
 				.setDeleteUploadedFilesOnEnd(true));
 		this.eventBus = vertx.eventBus();
-		
+
 		setModules();
 
 		registerManipulationRouter();
@@ -129,6 +130,7 @@ public class Server extends AbstractVerticle {
 
 	public static void main(String[] args) {
 		Bootstrap.bootstrap(args);
-		Vertx.vertx().deployVerticle("org.dfpl.chronograph.chronoweb.Server", new DeploymentOptions().setInstances(Server.numberOfVerticles));
+		Vertx.vertx().deployVerticle("org.dfpl.chronograph.chronoweb.Server",
+				new DeploymentOptions().setInstances(Server.numberOfVerticles));
 	}
 }

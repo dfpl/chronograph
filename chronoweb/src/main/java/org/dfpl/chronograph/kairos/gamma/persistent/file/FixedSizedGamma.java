@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.kairos.gamma.persistent;
+package org.dfpl.chronograph.kairos.gamma.persistent.file;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -10,12 +10,12 @@ import org.dfpl.chronograph.kairos.gamma.GammaElement;
 
 import io.vertx.core.json.JsonObject;
 
-public class SparseGamma<K, E> implements Gamma<K, E> {
+public class FixedSizedGamma<K, E> implements Gamma<K, E> {
 
-	private SparseGammaTable<K, E> gammaTable;
+	private FixedSizedGammaTable<K, E> gammaTable;
 	private RandomAccessFile gamma;
 
-	public SparseGamma(SparseGammaTable<K, E> gammaTable, RandomAccessFile gamma) {
+	public FixedSizedGamma(FixedSizedGammaTable<K, E> gammaTable, RandomAccessFile gamma) {
 		this.gammaTable = gammaTable;
 		this.gamma = gamma;
 	}

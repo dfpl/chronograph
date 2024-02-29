@@ -12,6 +12,10 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -24,11 +28,17 @@ public class KairosEngine {
 	private Graph graph;
 	private EventBus mainEventBus;
 	private HashMap<Long, HashSet<AbstractKairosProgram<?>>> kairosPrograms;
+	private MongoClient gammaClient;
 
-	public KairosEngine(Graph graph, EventBus mainEventBus) {
+	public MongoClient getGammaClient() {
+		return gammaClient;
+	}
+
+	public KairosEngine(Graph graph, EventBus mainEventBus, String connectionString, String gammaDBName) {
 		this.graph = graph;
 		this.mainEventBus = mainEventBus;
 		this.kairosPrograms = new HashMap<Long, HashSet<AbstractKairosProgram<?>>>();
+		this.gammaClient = MongoClients.create(connectionString);
 
 		this.mainEventBus.consumer("addVertex", v -> {
 			Server.logger.debug("kairos addVertex: " + v.body());

@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.kairos.gamma.persistent;
+package org.dfpl.chronograph.kairos.gamma.persistent.file;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +20,7 @@ import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaElement;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 
-public class SparseGammaTable<K, E> implements GammaTable<K, E> {
+public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 
 	private HashMap<Integer, RandomAccessFile> gammaMap;
 	HashMap<K, Integer> idToIdx = new HashMap<K, Integer>();
@@ -34,12 +34,12 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 	private int capacity;
 	private int expandFactor;
 
-	public SparseGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass)
+	public FixedSizedGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass)
 			throws FileNotFoundException, NotDirectoryException {
 		this(directoryName, gammaElementClass, 4, 2);
 	}
 
-	public SparseGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass,
+	public FixedSizedGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass,
 			int initialCapacity, int expandFactor) throws FileNotFoundException, NotDirectoryException {
 		gammaMap = new HashMap<Integer, RandomAccessFile>();
 		try {
@@ -188,7 +188,7 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		Integer idx = idToIdx.get(from);
 		if (idx == null)
 			return null;
-		return new SparseGamma<K, E>(this, gammaMap.get(idx));
+		return new FixedSizedGamma<K, E>(this, gammaMap.get(idx));
 	}
 
 	@Override
@@ -298,4 +298,15 @@ public class SparseGammaTable<K, E> implements GammaTable<K, E> {
 		}
 	}
 
+	@Override
+	public void append(K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void append(Set<K> sources, K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate) {
+		throw new UnsupportedOperationException();
+	}
 }

@@ -88,6 +88,7 @@ public class Bootstrap {
 			String type = Server.configuration.getString("data_storage_type");
 			if (type.equals("memory")) {
 				Server.backendType = "memory";
+				Server.connectionString = Server.configuration.getString("db_connection_string");
 				System.out.println("backendType:memory");
 			} else if (type.equals("persistent")) {
 				Server.backendType = "persistent";
@@ -128,6 +129,9 @@ public class Bootstrap {
 			System.out.println("Invalid gamma base directory. System Terminated." + e.getMessage());
 			System.exit(1);
 		}
+		Server.gammaDBName = Server.configuration.getString("gamma_database");
+		System.out.println("gammaDBName:" + Server.gammaDBName);
+
 	}
 
 	public static void bootstrap(String[] args) {

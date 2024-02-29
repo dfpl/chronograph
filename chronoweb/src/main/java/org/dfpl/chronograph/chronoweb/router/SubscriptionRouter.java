@@ -6,6 +6,7 @@ import java.nio.file.NotDirectoryException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.bson.Document;
 import org.dfpl.chronograph.chronoweb.MessageBuilder;
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.KairosProgram;
@@ -13,9 +14,11 @@ import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.KairosEngine;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
-import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
-import org.dfpl.chronograph.kairos.gamma.persistent.SparseGammaTable;
-import org.dfpl.chronograph.kairos.program.IsAfterReachability;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
+import org.dfpl.chronograph.kairos.program.path_reachability.OutIsAfterPathReachability;
+import org.dfpl.chronograph.kairos.program.reachability.OutIsAfterReachability;
+import org.dfpl.chronograph.kairos.gamma.persistent.db.ExpandableGammaTable;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
@@ -111,43 +114,57 @@ public class SubscriptionRouter extends BaseRouter {
 
 			AbstractKairosProgram<?> existing = kairos.getProgram(time, kairosProgram);
 			if (existing != null) {
-				GammaTable<String, Long> gammaTable = existing.getGammaTable();
-				if (gammaTable.getSources().contains(v.getId())) {
-					sendResult(routingContext, 406);
-					return;
-				} else {
-					if(kairosProgram.equals("IsAfterReachability")) {
-						kairos.addSubscription(v, ve.getTime(), new IsAfterReachability(graph, gammaTable));
+				if (kairosProgram.equals("OutIsAfterReachability")) {
+					GammaTable<String, Long> gammaTable = existing.getGammaTable();
+					if (gammaTable.getSources().contains(v.getId())) {
+						sendResult(routingContext, 406);
+						return;
+					} else {
+						kairos.addSubscription(v, ve.getTime(), new OutIsAfterReachability(graph, gammaTable));
 						sendResult(routingContext, 200);
 						return;
-					}else {
-						sendResult(routingContext, 500);
+					}
+				} else if (kairosProgram.equals("OutIsAfterPathReachability")) {
+					GammaTable<String, Document> gammaTable = existing.getGammaTable();
+					if (gammaTable.getSources().contains(v.getId())) {
+						sendResult(routingContext, 406);
+						return;
+					} else {
+						kairos.addSubscription(v, ve.getTime(), new OutIsAfterPathReachability(graph, gammaTable));
+						sendResult(routingContext, 200);
 						return;
 					}
+				} else {
+					sendResult(routingContext, 500);
+					return;
 				}
 			} else {
-				String subDirectoryName = Server.gammaBaseDirectory + "\\" + ve.getTime() + "_" + kairosProgram;
-				File subDirectory = new File(subDirectoryName);
-				if (!subDirectory.exists())
-					subDirectory.mkdirs();
-
-				if(kairosProgram.equals("IsAfterReachability")) {
-					SparseGammaTable<String, Long> gammaTable = null;
+				if (kairosProgram.equals("OutIsAfterReachability")) {
+					String subDirectoryName = Server.gammaBaseDirectory + "\\" + ve.getTime() + "_" + kairosProgram;
+					File subDirectory = new File(subDirectoryName);
+					if (!subDirectory.exists())
+						subDirectory.mkdirs();
+					FixedSizedGammaTable<String, Long> gammaTable = null;
 					try {
-						gammaTable = new SparseGammaTable<String, Long>(subDirectoryName, LongGammaElement.class);
+						gammaTable = new FixedSizedGammaTable<String, Long>(subDirectoryName, LongGammaElement.class);
 					} catch (NotDirectoryException | FileNotFoundException e) {
 						sendResult(routingContext, 500);
 						return;
 					}
-					kairos.addSubscription(v, ve.getTime(), new IsAfterReachability(graph, gammaTable));
+					kairos.addSubscription(v, ve.getTime(), new OutIsAfterReachability(graph, gammaTable));
 					sendResult(routingContext, 200);
 					return;
-				}else {
+				} else if (kairosProgram.equals("OutIsAfterPathReachability")) {
+					ExpandableGammaTable gammaTable = null;
+					gammaTable = new ExpandableGammaTable(kairos.getGammaClient(), time + "_" + kairosProgram);
+					kairos.addSubscription(v, ve.getTime(), new OutIsAfterPathReachability(graph, gammaTable));
+					sendResult(routingContext, 200);
+					return;
+				} else {
 					sendResult(routingContext, 500);
 					return;
 				}
 			}
-
 		});
 
 		Server.logger.info("POST /chronoweb/subscribe/:resource router added");

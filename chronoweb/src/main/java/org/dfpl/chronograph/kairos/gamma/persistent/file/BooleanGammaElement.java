@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.kairos.gamma.persistent;
+package org.dfpl.chronograph.kairos.gamma.persistent.file;
 
 import java.nio.ByteBuffer;
 

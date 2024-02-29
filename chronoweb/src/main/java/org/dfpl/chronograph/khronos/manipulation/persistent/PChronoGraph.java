@@ -333,7 +333,7 @@ public class PChronoGraph implements Graph {
 
 	@Override
 	public Iterable<EdgeEvent> getEdgeEvents() {
-		return edges.find().sort(new Document("_t", 1)).map(doc -> {
+		return edgeEvents.find().sort(new Document("_t", 1)).map(doc -> {
 			return new PChronoEdgeEvent(this, doc.getString("_id"), doc.getString("_o"), doc.getString("_l"),
 					doc.getString("_i"), doc.getLong("_t"), edgeEvents);
 		});

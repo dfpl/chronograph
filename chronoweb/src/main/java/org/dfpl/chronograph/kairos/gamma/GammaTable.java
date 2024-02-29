@@ -18,6 +18,13 @@ public interface GammaTable<K, E> {
 	public void update(K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
 			BiPredicate<E, E> testUpdate);
 
+	public void append(Set<K> sources, K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate);
+
+	
+	public void append(K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
+			BiPredicate<E, E> testUpdate);
+
 	public Gamma<K, E> getGamma(K from);
 
 	public void clear();

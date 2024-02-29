@@ -1,4 +1,4 @@
-package org.dfpl.chronograph.kairos.program;
+package org.dfpl.chronograph.kairos.program.reachability;
 
 import java.util.Set;
 import java.util.function.BiPredicate;
@@ -10,7 +10,7 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
-import org.dfpl.chronograph.kairos.gamma.persistent.LongGammaElement;
+import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
@@ -19,10 +19,10 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
-public class IsAfterReachability extends AbstractKairosProgram<Long> {
+public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 
-	public IsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
-		super(graph, gammaTable, "IsAfterReachability");
+	public OutIsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
+		super(graph, gammaTable, "OutIsAfterReachability");
 	}
 
 	Predicate<Long> sourceTest = new Predicate<Long>() {
