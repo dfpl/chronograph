@@ -39,6 +39,12 @@ public interface Edge extends Element {
 	 */
 	public void remove();
 	
+	/**
+	 * Convert the edge to a document 
+	 * 
+	 * @param includeProperties in
+	 * @return a document representation
+	 */
 	public Document toDocument(boolean includeProperties);
 	
 	/**

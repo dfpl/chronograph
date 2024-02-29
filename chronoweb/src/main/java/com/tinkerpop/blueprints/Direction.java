@@ -13,7 +13,12 @@ public enum Direction {
 	OUT, IN, BOTH;
 
 	public static final Direction[] proper = new Direction[] { OUT, IN };
-
+	
+	/**
+	 * Return the opposite direction
+	 * 
+	 * @return the opposite direction
+	 */
 	public Direction opposite() {
 		if (this.equals(OUT))
 			return IN;

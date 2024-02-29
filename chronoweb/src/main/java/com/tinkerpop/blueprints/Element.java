@@ -2,6 +2,9 @@ package com.tinkerpop.blueprints;
 
 import org.bson.Document;
 
+/**
+ * An Element represents
+ */
 public interface Element {
 
 	/**
