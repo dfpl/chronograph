@@ -59,8 +59,15 @@ public interface Vertex extends Element {
 	 */
 	public void remove();
 
+	/**
+	 * Convert the vertex to a document
+	 * 
+	 * @param includeProperties includes the properties in the return document if
+	 *                          set to true
+	 * @return a document representation
+	 */
 	public Document toDocument(boolean includeProperties);
-	
+
 	/**
 	 * Explicitly add a vertex event of this graph element valid at time.
 	 * 
@@ -70,9 +77,7 @@ public interface Vertex extends Element {
 	public VertexEvent addEvent(long time);
 
 	/**
-	 * Return a vertex event of this graph element valid at time. Difference from
-	 * pickEvent(long time): always return the event even if the vertex has no such
-	 * event in events
+	 * Return a vertex event of this graph element valid at time.
 	 * 
 	 * @param time long
 	 * @return VertexEvent valid at time
@@ -80,9 +85,12 @@ public interface Vertex extends Element {
 	public VertexEvent getEvent(long time);
 
 	/**
-	 * Return events of this element. In addition, the method includes in-going
-	 * vertex event for out-going edge events if aware out events and out-going
-	 * vertex event for in-going edge events if aware in events.
+	 * Return events of this element. In addition, the method includes:
+	 * <ul>
+	 * <li>in-going vertex event for out-going edge events if aware out events</li>
+	 * <li>and out-going vertex event for in-going edge events if aware in
+	 * events.</li>
+	 * </ul>
 	 * 
 	 * @param awareOutEvents include in-going vertex events for out-going edge
 	 *                       events
@@ -93,19 +101,23 @@ public interface Vertex extends Element {
 	public Iterable<VertexEvent> getEvents(boolean awareOutEvents, boolean awareInEvents);
 
 	/**
-	 * Return an event of this element that are matched with tr for time
+	 * Return an event of this element that are matched with temporalRelation for
+	 * time
 	 *
-	 * @param time the time to check in the events
+	 * @param time             the time to check in the events
+	 * @param temporalRelation the temporal relation to match
 	 * @return EdgeEvent
 	 */
 	public VertexEvent getEvent(long time, TemporalRelation temporalRelation);
 
 	/**
 	 * Return events of this element that are matched with tr for time. In addition
-	 * to getEvents(time, tr), the method includes in-going vertex event for
-	 * out-going edge events if aware out events and out-going vertex event for
-	 * in-going edge events if aware in events.
-	 * 
+	 * to getEvents(time, temporalRelation), the method includes:
+	 * <ul>
+	 * <li>in-going vertex event for out-going edge events if awareOutEvents,
+	 * and</li>
+	 * <li>out-going vertex event for in-going edge events if awareInEvents.
+	 * </ul>
 	 * 
 	 * @param time           the time to check
 	 * @param tr             the temporal relation to match with time

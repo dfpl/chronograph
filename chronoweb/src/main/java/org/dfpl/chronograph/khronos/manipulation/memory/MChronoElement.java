@@ -42,7 +42,8 @@ public class MChronoElement implements Element {
 	public <T> T removeProperty(String key) {
 		return (T) properties.remove(key);
 	}
-
+	
+	@Override
 	public void setProperties(Document properties, boolean isSet) {
 		if (!isSet) {
 			this.properties = properties;

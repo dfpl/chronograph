@@ -3,7 +3,7 @@ package com.tinkerpop.blueprints;
 import org.bson.Document;
 
 /**
- * An Element represents
+ * An Element is used to denote a graph element.
  */
 public interface Element {
 
@@ -56,7 +56,18 @@ public interface Element {
 	 */
 	public <T> T removeProperty(String key);
 
+	/**
+	 * Set the properties of the element
+	 * 
+	 * @param properties the properties to set
+	 * @param isSet      replaces the current properties if value is true
+	 */
 	public void setProperties(Document properties, boolean isSet);
-
+	
+	/**
+	 * Return the graph
+	 * 
+	 * @return the graph that the element belongs to
+	 */
 	public Graph getGraph();
 }

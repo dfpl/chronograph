@@ -94,7 +94,7 @@ public interface Edge extends Element {
 	public Iterable<EdgeEvent> getEvents();
 	
 	/**
-	 * Return events of this element that are matched with tr for time
+	 * Return events of this element that are matched with temporalRelation for time
 	 *
 	 * @param time the time to check in the events
 	 * @return EdgeEvent
