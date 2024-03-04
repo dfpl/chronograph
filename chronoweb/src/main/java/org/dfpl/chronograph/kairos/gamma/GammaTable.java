@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 /**
  * The {@code GammaTable} contains the temporal information diffusion results
- * where each source stores the temporal information diffusion results.
+ * of a set of sources
  * 
  * @param <K> the data type of the source
  * @param <E> the data type of the temporal information diffusion results
@@ -41,6 +41,7 @@ public interface GammaTable<K, E> {
 	public void set(K from, K to, GammaElement<E> element);
 
 	/**
+	 * TODO
 	 * 
 	 * @param sources
 	 * @param check
@@ -51,13 +52,40 @@ public interface GammaTable<K, E> {
 	 */
 	public void update(Set<K> sources, K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
 			BiPredicate<E, E> testUpdate);
-
+	
+	/**
+	 * TODO
+	 * 
+	 * @param check
+	 * @param testCheck
+	 * @param update
+	 * @param newValue
+	 * @param testUpdate
+	 */
 	public void update(K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
 			BiPredicate<E, E> testUpdate);
-
+	
+	/**
+	 * TODO
+	 * 
+	 * @param sources
+	 * @param check
+	 * @param testCheck
+	 * @param update
+	 * @param newValue
+	 * @param testUpdate
+	 */
 	public void append(Set<K> sources, K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
 			BiPredicate<E, E> testUpdate);
-
+	
+	/**
+	 * TODO 
+	 * @param check
+	 * @param testCheck
+	 * @param update
+	 * @param newValue
+	 * @param testUpdate
+	 */
 	public void append(K check, Predicate<E> testCheck, K update, GammaElement<E> newValue,
 			BiPredicate<E, E> testUpdate);
 
