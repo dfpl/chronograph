@@ -80,45 +80,105 @@ public abstract class AbstractKairosProgram<E> {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * Initialize the Gamma Table given the sources and start time
 	 * 
-	 * @param sources a set of source vertices
+	 * @param sources   a set of source vertices
 	 * @param startTime the reference time
 	 */
 	public abstract void onInitialization(Set<Vertex> sources, Long startTime);
-	
+
 	/**
-	 * Compute the temporal information diffusion result after adding a vertex
+	 * Update the temporal information diffusion result after adding a vertex
 	 * 
 	 * @param addedVertex the vertex to add
 	 */
 	public abstract void onAddVertex(Vertex addedVertex);
-	
+
 	/**
-	 * Compute the 
-	 * @param addedEdge
+	 * Update the temporal information diffusion result after adding an edge
+	 * 
+	 * @param addedEdge the edge to be added
 	 */
 	public abstract void onAddEdge(Edge addedEdge);
 
+	/**
+	 * Update the temporal information diffusion result after updating a vertex
+	 * property
+	 * 
+	 * @param previous the previous vertex property
+	 * @param updated  the updated vertex property
+	 */
 	public abstract void onUpdateVertexProperty(Document previous, Document updated);
 
+	/**
+	 * Update the temporal information diffusion result after updating an edge
+	 * property
+	 * 
+	 * @param previous the previous edge property
+	 * @param updated  the updated edge property
+	 */
 	public abstract void onUpdateEdgeProperty(Document previous, Document updated);
 
+	/**
+	 * Update the temporal information diffusion result after removing a vertex
+	 * 
+	 * @param removedVertex the vertex to be removed
+	 */
 	public abstract void onRemoveVertex(Vertex removedVertex);
 
+	/**
+	 * Update the temporal information diffusion result after removing an edge
+	 * 
+	 * @param removedEdge the edge to be removed
+	 */
 	public abstract void onRemoveEdge(Edge removedEdge);
 
+	/**
+	 * Update the temporal information diffusion result after adding a vertex event
+	 * 
+	 * @param addedVertexEvent the vertex event to be added
+	 */
 	public abstract void onAddVertexEvent(VertexEvent addedVertexEvent);
 
+	/**
+	 * Update the temporal information diffusion result after adding an edge event
+	 * 
+	 * @param addedEvent the edge event to be added
+	 */
 	public abstract void onAddEdgeEvent(EdgeEvent addedEvent);
 
+	/**
+	 * Update the temporal information diffusion result after updating a vertex
+	 * event property
+	 * 
+	 * @param previous the previous vertex event property
+	 * @param updated  the updated vertex event property
+	 */
 	public abstract void onUpdateVertexEventProperty(Document previous, Document updated);
 
+	/**
+	 * Update the temporal information diffusion result after updating an edge event
+	 * property
+	 * 
+	 * @param previous the previous edge event property
+	 * @param updated  the updated edge event property
+	 */
 	public abstract void onUpdateEdgeEventProperty(Document previous, Document updated);
 
-	public abstract void onRemoveVertexEvent(VertexEvent removedVertex);
+	/**
+	 * Update the temporal information diffusion result after removing a vertex
+	 * event
+	 * 
+	 * @param removedEvent the vertex event to be removed
+	 */
+	public abstract void onRemoveVertexEvent(VertexEvent removedEvent);
 
-	public abstract void onRemoveEdgeEvent(EdgeEvent removedEdge);
+	/**
+	 * Update the temporal information diffusion result after removing an edge event
+	 * 
+	 * @param removedEvent the edge event to be removed
+	 */
+	public abstract void onRemoveEdgeEvent(EdgeEvent removedEvent);
 }
