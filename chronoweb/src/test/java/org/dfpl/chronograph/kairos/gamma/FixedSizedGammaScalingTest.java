@@ -31,6 +31,7 @@ public class FixedSizedGammaScalingTest {
 
 	}
 
+	@Test
 	public void baseIntegerTest() {
 		for (int i = 0; i < 100; i++) {
 			gammaTable.set(String.valueOf(i), String.valueOf(i), new IntegerGammaElement(3));

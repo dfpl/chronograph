@@ -2,6 +2,7 @@ package org.dfpl.chronograph.kairos.program.reachability.algorithms;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.NotDirectoryException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,6 +13,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import io.vertx.core.json.JsonObject;
+import org.dfpl.chronograph.chronoweb.Bootstrap;
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.Event;
@@ -24,11 +27,14 @@ import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.traversal.TraversalEngine;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
+
+import static org.dfpl.chronograph.chronoweb.Bootstrap.readFile;
 
 /**
  * {@code TraversalReachability} implements the temporal reachability algorithm
@@ -39,24 +45,19 @@ public class TraversalReachability {
     private Gamma<String, Long> gamma;
     TraversalEngine engine;
     private long computationTime = 0;
+    JsonObject configuration;
 
     /**
      * Return true if the second argument is less than the first argument
      */
     private final BiPredicate<Long, Long> isAfter = (t, u) -> u < t;
 
-    public TraversalReachability(Graph g, VertexEvent source, String programName)
+    public TraversalReachability(Graph g, VertexEvent source, String gammaPrimePath)
             throws NotDirectoryException, FileNotFoundException {
-        String subDirectoryName = Server.gammaBaseDirectory + "\\" + source.getTime() + "_" + programName;
-        File subDirectory = new File(subDirectoryName);
-        if (!subDirectory.exists())
-            subDirectory.mkdirs();
-        FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<String, Long>(subDirectoryName,
-                LongGammaElement.class);
+        gammaTable = new FixedSizedGammaTable<>(gammaPrimePath, LongGammaElement.class);
         String sourceVertexId = ((Vertex) source.getElement()).getId();
         gammaTable.addSource(sourceVertexId, new LongGammaElement(source.getTime()));
         gamma = gammaTable.getGamma(sourceVertexId);
-
         engine = new TraversalEngine(g, source, VertexEvent.class, false);
     }
 
@@ -105,6 +106,14 @@ public class TraversalReachability {
         engine = engine.inVe();
         engine = engine.loop("s", exitIfEmpty);
         engine.toList();
+    }
+
+    public GammaTable<String, Long> getGammaTable() {
+        return this.gammaTable;
+    }
+
+    public Gamma<String, Long> getGamma() {
+        return this.gamma;
     }
 
 }

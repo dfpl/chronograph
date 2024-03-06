@@ -35,7 +35,7 @@ public class FixedSizedGamma<K, E> implements Gamma<K, E> {
 
 	@Override
 	public void setElement(K to, GammaElement<E> element) {
-		Integer toIdx = gammaTable.idToIdx.get(to);
+		Integer toIdx = gammaTable.getID(to);
 		if (toIdx == null)
 			throw new NullPointerException();
 		try {

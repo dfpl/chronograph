@@ -23,7 +23,7 @@ import org.dfpl.chronograph.kairos.gamma.GammaTable;
 public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 
 	private HashMap<Integer, RandomAccessFile> gammaMap;
-	HashMap<K, Integer> idToIdx = new HashMap<K, Integer>();
+	HashMap<K, Integer> idToIdx = new HashMap<>();
 	ArrayList<K> idList = new ArrayList<K>();
 	int cnt = 0;
 	int elementByteSize;
@@ -40,8 +40,8 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 	}
 
 	public FixedSizedGammaTable(String directoryName, Class<? extends GammaElement<E>> gammaElementClass,
-			int initialCapacity, int expandFactor) throws FileNotFoundException, NotDirectoryException {
-		gammaMap = new HashMap<Integer, RandomAccessFile>();
+			int initialCapacity, int expandFactor) throws NotDirectoryException {
+		this.gammaMap = new HashMap<>();
 		try {
 			this.gammaElementConverter = gammaElementClass.getConstructor().newInstance();
 			this.elementByteSize = gammaElementConverter.getElementByteSize();
@@ -73,7 +73,7 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 		capacity *= expandFactor;
 	}
 
-	private int getID(K id) {
+	public int getID(K id) {
 		Integer idx = idToIdx.get(id);
 		if (idx != null)
 			return idx;
@@ -88,6 +88,7 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 		}
 	}
 
+	@Override
 	public void addSource(K source, GammaElement<E> element) {
 		gammaWriteLock.lock();
 		int fromIdx = getID(source);
@@ -102,6 +103,8 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 			byte[] fill = new byte[capacity * elementByteSize];
 			Arrays.fill(fill, gammaElementConverter.getDefaultByteValue());
 			gamma.write(fill);
+			gamma.seek(fromIdx);
+			gamma.write(element.getBytes());
 			gammaMap.put(fromIdx, gamma);
 		} catch (Exception e) {
 
@@ -156,6 +159,10 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 		gamma.read(bytesToRead);
 		Object e = gammaElementConverter.toJsonValue(bytesToRead);
 		return e;
+	}
+
+	public File getDirectory() {
+		return directory;
 	}
 
 	@Override

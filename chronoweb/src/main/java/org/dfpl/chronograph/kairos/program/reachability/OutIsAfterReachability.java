@@ -25,24 +25,15 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 		super(graph, gammaTable, "OutIsAfterReachability");
 	}
 
-	Predicate<Long> sourceTest = new Predicate<Long>() {
-		@Override
-		public boolean test(Long t) {
-			if (t.longValue() == 9187201950435737471l)
-				return false;
-			return true;
-		}
-	};
+	/**
+	 * Return true if the source value has a valid value
+	 */
+	Predicate<Long> sourceTest = t -> t != 9187201950435737471l;
 
-	BiPredicate<Long, Long> targetTest = new BiPredicate<Long, Long>() {
-		@Override
-		public boolean test(Long t, Long u) {
-			if (u < t)
-				return true;
-
-			return false;
-		}
-	};
+	/**
+	 * Return true if the second argument is less than the first argument
+	 */
+	BiPredicate<Long, Long> targetTest = (t, u) -> u < t;
 
 	@Override
 	public void onInitialization(Set<Vertex> sources, Long startTime) {
@@ -50,14 +41,13 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 			for (Vertex s : sources) {
 				gammaTable.set(s.getId(), s.getId(), new LongGammaElement(startTime));
 			}
-			
+
 			if (graph instanceof MChronoGraph mg) {
 				mg.getEdgeEvents().forEach(event -> {
 					System.out.println("\t\t" + event);
 					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
 							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
 							new LongGammaElement(event.getTime()), targetTest);
-					gammaTable.print();
 				});
 			} else if (graph instanceof PChronoGraph pg) {
 				pg.getEdgeEvents().forEach(event -> {
@@ -65,9 +55,9 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 					gammaTable.update(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()),
 							event.getVertex(Direction.OUT).getId(), sourceTest, event.getVertex(Direction.IN).getId(),
 							new LongGammaElement(event.getTime()), targetTest);
-					gammaTable.print();
 				});
 			}
+			gammaTable.print();
 		}
 	}
 
