@@ -316,4 +316,13 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 			BiPredicate<E, E> testUpdate) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public String toString(){
+		StringBuilder stringBuilder = new StringBuilder();
+		for (K s : getSources()) {
+			stringBuilder.append(String.format("%s -> %s", s, getGamma(s).toMap(true)));
+		}
+		return stringBuilder.toString();
+	}
 }
