@@ -19,10 +19,11 @@ import java.nio.file.NotDirectoryException;
 
 public class TraversalReachabilityTest {
     public static final String TEMP_DIR = "D:\\chronoweb\\gamma_tables";
+    public static final String EDGE_LABEL = "label";
 
 
     @Test
-    public void testAlgo() throws NotDirectoryException, FileNotFoundException {
+    public void testIsAfterAlgo() throws NotDirectoryException, FileNotFoundException {
         Graph g = new MChronoGraph();
 
 
@@ -39,10 +40,10 @@ public class TraversalReachabilityTest {
 
         Assert.assertEquals("A -> {A=1}", algorithm.getGammaTable().toString());
         Vertex b = g.addVertex("B");
-        Edge edge = g.addEdge(a,b, "label");
+        Edge edge = g.addEdge(a,b, EDGE_LABEL);
         edge.addEvent(2);
 
-        algorithm.compute(TemporalRelation.isAfter, "label");
+        algorithm.compute(TemporalRelation.isAfter, EDGE_LABEL);
 
         Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
 
@@ -50,7 +51,50 @@ public class TraversalReachabilityTest {
         edge = g.addEdge(a,c, "label");
         edge.addEvent(0);
 
+        algorithm.getGammaTable().clear();
+        algorithm = new TraversalReachability(g, sourceEvent, gammaPrimePath);
+        algorithm.compute(TemporalRelation.isAfter, EDGE_LABEL);
+
         Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
+
+        algorithm.getGammaTable().clear();
+    }
+
+    @Test
+    public void testisBeforeAlgo() throws NotDirectoryException, FileNotFoundException {
+        Graph g = new MChronoGraph();
+
+
+        Vertex c = new MChronoVertex(g, "C");
+        VertexEvent sourceEvent = new MChronoVertexEvent(c, 3L);
+        FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<>(TEMP_DIR, LongGammaElement.class);
+
+        String gammaPrimePath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(), sourceEvent.getTime());
+        File subDirectory = new File(gammaPrimePath);
+        if (!subDirectory.exists())
+            subDirectory.mkdirs();
+
+        TraversalReachability algorithm = new TraversalReachability(g, sourceEvent, gammaPrimePath);
+        Assert.assertEquals("C -> {C=3}", algorithm.getGammaTable().toString());
+
+        Vertex b = g.addVertex("B");
+        Edge edge = g.addEdge(b,c, "label");
+        edge.addEvent(2);
+        algorithm.computeInverse(TemporalRelation.isBefore, EDGE_LABEL);
+
+        Assert.assertEquals("C -> {B=2, C=3}", algorithm.getGammaTable().toString());
+        algorithm.getGammaTable().clear();
+
+        algorithm = new TraversalReachability(g, sourceEvent, gammaPrimePath);
+        algorithm.computeInverse(TemporalRelation.isBefore, EDGE_LABEL);
+        algorithm.getGammaTable().clear();
+
+        Vertex a = g.addVertex("A");
+        edge = g.addEdge(a,b, EDGE_LABEL);
+        edge.addEvent(1);
+        algorithm = new TraversalReachability(g, sourceEvent, gammaPrimePath);
+        algorithm.computeInverse(TemporalRelation.isBefore, EDGE_LABEL);
+        Assert.assertEquals("C -> {A=1, B=2, C=3}", algorithm.getGammaTable().toString());
 
         algorithm.getGammaTable().clear();
     }

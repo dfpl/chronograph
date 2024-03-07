@@ -50,6 +50,12 @@ public class TraversalReachability {
      */
     private final BiPredicate<Long, Long> isCotemporal = (t, u) -> Objects.equals(u, t);
 
+    private final Predicate<LoopBundle<Event>> exitIfEmpty = loopBundle -> {
+        Collection<Event> traverserSet = loopBundle.getTraverserSet();
+
+        return traverserSet != null && !traverserSet.isEmpty();
+    };
+
     public TraversalReachability(Graph g, VertexEvent source, String gammaPrimePath)
             throws NotDirectoryException, FileNotFoundException {
         gammaTable = new FixedSizedGammaTable<>(gammaPrimePath, LongGammaElement.class);
@@ -94,16 +100,11 @@ public class TraversalReachability {
         };
 
         Consumer<EdgeEvent> storeGamma = event -> {
-            Vertex inVertex = event.getVertex(Direction.IN);
-            boolean isReachable = gamma.getElement(inVertex.getId()) != null;
+            String inVertexId = event.getVertex(Direction.IN).getId();
+            boolean isReachable = gamma.getElement(inVertexId) != null;
 
-            if (!isReachable || isAfter.test(gamma.getElement(inVertex.getId()), event.getTime()))
-                gamma.setElement(inVertex.getId(), new LongGammaElement(event.getTime()));
-        };
-        Predicate<LoopBundle<Event>> exitIfEmpty = loopBundle -> {
-            Collection<Event> traverserSet = loopBundle.getTraverserSet();
-
-            return traverserSet != null && !traverserSet.isEmpty();
+            if (!isReachable || isAfter.test(gamma.getElement(inVertexId), event.getTime()))
+                gamma.setElement(inVertexId, new LongGammaElement(event.getTime()));
         };
 
         engine = engine.as("s");
@@ -114,7 +115,46 @@ public class TraversalReachability {
         engine.toList();
     }
 
-    public void computeInverse() {
+    public void computeInverse(TemporalRelation tr, String edgeLabel) {
+        List<String> edgeLabels = List.of(edgeLabel);
 
+        Function<VertexEvent, Set<EdgeEvent>> inEdgeEvents = vertexEvent -> {
+            Set<EdgeEvent> events = new HashSet<>();
+            Vertex inVertex = (Vertex) vertexEvent.getElement();
+            if (gamma.getElement(inVertex.getId()) == null)
+                return events;
+
+            for (Edge edge : inVertex.getEdges(Direction.IN, edgeLabels)) {
+                String outVertexId = edge.getVertex(Direction.OUT).getId();
+                boolean isReachable = gamma.getElement(outVertexId) != null;
+
+                if (isReachable &&
+                        (isAfter.test(gamma.getElement(outVertexId), vertexEvent.getTime()) || isCotemporal.test(gamma.getElement(outVertexId), vertexEvent.getTime())))
+                    continue;
+
+                EdgeEvent event = edge.getEvent(vertexEvent.getTime(), tr);
+                if (event == null)
+                    continue;
+
+                if (!isReachable || isAfter.test(gamma.getElement(inVertex.getId()), event.getTime()))
+                    events.add(event);
+            }
+            return events;
+        };
+
+        Consumer<EdgeEvent> storeGamma = event -> {
+            String outVertexId = event.getVertex(Direction.OUT).getId();
+            boolean isReachable = gamma.getElement(outVertexId) != null;
+
+            if (!isReachable || isAfter.test(gamma.getElement(outVertexId), event.getTime()))
+                gamma.setElement(outVertexId, new LongGammaElement(event.getTime()));
+        };
+
+        engine = engine.as("s");
+        engine = engine.flatMap(inEdgeEvents, EdgeEvent.class);
+        engine = engine.sideEffect(storeGamma);
+        engine = engine.outVe();
+        engine = engine.loop("s", exitIfEmpty);
+        engine.toList();
     }
 }
