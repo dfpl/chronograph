@@ -5,13 +5,12 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
-import org.dfpl.chronograph.kairos.gamma.Gamma;
-import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -27,8 +26,8 @@ public class TraversalReachabilityTest {
         Graph g = new MChronoGraph();
 
 
-        Vertex sourceVertex = new MChronoVertex(g, "A");
-        VertexEvent sourceEvent = new MChronoVertexEvent(sourceVertex, 1L);
+        Vertex a = new MChronoVertex(g, "A");
+        VertexEvent sourceEvent = new MChronoVertexEvent(a, 1L);
         FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<>(TEMP_DIR, LongGammaElement.class);
 
         String gammaPrimePath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(), sourceEvent.getTime());
@@ -38,14 +37,21 @@ public class TraversalReachabilityTest {
 
         TraversalReachability algorithm = new TraversalReachability(g, sourceEvent, gammaPrimePath);
 
-        algorithm.getGammaTable().print();
-        Vertex a = sourceVertex;
+        Assert.assertEquals("A -> {A=1}", algorithm.getGammaTable().toString());
         Vertex b = g.addVertex("B");
         Edge edge = g.addEdge(a,b, "label");
         edge.addEvent(2);
 
         algorithm.compute(TemporalRelation.isAfter, "label");
 
-        algorithm.getGammaTable().print();
+        Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
+
+        Vertex c = g.addVertex("C");
+        edge = g.addEdge(a,c, "label");
+        edge.addEvent(0);
+
+        Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
+
+        algorithm.getGammaTable().clear();
     }
 }

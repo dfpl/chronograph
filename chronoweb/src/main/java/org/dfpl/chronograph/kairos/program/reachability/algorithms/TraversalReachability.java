@@ -1,40 +1,28 @@
 package org.dfpl.chronograph.kairos.program.reachability.algorithms;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.NotDirectoryException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.LoopBundle;
 import io.vertx.core.json.JsonObject;
-import org.dfpl.chronograph.chronoweb.Bootstrap;
-import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.gremlin.LoopBundle;
-
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
-import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.traversal.TraversalEngine;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Graph;
-
-import static org.dfpl.chronograph.chronoweb.Bootstrap.readFile;
+import java.io.FileNotFoundException;
+import java.nio.file.NotDirectoryException;
+import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * {@code TraversalReachability} implements the temporal reachability algorithm
@@ -52,6 +40,16 @@ public class TraversalReachability {
      */
     private final BiPredicate<Long, Long> isAfter = (t, u) -> u < t;
 
+    /**
+     * Return true if the second argument is greater than the first argument
+     */
+    private final BiPredicate<Long, Long> isBefore = (t, u) -> u > t;
+
+    /**
+     * Return true if the first and second arguments are equal
+     */
+    private final BiPredicate<Long, Long> isCotemporal = (t, u) -> Objects.equals(u, t);
+
     public TraversalReachability(Graph g, VertexEvent source, String gammaPrimePath)
             throws NotDirectoryException, FileNotFoundException {
         gammaTable = new FixedSizedGammaTable<>(gammaPrimePath, LongGammaElement.class);
@@ -59,6 +57,14 @@ public class TraversalReachability {
         gammaTable.addSource(sourceVertexId, new LongGammaElement(source.getTime()));
         gamma = gammaTable.getGamma(sourceVertexId);
         engine = new TraversalEngine(g, source, VertexEvent.class, false);
+    }
+
+    public GammaTable<String, Long> getGammaTable() {
+        return this.gammaTable;
+    }
+
+    public Gamma<String, Long> getGamma() {
+        return this.gamma;
     }
 
     public void compute(TemporalRelation tr, String edgeLabel) {
@@ -70,17 +76,17 @@ public class TraversalReachability {
                 return events;
 
             for (Edge edge : outVertex.getEdges(Direction.OUT, edgeLabels)) {
-                Vertex inVertex = edge.getVertex(Direction.IN);
-                boolean isReachable = gamma.getElement(inVertex.getId()) != null;
+                String inVertexId = edge.getVertex(Direction.IN).getId();
+                boolean isReachable = gamma.getElement(inVertexId) != null;
 
-                if (isReachable && gamma.getElement(inVertex.getId()) <= 0)
+                if (isReachable && (isBefore.test(gamma.getElement(inVertexId), vertexEvent.getTime()) || isCotemporal.test(gamma.getElement(inVertexId), vertexEvent.getTime())))
                     continue;
 
                 EdgeEvent event = edge.getEvent(vertexEvent.getTime(), tr);
                 if (event == null)
                     continue;
 
-                if (!isReachable || isAfter.test(gamma.getElement(inVertex.getId()), event.getTime()))
+                if (!isReachable || isAfter.test(gamma.getElement(inVertexId), event.getTime()))
                     events.add(event);
             }
 
@@ -108,12 +114,7 @@ public class TraversalReachability {
         engine.toList();
     }
 
-    public GammaTable<String, Long> getGammaTable() {
-        return this.gammaTable;
-    }
+    public void computeInverse() {
 
-    public Gamma<String, Long> getGamma() {
-        return this.gamma;
     }
-
 }
