@@ -67,7 +67,7 @@ public class SubscriptionRouter extends BaseRouter {
 
 	public void registerSubscribeVertexEventRouter(Router router, EventBus eventBus) {
 
-		router.put("/chronoweb/graph/:time/:kairosProgram/:vertexID").handler(routingContext -> {
+		router.put("/chronoweb/graph/:time/:kairosProgram/:vertexID/:edgeLabel").handler(routingContext -> {
 			long time;
 			try {
 				time = Long.parseLong(routingContext.pathParam("time"));
@@ -85,6 +85,14 @@ public class SubscriptionRouter extends BaseRouter {
 			String vertexID = routingContext.pathParam("vertexID");
 			if (!vPattern.matcher(vertexID).matches()) {
 				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException, 400);
+				return;
+			}
+
+			String edgeLabel = routingContext.pathParam("edgeLabel");
+			try {
+				edgeLabel = routingContext.pathParam("edgeLabel");
+			} catch (Exception e) {
+				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
 				return;
 			}
 
@@ -120,7 +128,7 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 406);
 						return;
 					} else {
-						kairos.addSubscription(v, ve.getTime(), new OutIsAfterReachability(graph, gammaTable));
+						kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterReachability(graph, gammaTable));
 						sendResult(routingContext, 200);
 						return;
 					}
@@ -130,7 +138,7 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 406);
 						return;
 					} else {
-						kairos.addSubscription(v, ve.getTime(), new OutIsAfterPathReachability(graph, gammaTable));
+						kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterPathReachability(graph, gammaTable));
 						sendResult(routingContext, 200);
 						return;
 					}
@@ -151,13 +159,13 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 500);
 						return;
 					}
-					kairos.addSubscription(v, ve.getTime(), new OutIsAfterReachability(graph, gammaTable));
+					kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterReachability(graph, gammaTable));
 					sendResult(routingContext, 200);
 					return;
 				} else if (kairosProgram.equals("OutIsAfterPathReachability")) {
 					ExpandableGammaTable gammaTable = null;
 					gammaTable = new ExpandableGammaTable(kairos.getGammaClient(), time + "_" + kairosProgram);
-					kairos.addSubscription(v, ve.getTime(), new OutIsAfterPathReachability(graph, gammaTable));
+					kairos.addSubscription(v, ve.getTime(), edgeLabel,  new OutIsAfterPathReachability(graph, gammaTable));
 					sendResult(routingContext, 200);
 					return;
 				} else {

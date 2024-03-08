@@ -29,6 +29,8 @@ public abstract class AbstractKairosProgram<E> {
 	 */
 	protected String name;
 
+	protected String edgeLabel;
+
 	/**
 	 * Create a {@code AbstractKairosProgram} with the specified graph, gammaTable,
 	 * and name
@@ -86,8 +88,9 @@ public abstract class AbstractKairosProgram<E> {
 	 * 
 	 * @param sources   a set of source vertices
 	 * @param startTime the reference time
+	 * @param edgeLabel  the edge label to traverse
 	 */
-	public abstract void onInitialization(Set<Vertex> sources, Long startTime);
+	public abstract void onInitialization(Set<Vertex> sources, Long startTime, String edgeLabel);
 
 	/**
 	 * Update the temporal information diffusion result after adding a vertex

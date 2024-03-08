@@ -16,6 +16,7 @@ import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
 import org.dfpl.chronograph.khronos.traversal.TraversalEngine;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
 import java.util.*;
@@ -58,6 +59,9 @@ public class TraversalReachability {
 
     public TraversalReachability(Graph g, VertexEvent source, String gammaPrimePath)
             throws NotDirectoryException, FileNotFoundException {
+        File gammaPrimeDir = new File(gammaPrimePath);
+        if (!gammaPrimeDir.exists())
+            gammaPrimeDir.mkdirs();
         gammaTable = new FixedSizedGammaTable<>(gammaPrimePath, LongGammaElement.class);
         String sourceVertexId = ((Vertex) source.getElement()).getId();
         gammaTable.addSource(sourceVertexId, new LongGammaElement(source.getTime()));
@@ -73,7 +77,7 @@ public class TraversalReachability {
         return this.gamma;
     }
 
-    public void compute(TemporalRelation tr, String edgeLabel) {
+    public Gamma<String, Long> compute(TemporalRelation tr, String edgeLabel) {
         List<String> edgeLabels = List.of(edgeLabel);
         Function<VertexEvent, Set<EdgeEvent>> outEdgeEvents = vertexEvent -> {
             Set<EdgeEvent> events = new HashSet<>();
@@ -113,9 +117,11 @@ public class TraversalReachability {
         engine = engine.inVe();
         engine = engine.loop("s", exitIfEmpty);
         engine.toList();
+
+        return gamma;
     }
 
-    public void computeInverse(TemporalRelation tr, String edgeLabel) {
+    public Gamma<String, Long> computeInverse(TemporalRelation tr, String edgeLabel) {
         List<String> edgeLabels = List.of(edgeLabel);
 
         Function<VertexEvent, Set<EdgeEvent>> inEdgeEvents = vertexEvent -> {
@@ -156,5 +162,7 @@ public class TraversalReachability {
         engine = engine.outVe();
         engine = engine.loop("s", exitIfEmpty);
         engine.toList();
+
+        return gamma;
     }
 }

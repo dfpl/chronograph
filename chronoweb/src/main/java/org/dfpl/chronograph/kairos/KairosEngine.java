@@ -176,16 +176,16 @@ public class KairosEngine {
 		return kairosPrograms.get(startTime);
 	}
 
-	public void addSubscription(Vertex source, Long startTime, AbstractKairosProgram<?> program) {
+	public void addSubscription(Vertex source, Long startTime, String edgeLabel, AbstractKairosProgram<?> program) {
 		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
 		if (programs == null) {
-			programs = new HashSet<AbstractKairosProgram<?>>();
+			programs = new HashSet<>();
 			programs.add(program);
 			kairosPrograms.put(startTime, programs);
 		} else {
 			programs.add(program);
 		}
-		program.onInitialization(Set.of(source), startTime);
+		program.onInitialization(Set.of(source), startTime, edgeLabel);
 	}
 
 }
