@@ -1,20 +1,11 @@
 package org.dfpl.chronograph.kairos.program.reachability;
 
-import java.io.FileNotFoundException;
-import java.nio.file.NotDirectoryException;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import com.tinkerpop.blueprints.*;
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
-import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
@@ -22,6 +13,14 @@ import org.dfpl.chronograph.kairos.program.reachability.algorithms.TraversalReac
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
+
+import java.io.FileNotFoundException;
+import java.nio.file.NotDirectoryException;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 
