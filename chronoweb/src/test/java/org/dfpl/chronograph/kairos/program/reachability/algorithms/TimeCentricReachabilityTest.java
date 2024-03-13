@@ -23,7 +23,7 @@ public class TimeCentricReachabilityTest {
     public static final String EDGE_LABEL = "label";
 
     @Test
-    public void testIsAfterAlgor() throws NotDirectoryException, FileNotFoundException {
+    public void testIsAfterAlgo() throws NotDirectoryException, FileNotFoundException {
         Graph g = new MChronoGraph();
 
         Vertex a = g.addVertex("A");

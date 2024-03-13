@@ -45,7 +45,7 @@ public class TraversalReachability {
     private final static BiPredicate<Long, Long> IS_COTEMPORAL = (t, u) -> Objects.equals(u, t);
     private GammaTable<String, Long> gammaTable;
     private Gamma<String, Long> gamma;
-    TraversalEngine engine;
+
     private long computationTime = 0;
 
     private final Predicate<LoopBundle<Event>> exitIfEmpty = loopBundle -> {
@@ -54,16 +54,12 @@ public class TraversalReachability {
         return traverserSet != null && !traverserSet.isEmpty();
     };
 
-    public TraversalReachability(Graph g, VertexEvent source, String gammaPrimePath)
+    public TraversalReachability(String gammaPrimePath)
             throws NotDirectoryException, FileNotFoundException {
         File gammaPrimeDir = new File(gammaPrimePath);
         if (!gammaPrimeDir.exists())
             gammaPrimeDir.mkdirs();
         gammaTable = new FixedSizedGammaTable<>(gammaPrimePath, LongGammaElement.class);
-        String sourceVertexId = ((Vertex) source.getElement()).getId();
-        gammaTable.addSource(sourceVertexId, new LongGammaElement(source.getTime()));
-        gamma = gammaTable.getGamma(sourceVertexId);
-        engine = new TraversalEngine(g, source, VertexEvent.class, false);
     }
 
     public GammaTable<String, Long> getGammaTable() {
@@ -74,7 +70,7 @@ public class TraversalReachability {
         return this.gamma;
     }
 
-    public Gamma<String, Long> compute(TemporalRelation tr, String edgeLabel) {
+    public Gamma<String, Long> compute(Graph g, VertexEvent source, TemporalRelation tr, String edgeLabel) {
         List<String> edgeLabels = List.of(edgeLabel);
         Function<VertexEvent, Set<EdgeEvent>> outEdgeEvents = vertexEvent -> {
             Set<EdgeEvent> events = new HashSet<>();
@@ -108,6 +104,11 @@ public class TraversalReachability {
                 gamma.setElement(inVertexId, new LongGammaElement(event.getTime()));
         };
 
+        String sourceVertexId = ((Vertex) source.getElement()).getId();
+        gammaTable.addSource(sourceVertexId, new LongGammaElement(source.getTime()));
+        gamma = gammaTable.getGamma(sourceVertexId);
+
+        TraversalEngine engine = new TraversalEngine(g, source, VertexEvent.class, false);
         engine = engine.as("s");
         engine = engine.flatMap(outEdgeEvents, EdgeEvent.class);
         engine = engine.sideEffect(storeGamma);
@@ -118,7 +119,7 @@ public class TraversalReachability {
         return gamma;
     }
 
-    public Gamma<String, Long> computeInverse(TemporalRelation tr, String edgeLabel) {
+    public Gamma<String, Long> computeInverse(Graph g, VertexEvent source, TemporalRelation tr, String edgeLabel) {
         List<String> edgeLabels = List.of(edgeLabel);
 
         Function<VertexEvent, Set<EdgeEvent>> inEdgeEvents = vertexEvent -> {
@@ -153,6 +154,11 @@ public class TraversalReachability {
                 gamma.setElement(outVertexId, new LongGammaElement(event.getTime()));
         };
 
+        String sourceVertexId = ((Vertex) source.getElement()).getId();
+        gammaTable.addSource(sourceVertexId, new LongGammaElement(source.getTime()));
+        gamma = gammaTable.getGamma(sourceVertexId);
+
+        TraversalEngine engine = new TraversalEngine(g, source, VertexEvent.class, false);
         engine = engine.as("s");
         engine = engine.flatMap(inEdgeEvents, EdgeEvent.class);
         engine = engine.sideEffect(storeGamma);

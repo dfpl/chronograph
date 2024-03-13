@@ -64,8 +64,8 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
         String gammaPrimePath = String.format("%s\\onAdd\\%s", ((FixedSizedGammaTable<String, Long>) this.gammaTable).getDirectory().getPath(), sourcePrime.getId());
 
         try {
-            TraversalReachability algorithm = new TraversalReachability(this.graph, sourcePrime, gammaPrimePath);
-            Set<Map.Entry<String, Long>> gammaPrime = algorithm.compute(TemporalRelation.isAfter, this.edgeLabel).toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null).collect(Collectors.toSet());
+            TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
+            Set<Map.Entry<String, Long>> gammaPrime = algorithm.compute(this.graph, sourcePrime, TemporalRelation.isAfter, this.edgeLabel).toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null).collect(Collectors.toSet());
 
             // Step 2: Updating the Gamma Table
             for (Map.Entry<String, Long> entry : gammaPrime) {
@@ -91,8 +91,8 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
         String gammaPrimePath = String.format("%s\\onRemove\\%s", ((FixedSizedGammaTable<String, Long>) this.gammaTable).getDirectory().getPath(), sourcePrime.getId());
 
         try {
-            TraversalReachability algorithm = new TraversalReachability(this.graph, sourcePrime, gammaPrimePath);
-            Set<String> gammaPrime = algorithm.computeInverse(TemporalRelation.isBefore, this.edgeLabel).toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
+            TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
+            Set<String> gammaPrime = algorithm.computeInverse(this.graph, sourcePrime, TemporalRelation.isBefore, this.edgeLabel).toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
                     .map(Map.Entry::getKey).collect(Collectors.toSet());
 
             // Step 2: Invalidate gamma values
