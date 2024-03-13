@@ -75,13 +75,13 @@ public class TimeCentricReachability {
                 Vertex inV = event.getVertex(Direction.IN);
 
                 sourceVertices.forEach(sourceVertex -> {
-                    Gamma<String, Long> gamma = gammaTable.getGamma(sourceVertex.getId());
-                    boolean isReachable = gamma.getElement(outV.getId()) != null;
+                    Map<String, Long> gamma = gammaTable.getGamma(sourceVertex.getId()).toMap(true);
+                    boolean isReachable = gamma.get(outV.getId()) != null;
 
                     if (!isReachable)
                         return;
 
-                    Long gammaValue = gamma.getElement(inV.getId());
+                    Long gammaValue = gamma.get(inV.getId());
 
                     if (gammaValue == null || IS_AFTER.test(gammaValue, event.getTime()))
                         gammaTable.set(sourceVertex.getId(), inV.getId(), new LongGammaElement(event.getTime()));

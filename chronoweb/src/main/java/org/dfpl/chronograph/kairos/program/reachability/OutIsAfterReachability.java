@@ -9,6 +9,7 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
+import org.dfpl.chronograph.kairos.gamma.GammaElement;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
@@ -19,8 +20,7 @@ import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
 
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -41,6 +41,8 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
      * Return true if the second argument is less than the first argument
      */
     BiPredicate<Long, Long> targetTest = (t, u) -> u < t;
+
+    private final static BiPredicate<Long, Long> IS_COTEMPORAL = (t, u) -> Objects.equals(u, t);
 
     @Override
     public void onInitialization(Set<Vertex> sources, Long startTime, String edgeLabel) {
@@ -65,34 +67,35 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 
         try {
             TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
-            Set<Map.Entry<String, Long>> gammaPrime = algorithm.compute(this.graph, sourcePrime, TemporalRelation.isAfter, this.edgeLabel).toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null).collect(Collectors.toSet());
+            Map<String, LongGammaElement> gammaPrime = new HashMap<>();
+            algorithm.compute(this.graph, sourcePrime, TemporalRelation.isAfter, this.edgeLabel)
+                    .toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
+                    .forEach(entry -> {
+                        gammaPrime.put(entry.getKey(), new LongGammaElement(entry.getValue()));
+                    });
 
             // Step 2: Updating the Gamma Table
-            for (Map.Entry<String, Long> entry : gammaPrime) {
-                synchronized (gammaTable) {
-                    gammaTable.update(iPrime.getId(), sourceTest, entry.getKey(), new LongGammaElement(entry.getValue()), targetTest);
-                    gammaTable.print();
-                }
-            }
+            ((FixedSizedGammaTable) this.gammaTable).update(iPrime.getId(), sourceTest, addedEvent.getTime(), gammaPrime, targetTest);
+
             algorithm.getGammaTable().clear();
         } catch (NotDirectoryException | FileNotFoundException e) {
             e.printStackTrace();
         }
-        gammaTable.print();
+        this.gammaTable.print();
     }
 
     @Override
     public void onRemoveEdgeEvent(EdgeEvent removedEdge) {
-        // TODO Auto-generated method stub
         // Step 1: Compute immediate results using traversal approach
-        Vertex iPrime = removedEdge.getVertex(Direction.IN);
+        Vertex iPrime = removedEdge.getVertex(Direction.OUT);
 
         VertexEvent sourcePrime = new MChronoVertexEvent(iPrime, removedEdge.getTime());
         String gammaPrimePath = String.format("%s\\onRemove\\%s", ((FixedSizedGammaTable<String, Long>) this.gammaTable).getDirectory().getPath(), sourcePrime.getId());
 
         try {
             TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
-            Set<String> gammaPrime = algorithm.computeInverse(this.graph, sourcePrime, TemporalRelation.isBefore, this.edgeLabel).toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
+            Set<String> gammaPrime = algorithm.computeInverse(this.graph, sourcePrime, TemporalRelation.isBefore, this.edgeLabel)
+                    .toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
                     .map(Map.Entry::getKey).collect(Collectors.toSet());
 
             // Step 2: Invalidate gamma values
@@ -102,22 +105,26 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
                 Map<String, Long> gamma = this.gammaTable.getGamma(source.getId()).toMap(true);
 
                 for (Map.Entry<String, Long> entry : gamma.entrySet()) {
+                    Long currValue = gamma.get(entry.getKey());
 
-                    if (gamma.get(entry.getKey()) != null && this.targetTest.test(gamma.get(entry.getKey()), removedEdge.getTime())) {
-                        this.gammaTable.set(source.getId(), entry.getKey(), null);
+                    if (currValue == null)
+                        continue;
+
+                    if (this.targetTest.test(currValue, removedEdge.getTime()) || IS_COTEMPORAL.test(currValue, removedEdge.getTime())) {
+                        this.gammaTable.invalidate(source.getId(), entry.getKey());
                     }
                 }
-
             }
+            algorithm.getGammaTable().clear();
+
             // Step 3: Re-compute Gamma Table using time-centric approach
             new TimeCentricReachability(this.graph, this.gammaTable).compute(sourcesPrime, removedEdge.getTime(), TR, this.edgeLabel, true);
 
-            algorithm.getGammaTable().clear();
         } catch (NotDirectoryException | FileNotFoundException e) {
             e.printStackTrace();
         }
 
-
+        this.gammaTable.print();
     }
 
     @Override

@@ -115,4 +115,5 @@ public interface GammaTable<K, E> {
 	 */
 	public void print();
 
+    public void invalidate(K id, K key);
 }

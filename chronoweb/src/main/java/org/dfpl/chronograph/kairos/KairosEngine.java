@@ -21,6 +21,9 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
 import io.vertx.core.eventbus.EventBus;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoEdgeEvent;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
 @SuppressWarnings("unused")
 public class KairosEngine {
@@ -124,13 +127,18 @@ public class KairosEngine {
 		});
 
 		this.mainEventBus.consumer("removeEdgeEvent", ee -> {
-			Server.logger.debug("kairos addEdgeEvent: " + ee.body());
+			Server.logger.debug("kairos removeEdgeEvent: " + ee.body());
 			kairosPrograms.forEach((start, programs) -> {
 				programs.forEach(program -> {
 					String eeString = ee.body().toString();
 					String[] arr = eeString.split("_");
 					Edge e = graph.getEdge(arr[0]);
-					EdgeEvent removedEdgeEvent = e.getEvent(Long.parseLong(arr[1]));
+					EdgeEvent removedEdgeEvent = null;
+					if (graph instanceof MChronoGraph)
+					 	removedEdgeEvent = new MChronoEdgeEvent(e, Long.parseLong(arr[1])) ;
+					else if (graph instanceof PChronoGraph) {
+						// TODO
+					}
 					program.onRemoveEdgeEvent(removedEdgeEvent);
 				});
 			});

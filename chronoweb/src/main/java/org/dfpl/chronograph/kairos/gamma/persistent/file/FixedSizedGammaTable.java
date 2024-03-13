@@ -5,10 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.NotDirectoryException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
@@ -195,7 +192,7 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 		Integer idx = idToIdx.get(from);
 		if (idx == null)
 			return null;
-		return new FixedSizedGamma<K, E>(this, gammaMap.get(idx));
+		return new FixedSizedGamma<>(this, gammaMap.get(idx));
 	}
 
 	@Override
@@ -225,12 +222,45 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 		gammaMap.values().forEach(gamma -> {
 			try {
 				E checkValue = getElement(checkPos, gamma);
+
 				if (!testCheck.test(checkValue))
 					return;
 
 				if (testUpdate.test(getElement(updatePos, gamma), newValue.getElement())) {
 					setElement(updatePos, gamma, newValue);
 				}
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+		});
+		gammaWriteLock.unlock();
+	}
+
+	public void update(K check, Predicate<E> testCheck, E newCheckValue, Map<K, GammaElement<E>> updates,
+					   BiPredicate<E, E> testUpdate) {
+
+		gammaWriteLock.lock();
+		int checkIdx = getID(check);
+		long checkPos = getSeekPos(checkIdx);
+		gammaMap.values().forEach(gamma -> {
+			try {
+				E checkValue = getElement(checkPos, gamma);
+
+				if (!testCheck.test(checkValue))
+					return;
+
+				if (checkValue == null || testUpdate.test(checkValue, newCheckValue))
+					return;
+
+				for(Map.Entry<K, GammaElement<E>> update: updates.entrySet()){
+					int updateIdx = getID(update.getKey());
+					long updatePos = getSeekPos(updateIdx);
+					if (testUpdate.test(getElement(updatePos, gamma), update.getValue().getElement())) {
+						setElement(updatePos, gamma, update.getValue());
+					}
+				}
+
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -303,6 +333,25 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 		for (K s : getSources()) {
 			System.out.println(s + " -> " + getGamma(s).toMap(true));
 		}
+	}
+
+	@Override
+	public void invalidate(K from, K to) {
+		gammaWriteLock.lock();
+		int fromIdx = getID(from);
+		int toIdx = getID(to);
+		long toPos = getSeekPos(toIdx);
+		RandomAccessFile gamma = gammaMap.get(fromIdx);
+
+		byte[] fill = new byte[elementByteSize];
+		Arrays.fill(fill, gammaElementConverter.getDefaultByteValue());
+		try {
+			gamma.seek(toPos);
+			gamma.write(fill);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		gammaWriteLock.unlock();
 	}
 
 	@Override
