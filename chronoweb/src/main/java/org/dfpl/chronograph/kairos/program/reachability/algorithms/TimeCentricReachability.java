@@ -1,14 +1,11 @@
 package org.dfpl.chronograph.kairos.program.reachability.algorithms;
 
 import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.Event;
 import org.dfpl.chronograph.common.TemporalRelation;
-import org.dfpl.chronograph.common.VertexEvent;
-import org.dfpl.chronograph.kairos.gamma.Gamma;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
@@ -17,9 +14,10 @@ import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiPredicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TimeCentricReachability {

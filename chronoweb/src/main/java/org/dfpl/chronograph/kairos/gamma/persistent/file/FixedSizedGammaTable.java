@@ -262,7 +262,6 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 				}
 
 			} catch (IOException e) {
-
 				e.printStackTrace();
 			}
 		});

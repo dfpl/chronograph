@@ -9,7 +9,6 @@ import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.TemporalRelation;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.AbstractKairosProgram;
-import org.dfpl.chronograph.kairos.gamma.GammaElement;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
@@ -20,7 +19,10 @@ import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
 
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -28,21 +30,20 @@ import java.util.stream.Collectors;
 public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
     public static final TemporalRelation TR = TemporalRelation.isAfter;
 
-    public OutIsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
-        super(graph, gammaTable, "OutIsAfterReachability");
-    }
-
     /**
      * Return true if the source value has a valid value
      */
-    Predicate<Long> sourceTest = t -> t != 9187201950435737471l;
+    public static final Predicate<Long> IS_SOURCE_VALID = t -> t != 9187201950435737471L;
 
     /**
      * Return true if the second argument is less than the first argument
      */
-    BiPredicate<Long, Long> targetTest = (t, u) -> u < t;
-
+    public static final BiPredicate<Long, Long> IS_AFTER = (t, u) -> u < t;
     private final static BiPredicate<Long, Long> IS_COTEMPORAL = (t, u) -> Objects.equals(u, t);
+
+    public OutIsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
+        super(graph, gammaTable, "OutIsAfterReachability");
+    }
 
     @Override
     public void onInitialization(Set<Vertex> sources, Long startTime, String edgeLabel) {
@@ -50,7 +51,7 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 
         synchronized (this.gammaTable) {
             for (Vertex sourceVertex : sources) {
-                gammaTable.addSource(sourceVertex.getId(), new LongGammaElement(startTime));
+                this.gammaTable.addSource(sourceVertex.getId(), new LongGammaElement(startTime));
             }
         }
         new TimeCentricReachability(this.graph, this.gammaTable).compute(sources, startTime, TR, this.edgeLabel, true);
@@ -68,14 +69,14 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
         try {
             TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
             Map<String, LongGammaElement> gammaPrime = new HashMap<>();
-            algorithm.compute(this.graph, sourcePrime, TemporalRelation.isAfter, this.edgeLabel)
+            algorithm.compute(this.graph, sourcePrime, TR, this.edgeLabel)
                     .toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
                     .forEach(entry -> {
                         gammaPrime.put(entry.getKey(), new LongGammaElement(entry.getValue()));
                     });
 
             // Step 2: Updating the Gamma Table
-            ((FixedSizedGammaTable) this.gammaTable).update(iPrime.getId(), sourceTest, addedEvent.getTime(), gammaPrime, targetTest);
+            ((FixedSizedGammaTable) this.gammaTable).update(iPrime.getId(), IS_SOURCE_VALID, addedEvent.getTime(), gammaPrime, IS_AFTER);
 
             algorithm.getGammaTable().clear();
         } catch (NotDirectoryException | FileNotFoundException e) {
@@ -110,7 +111,7 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
                     if (currValue == null)
                         continue;
 
-                    if (this.targetTest.test(currValue, removedEdge.getTime()) || IS_COTEMPORAL.test(currValue, removedEdge.getTime())) {
+                    if (IS_AFTER.test(currValue, removedEdge.getTime()) || IS_COTEMPORAL.test(currValue, removedEdge.getTime())) {
                         this.gammaTable.invalidate(source.getId(), entry.getKey());
                     }
                 }
