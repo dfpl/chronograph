@@ -43,16 +43,14 @@ public class TraversalReachability {
      * Return true if the first and second arguments are equal
      */
     private final static BiPredicate<Long, Long> IS_COTEMPORAL = (t, u) -> Objects.equals(u, t);
-    private GammaTable<String, Long> gammaTable;
-    private Gamma<String, Long> gamma;
 
-    private long computationTime = 0;
-
-    private final Predicate<LoopBundle<Event>> exitIfEmpty = loopBundle -> {
+    private final static Predicate<LoopBundle<Event>> IS_EMPTY = loopBundle -> {
         Collection<Event> traverserSet = loopBundle.getTraverserSet();
 
         return traverserSet != null && !traverserSet.isEmpty();
     };
+    private GammaTable<String, Long> gammaTable;
+    private Gamma<String, Long> gamma;
 
     public TraversalReachability(String gammaPrimePath)
             throws NotDirectoryException, FileNotFoundException {
@@ -71,37 +69,23 @@ public class TraversalReachability {
     }
 
     public Gamma<String, Long> compute(Graph g, VertexEvent source, TemporalRelation tr, String edgeLabel) {
-        List<String> edgeLabels = List.of(edgeLabel);
-        Function<VertexEvent, Set<EdgeEvent>> outEdgeEvents = vertexEvent -> {
-            Set<EdgeEvent> events = new HashSet<>();
-            Vertex outVertex = (Vertex) vertexEvent.getElement();
-            if (gamma.getElement(outVertex.getId()) == null)
-                return events;
+        Consumer<EdgeEvent> storeGamma = event -> {
+            if (event == null)
+                return;
 
-            for (Edge edge : outVertex.getEdges(Direction.OUT, edgeLabels)) {
-                String inVertexId = edge.getVertex(Direction.IN).getId();
-                boolean isReachable = gamma.getElement(inVertexId) != null;
-
-                if (isReachable && (IS_BEFORE.test(gamma.getElement(inVertexId), vertexEvent.getTime()) || IS_COTEMPORAL.test(gamma.getElement(inVertexId), vertexEvent.getTime())))
-                    continue;
-
-                EdgeEvent event = edge.getEvent(vertexEvent.getTime(), tr);
-                if (event == null)
-                    continue;
-
-                if (!isReachable || IS_AFTER.test(gamma.getElement(inVertexId), event.getTime()))
-                    events.add(event);
-            }
-
-            return events;
+            String inVertexId = event.getVertex(Direction.IN).getId();
+            gamma.setElement(inVertexId, new LongGammaElement(event.getTime()));
         };
 
-        Consumer<EdgeEvent> storeGamma = event -> {
-            String inVertexId = event.getVertex(Direction.IN).getId();
-            boolean isReachable = gamma.getElement(inVertexId) != null;
+        Predicate<EdgeEvent> affectsGamma = edgeEvent -> {
+            if (edgeEvent == null)
+                return false;
 
-            if (!isReachable || IS_AFTER.test(gamma.getElement(inVertexId), event.getTime()))
-                gamma.setElement(inVertexId, new LongGammaElement(event.getTime()));
+            String inVertexId = edgeEvent.getVertex(Direction.IN).getId();
+            Long currValue = gamma.getElement(inVertexId);
+            boolean isReachable = currValue != null;
+
+            return !isReachable || IS_AFTER.test(currValue, edgeEvent.getTime());
         };
 
         String sourceVertexId = ((Vertex) source.getElement()).getId();
@@ -110,48 +94,32 @@ public class TraversalReachability {
 
         TraversalEngine engine = new TraversalEngine(g, source, VertexEvent.class, false);
         engine = engine.as("s");
-        engine = engine.flatMap(outEdgeEvents, EdgeEvent.class);
+        engine = engine.outEe(tr, edgeLabel);
+        engine = engine.filter(affectsGamma);
         engine = engine.sideEffect(storeGamma);
         engine = engine.inVe();
-        engine = engine.loop("s", exitIfEmpty);
+        engine = engine.loop("s", IS_EMPTY);
         engine.toList();
 
         return gamma;
     }
 
     public Gamma<String, Long> computeInverse(Graph g, VertexEvent source, TemporalRelation tr, String edgeLabel) {
-        List<String> edgeLabels = List.of(edgeLabel);
 
-        Function<VertexEvent, Set<EdgeEvent>> inEdgeEvents = vertexEvent -> {
-            Set<EdgeEvent> events = new HashSet<>();
-            Vertex inVertex = (Vertex) vertexEvent.getElement();
-            if (gamma.getElement(inVertex.getId()) == null)
-                return events;
+        Predicate<EdgeEvent> affectsGamma = edgeEvent -> {
+            if (edgeEvent == null)
+                return false;
 
-            for (Edge edge : inVertex.getEdges(Direction.IN, edgeLabels)) {
-                String outVertexId = edge.getVertex(Direction.OUT).getId();
-                boolean isReachable = gamma.getElement(outVertexId) != null;
+            String outVertexId = edgeEvent.getVertex(Direction.OUT).getId();
+            Long currValue = gamma.getElement(outVertexId);
+            boolean isReachable = currValue != null;
 
-                if (isReachable &&
-                        (IS_AFTER.test(gamma.getElement(outVertexId), vertexEvent.getTime()) || IS_AFTER.test(gamma.getElement(outVertexId), vertexEvent.getTime())))
-                    continue;
-
-                EdgeEvent event = edge.getEvent(vertexEvent.getTime(), tr);
-                if (event == null)
-                    continue;
-
-                if (!isReachable || IS_AFTER.test(gamma.getElement(inVertex.getId()), event.getTime()))
-                    events.add(event);
-            }
-            return events;
+            return !isReachable || IS_AFTER.test(currValue, edgeEvent.getTime());
         };
 
         Consumer<EdgeEvent> storeGamma = event -> {
             String outVertexId = event.getVertex(Direction.OUT).getId();
-            boolean isReachable = gamma.getElement(outVertexId) != null;
-
-            if (!isReachable || IS_AFTER.test(gamma.getElement(outVertexId), event.getTime()))
-                gamma.setElement(outVertexId, new LongGammaElement(event.getTime()));
+            gamma.setElement(outVertexId, new LongGammaElement(event.getTime()));
         };
 
         String sourceVertexId = ((Vertex) source.getElement()).getId();
@@ -160,10 +128,11 @@ public class TraversalReachability {
 
         TraversalEngine engine = new TraversalEngine(g, source, VertexEvent.class, false);
         engine = engine.as("s");
-        engine = engine.flatMap(inEdgeEvents, EdgeEvent.class);
+        engine = engine.inEe(tr, edgeLabel);
+        engine = engine.filter(affectsGamma);
         engine = engine.sideEffect(storeGamma);
         engine = engine.outVe();
-        engine = engine.loop("s", exitIfEmpty);
+        engine = engine.loop("s", IS_EMPTY);
         engine.toList();
 
         return gamma;

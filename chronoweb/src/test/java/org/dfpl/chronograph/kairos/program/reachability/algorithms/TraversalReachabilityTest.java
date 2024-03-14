@@ -30,13 +30,9 @@ public class TraversalReachabilityTest {
         Vertex a = new MChronoVertex(g, "A");
         VertexEvent sourceEvent = new MChronoVertexEvent(a, 1L);
         FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<>(TEMP_DIR, LongGammaElement.class);
+        String onAddPath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(), sourceEvent.getTime());
 
-        String gammaPrimePath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(), sourceEvent.getTime());
-        File subDirectory = new File(gammaPrimePath);
-        if (!subDirectory.exists())
-            subDirectory.mkdirs();
-
-        TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
+        TraversalReachability algorithm = new TraversalReachability(onAddPath);
 
         Vertex b = g.addVertex("B");
         Edge edge = g.addEdge(a, b, EDGE_LABEL);
@@ -51,7 +47,7 @@ public class TraversalReachabilityTest {
         edge.addEvent(0);
 
         algorithm.getGammaTable().clear();
-        algorithm = new TraversalReachability(gammaPrimePath);
+        algorithm = new TraversalReachability(onAddPath);
         algorithm.compute(g, sourceEvent, TemporalRelation.isAfter, EDGE_LABEL);
 
         Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
