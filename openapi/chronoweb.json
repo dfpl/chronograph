@@ -4048,7 +4048,7 @@
         }
       }
     },
-    "/graph/{time}/{kairosProgram}/{vertexID}": {
+    "/graph/{time}/{kairosProgram}/{edgeLabel}/{vertexID}": {
       "put": {
         "tags": [
           "incremental computation"
@@ -4084,6 +4084,23 @@
                 "IsAfterReachability"
               ]
             }
+          },
+          {
+            "name": "edgeLabel",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            },
+            "description": "the edge label to match"
           },
           {
             "name": "vertexID",
@@ -4297,6 +4314,23 @@
                 "IsAfterReachability"
               ]
             }
+          },
+          {
+            "name": "edgeLabel",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            },
+            "description": "the edge label to match"
           },
           {
             "name": "vertexID",
@@ -4607,13 +4641,13 @@
         }
       }
     },
-    "/gammaTable/{time}/{kairosProgram}": {
+    "/gammaTable/{time}/{kairosProgram}/{edgeLabel}": {
       "get": {
         "tags": [
           "incremental computation"
         ],
-        "summary": "Retrieves a gamma table for {time} and {kairosProgram}",
-        "description": "Retrieves a gamma table for {time} and {kairosProgram}",
+        "summary": "Retrieves a gamma table for {time}, {kairosProgram}, and {edgeLabel}",
+        "description": "Retrieves a gamma table for {time}, {kairosProgram}, and {edgeLabel}",
         "parameters": [
           {
             "name": "time",
@@ -4643,6 +4677,23 @@
                 "IsAfterReachability"
               ]
             }
+          },
+          {
+            "name": "edgeLabel",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            },
+            "description": "the edge label to match"
           }
         ],
         "responses": {
@@ -4763,13 +4814,13 @@
         }
       }
     },
-    "/gammaTable/{time}/{kairosProgram}/{vertexID}": {
+    "/gammaTable/{time}/{kairosProgram}/{edgeLabel}/{vertexID}": {
       "get": {
         "tags": [
           "incremental computation"
         ],
-        "summary": "Retrieves a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
-        "description": "Retrieves a gamma for a source vertex in a gamma table for {time} and {kairosProgram}",
+        "summary": "Retrieves a gamma for a source vertex in a gamma table for {time}, {edgeLabel}, and {kairosProgram}",
+        "description": "Retrieves a gamma for a source vertex in a gamma table for {time}, {edgeLabel}, and {kairosProgram}",
         "parameters": [
           {
             "name": "time",
@@ -4799,6 +4850,23 @@
                 "IsAfterReachability"
               ]
             }
+          },
+          {
+            "name": "edgeLabel",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "An edge label",
+              "schema": {
+                "type": "string",
+                "pattern": "^[^|_]+$"
+              },
+              "examples": [
+                "isConnectedTo",
+                "hasFriend"
+              ]
+            },
+            "description": "the edge label to match"
           },
           {
             "name": "vertexID",

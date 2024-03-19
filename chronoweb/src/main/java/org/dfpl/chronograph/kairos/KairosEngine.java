@@ -168,12 +168,12 @@ public class KairosEngine {
 		return set;
 	}
 
-	public AbstractKairosProgram<?> getProgram(Long startTime, String name) {
+	public AbstractKairosProgram<?> getProgram(Long startTime, String name, String edgeLabel) {
 		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
 		if (programs == null)
 			return null;
 		for (AbstractKairosProgram<?> program : programs) {
-			if (program.getName().equals(name)) {
+			if (program.getName().equals(name) & program.getEdgeLabel().equals(edgeLabel)) {
 				return program;
 			}
 		}

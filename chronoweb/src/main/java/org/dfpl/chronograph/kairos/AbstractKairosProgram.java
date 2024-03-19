@@ -84,6 +84,12 @@ public abstract class AbstractKairosProgram<E> {
 	}
 
 	/**
+	 * Return the edge label of the program
+	 * @return
+	 */
+	public String getEdgeLabel() { return edgeLabel; }
+
+	/**
 	 * Initialize the Gamma Table given the sources and start time
 	 * 
 	 * @param sources   a set of source vertices
