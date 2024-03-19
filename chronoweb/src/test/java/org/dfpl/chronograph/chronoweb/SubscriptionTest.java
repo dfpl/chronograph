@@ -21,7 +21,7 @@ public class SubscriptionTest {
     static String SOURCE_TIME;
 
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() {
         HOST = "http://localhost/chronoweb";
         EDGE_LABEL = "label";
         KAIROS_PROGRAM_NAME = "OutIsAfterReachability";
