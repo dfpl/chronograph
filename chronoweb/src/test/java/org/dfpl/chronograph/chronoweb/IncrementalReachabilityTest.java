@@ -20,9 +20,10 @@ public class IncrementalReachabilityTest {
 		String graphFile = "D:\\chronoweb\\datasets\\email.txt"; // input graph
 
 		String host = "http://localhost/chronoweb";
+		String edgeLabel = "label";
 
 		// 1. SUBSCRIBE
-		subscribe(host, sourceVertex, sourceTime);
+		subscribe(host, sourceVertex, edgeLabel, sourceTime);
 
 		int lineRead = 0;
 		BufferedReader br = new BufferedReader(new FileReader(graphFile));
@@ -44,7 +45,7 @@ public class IncrementalReachabilityTest {
 
 			Long startTime = System.currentTimeMillis();
 			// 3. GET
-			getReachability(host, sourceVertex, sourceTime);
+			getReachability(host, sourceVertex, edgeLabel, sourceTime);
 			Long computationTime = System.currentTimeMillis() - startTime;
 
 			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true));
@@ -60,8 +61,8 @@ public class IncrementalReachabilityTest {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static void getReachability(String host, Integer sourceVertex, Integer sourceTime) throws IOException {
-		String getURLString = String.format("%s/gammaTable/%s/IsAfterReachability/%s", host, sourceTime, sourceVertex);
+	private static void getReachability(String host, Integer sourceVertex, String edgeLabel, Integer sourceTime) throws IOException {
+		String getURLString = String.format("%s/gammaTable/%s/OutIsAfterReachability/%s/%s", host, sourceTime, edgeLabel, sourceVertex);
 
 		URL getURL = new URL(getURLString);
 
@@ -92,8 +93,8 @@ public class IncrementalReachabilityTest {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void subscribe(String host, Integer sourceVertex, Integer sourceTime) throws IOException {
-		String subURLString = String.format("%s/graph/%s/IsAfterReachability/%s", host, sourceTime, sourceVertex);
+	public static void subscribe(String host, Integer sourceVertex, String edgeLabel, Integer sourceTime) throws IOException {
+		String subURLString = String.format("%s/graph/%s/OutIsAfterReachability/%s/%s", host, sourceTime, edgeLabel, sourceVertex);
 		URL subURL = new URL(subURLString);
 		HttpURLConnection subCon = (HttpURLConnection) subURL.openConnection();
 		subCon.setRequestMethod("PUT");
