@@ -1095,7 +1095,7 @@ public class TraversalEngine implements GremlinFluentPipeline {
 
 		// Pipeline Update
 		stream = stream.flatMap(ve -> {
-			return iterableToStream(((VertexEvent) g).getEdgeEvents(Direction.OUT, tr, label));
+			return iterableToStream(((VertexEvent) ve).getEdgeEvents(Direction.OUT, tr, label));
 		});
 
 		// Set Class
@@ -1117,7 +1117,7 @@ public class TraversalEngine implements GremlinFluentPipeline {
 
 		// Pipeline Update
 		stream = stream.flatMap(ve -> {
-			return iterableToStream(((VertexEvent) g).getEdgeEvents(Direction.IN, tr, label));
+			return iterableToStream(((VertexEvent) ve).getEdgeEvents(Direction.IN, tr, label));
 		});
 
 		// Set Class

@@ -1,6 +1,7 @@
 package org.dfpl.chronograph.khronos.manipulation.memory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.dfpl.chronograph.common.EdgeEvent;
@@ -140,6 +141,11 @@ public class MChronoEdge extends MChronoElement implements Edge {
 
 	@Override
 	public void removeEvents(long time, TemporalRelation temporalRelation) {
+		Set<EdgeEvent> removedEvents = this.events.stream().filter(event -> TimeInstant.getTemporalRelation(time, event.getTime()).equals(temporalRelation)).collect(Collectors.toSet());
 		this.events.removeIf(event -> TimeInstant.getTemporalRelation(time, event.getTime()).equals(temporalRelation));
+		removedEvents.forEach(event -> {
+			if (((MChronoGraph) g).getEventBus() != null)
+				((MChronoGraph) g).getEventBus().send("removeEdgeEvent", event.getId());
+		});
 	}
 }

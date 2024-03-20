@@ -196,4 +196,9 @@ public class ExpandableGammaTable implements GammaTable<String, Document> {
 		}
 	}
 
+	@Override
+	public void invalidate(String id, String key) {
+
+	}
+
 }

@@ -21,6 +21,9 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
 import io.vertx.core.eventbus.EventBus;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoEdgeEvent;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
 @SuppressWarnings("unused")
 public class KairosEngine {
@@ -124,13 +127,18 @@ public class KairosEngine {
 		});
 
 		this.mainEventBus.consumer("removeEdgeEvent", ee -> {
-			Server.logger.debug("kairos addEdgeEvent: " + ee.body());
+			Server.logger.debug("kairos removeEdgeEvent: " + ee.body());
 			kairosPrograms.forEach((start, programs) -> {
 				programs.forEach(program -> {
 					String eeString = ee.body().toString();
 					String[] arr = eeString.split("_");
 					Edge e = graph.getEdge(arr[0]);
-					EdgeEvent removedEdgeEvent = e.getEvent(Long.parseLong(arr[1]));
+					EdgeEvent removedEdgeEvent = null;
+					if (graph instanceof MChronoGraph)
+					 	removedEdgeEvent = new MChronoEdgeEvent(e, Long.parseLong(arr[1])) ;
+					else if (graph instanceof PChronoGraph) {
+						// TODO
+					}
 					program.onRemoveEdgeEvent(removedEdgeEvent);
 				});
 			});
@@ -160,12 +168,12 @@ public class KairosEngine {
 		return set;
 	}
 
-	public AbstractKairosProgram<?> getProgram(Long startTime, String name) {
+	public AbstractKairosProgram<?> getProgram(Long startTime, String name, String edgeLabel) {
 		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
 		if (programs == null)
 			return null;
 		for (AbstractKairosProgram<?> program : programs) {
-			if (program.getName().equals(name)) {
+			if (program.getName().equals(name) & program.getEdgeLabel().equals(edgeLabel)) {
 				return program;
 			}
 		}
@@ -176,16 +184,16 @@ public class KairosEngine {
 		return kairosPrograms.get(startTime);
 	}
 
-	public void addSubscription(Vertex source, Long startTime, AbstractKairosProgram<?> program) {
+	public void addSubscription(Vertex source, Long startTime, String edgeLabel, AbstractKairosProgram<?> program) {
 		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
 		if (programs == null) {
-			programs = new HashSet<AbstractKairosProgram<?>>();
+			programs = new HashSet<>();
 			programs.add(program);
 			kairosPrograms.put(startTime, programs);
 		} else {
 			programs.add(program);
 		}
-		program.onInitialization(Set.of(source), startTime);
+		program.onInitialization(Set.of(source), startTime, edgeLabel);
 	}
 
 }

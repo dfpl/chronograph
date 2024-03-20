@@ -46,7 +46,8 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 	};
 
 	@Override
-	public void onInitialization(Set<Vertex> sources, Long startTime) {
+	public void onInitialization(Set<Vertex> sources, Long startTime, String edgeLabel) {
+		this.edgeLabel = edgeLabel;
 		synchronized (gammaTable) {
 			for (Vertex s : sources) {
 				String id = s.getId();

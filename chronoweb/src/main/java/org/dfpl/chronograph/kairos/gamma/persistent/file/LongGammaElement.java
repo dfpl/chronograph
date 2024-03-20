@@ -6,6 +6,7 @@ import org.dfpl.chronograph.kairos.gamma.GammaElement;
 
 public class LongGammaElement implements GammaElement<Long> {
 
+	public static final Long DEFAULT_VALUE = 9187201950435737471L;
 	private Long element;
 
 	public LongGammaElement() {
@@ -13,7 +14,7 @@ public class LongGammaElement implements GammaElement<Long> {
 	}
 
 	public LongGammaElement(Long element) {
-		if (element.equals(9187201950435737471l))
+		if (element.equals(DEFAULT_VALUE))
 			throw new IllegalArgumentException();
 		this.element = element;
 	}
@@ -55,7 +56,7 @@ public class LongGammaElement implements GammaElement<Long> {
 
 	@Override
 	public Long getDefaultValue() {
-		return 9187201950435737471l;
+		return DEFAULT_VALUE;
 	}
 
 }

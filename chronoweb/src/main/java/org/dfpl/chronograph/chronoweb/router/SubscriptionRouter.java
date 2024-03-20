@@ -67,7 +67,7 @@ public class SubscriptionRouter extends BaseRouter {
 
 	public void registerSubscribeVertexEventRouter(Router router, EventBus eventBus) {
 
-		router.put("/chronoweb/graph/:time/:kairosProgram/:vertexID").handler(routingContext -> {
+		router.put("/chronoweb/graph/:time/:kairosProgram/:edgeLabel/:vertexID").handler(routingContext -> {
 			long time;
 			try {
 				time = Long.parseLong(routingContext.pathParam("time"));
@@ -88,6 +88,12 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
+			String edgeLabel = routingContext.pathParam("edgeLabel");
+			if (edgeLabel == null){
+				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+				return;
+			}
+
 			Vertex v = null;
 			if (Server.backendType.equals("memory"))
 				v = new MChronoVertex(graph, vertexID);
@@ -96,12 +102,12 @@ public class SubscriptionRouter extends BaseRouter {
 			}
 
 			try {
-				if (kairos.getProgram(time, kairosProgram).getGammaTable().getSources().contains(vertexID)) {
+				if (kairos.getProgram(time, kairosProgram, edgeLabel).getGammaTable().getSources().contains(vertexID)) {
 					sendResult(routingContext, "application/json", MessageBuilder.sourceAlreadySubscribedException,
 							409);
 					return;
 				}
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 
 			}
 
@@ -112,7 +118,7 @@ public class SubscriptionRouter extends BaseRouter {
 				ve = new PChronoVertexEvent(graph, vertexID, time, ((PChronoGraph) graph).getVertexEventCollection());
 			}
 
-			AbstractKairosProgram<?> existing = kairos.getProgram(time, kairosProgram);
+			AbstractKairosProgram<?> existing = kairos.getProgram(time, kairosProgram, edgeLabel);
 			if (existing != null) {
 				if (kairosProgram.equals("OutIsAfterReachability")) {
 					GammaTable<String, Long> gammaTable = existing.getGammaTable();
@@ -120,7 +126,7 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 406);
 						return;
 					} else {
-						kairos.addSubscription(v, ve.getTime(), new OutIsAfterReachability(graph, gammaTable));
+						kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterReachability(graph, gammaTable));
 						sendResult(routingContext, 200);
 						return;
 					}
@@ -130,7 +136,7 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 406);
 						return;
 					} else {
-						kairos.addSubscription(v, ve.getTime(), new OutIsAfterPathReachability(graph, gammaTable));
+						kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterPathReachability(graph, gammaTable));
 						sendResult(routingContext, 200);
 						return;
 					}
@@ -140,7 +146,7 @@ public class SubscriptionRouter extends BaseRouter {
 				}
 			} else {
 				if (kairosProgram.equals("OutIsAfterReachability")) {
-					String subDirectoryName = Server.gammaBaseDirectory + "\\" + ve.getTime() + "_" + kairosProgram;
+					String subDirectoryName = Server.gammaBaseDirectory + "\\" + ve.getTime() + "_" + kairosProgram + "_" + edgeLabel;
 					File subDirectory = new File(subDirectoryName);
 					if (!subDirectory.exists())
 						subDirectory.mkdirs();
@@ -151,13 +157,13 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 500);
 						return;
 					}
-					kairos.addSubscription(v, ve.getTime(), new OutIsAfterReachability(graph, gammaTable));
+					kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterReachability(graph, gammaTable));
 					sendResult(routingContext, 200);
 					return;
 				} else if (kairosProgram.equals("OutIsAfterPathReachability")) {
 					ExpandableGammaTable gammaTable = null;
 					gammaTable = new ExpandableGammaTable(kairos.getGammaClient(), time + "_" + kairosProgram);
-					kairos.addSubscription(v, ve.getTime(), new OutIsAfterPathReachability(graph, gammaTable));
+					kairos.addSubscription(v, ve.getTime(), edgeLabel,  new OutIsAfterPathReachability(graph, gammaTable));
 					sendResult(routingContext, 200);
 					return;
 				} else {
@@ -207,7 +213,7 @@ public class SubscriptionRouter extends BaseRouter {
 
 		Server.logger.info("GET /chronoweb/gammaTable/:time router added");
 
-		router.get("/chronoweb/gammaTable/:time/:kairosProgram").handler(routingContext -> {
+		router.get("/chronoweb/gammaTable/:time/:kairosProgram/:edgeLabel").handler(routingContext -> {
 
 			long time;
 			try {
@@ -223,11 +229,18 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
+			String edgeLabel = routingContext.pathParam("edgeLabel");
+			if (edgeLabel == null){
+				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+				return;
+			}
+
 			try {
 				JsonObject result = new JsonObject();
 				result.put("time", time);
 				result.put("program", kairosProgram);
-				Set<String> sources = kairos.getProgram(time, kairosProgram).getGammaTable().getSources();
+				result.put("edgeLabel", edgeLabel);
+				Set<String> sources = kairos.getProgram(time, kairosProgram, edgeLabel).getGammaTable().getSources();
 				JsonArray sourceArray = new JsonArray();
 				for (String source : sources) {
 					sourceArray.add(source);
@@ -247,7 +260,7 @@ public class SubscriptionRouter extends BaseRouter {
 
 		Server.logger.info("GET /chronoweb/graph/:time/:kairosProgram router added");
 
-		router.get("/chronoweb/gammaTable/:time/:kairosProgram/:vertexID").handler(routingContext -> {
+		router.get("/chronoweb/gammaTable/:time/:kairosProgram/:edgeLabel/:vertexID").handler(routingContext -> {
 			long time;
 			try {
 				time = Long.parseLong(routingContext.pathParam("time"));
@@ -268,6 +281,12 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
+			String edgeLabel = routingContext.pathParam("edgeLabel");
+			if (edgeLabel == null){
+				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+				return;
+			}
+
 			Vertex v = graph.getVertex(vertexID);
 			if (v == null) {
 				sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
@@ -279,7 +298,8 @@ public class SubscriptionRouter extends BaseRouter {
 				result.put("time", time);
 				result.put("source", vertexID);
 				result.put("program", kairosProgram);
-				JsonObject gamma = kairos.getProgram(time, kairosProgram).getGammaTable().getGamma(vertexID)
+				result.put("edgeLabel", edgeLabel);
+				JsonObject gamma = kairos.getProgram(time, kairosProgram, edgeLabel).getGammaTable().getGamma(vertexID)
 						.toJson(true);
 				if (gamma == null) {
 					sendResult(routingContext, "application/json", MessageBuilder.resourceNotFoundException, 404);
@@ -315,6 +335,12 @@ public class SubscriptionRouter extends BaseRouter {
 				return;
 			}
 
+			String edgeLabel = routingContext.pathParam("edgeLabel");
+			if (edgeLabel == null){
+				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+				return;
+			}
+
 			String sourceID = routingContext.pathParam("source");
 			if (!vPattern.matcher(sourceID).matches()) {
 				sendResult(routingContext, "application/json", MessageBuilder.invalidVertexIDException, 400);
@@ -343,10 +369,11 @@ public class SubscriptionRouter extends BaseRouter {
 				JsonObject result = new JsonObject();
 				result.put("time", time);
 				result.put("program", kairosProgram);
+				result.put("edgeLabel", edgeLabel);
 				result.put("source", sourceID);
 				result.put("destination", destinationID);
 
-				Object gammaElement = kairos.getProgram(time, kairosProgram).getGammaTable().getGamma(sourceID)
+				Object gammaElement = kairos.getProgram(time, kairosProgram, edgeLabel).getGammaTable().getGamma(sourceID)
 						.getElement(destinationID);
 				result.put("gammaElement", gammaElement);
 
