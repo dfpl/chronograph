@@ -26,3 +26,5 @@ replay_pid*
 */doc/
 
 **/.idea
+
+/chronoweb/file-uploads/
