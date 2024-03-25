@@ -17,7 +17,7 @@ import org.dfpl.chronograph.kairos.program.reachability.algorithms.TraversalReac
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.nio.file.NotDirectoryException;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,30 +59,52 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 
     @Override
     public void onAddEdgeEvent(EdgeEvent addedEvent) {
-        Vertex iPrime = addedEvent.getVertex(Direction.OUT);
-        Vertex jPrime = addedEvent.getVertex(Direction.IN);
-
-        // Step 1: Computing affected subgraph
-        VertexEvent sourcePrime = new MChronoVertexEvent(jPrime, addedEvent.getTime());
-        String gammaPrimePath = String.format("%s\\onAdd\\%s", ((FixedSizedGammaTable<String, Long>) this.gammaTable).getDirectory().getPath(), sourcePrime.getId());
-
+        File resultFile = new File("D:\\tpvis\\results\\CollegeMsg.txt");
         try {
-            TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
-            Map<String, LongGammaElement> gammaPrime = new HashMap<>();
-            algorithm.compute(this.graph, sourcePrime, TR, this.edgeLabel)
-                    .toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
-                    .forEach(entry -> {
-                        gammaPrime.put(entry.getKey(), new LongGammaElement(entry.getValue()));
-                    });
+            FileWriter resultFW = new FileWriter(resultFile, true);
+            BufferedWriter resultBW = new BufferedWriter(resultFW);
+            StringBuilder header = new StringBuilder();
 
-            // Step 2: Updating the Gamma Table
-            ((FixedSizedGammaTable) this.gammaTable).update(iPrime.getId(), IS_SOURCE_VALID, addedEvent.getTime(), gammaPrime, IS_AFTER);
+            long pre = System.currentTimeMillis();
 
-            algorithm.getGammaTable().clear();
-        } catch (NotDirectoryException | FileNotFoundException e) {
-            e.printStackTrace();
+            Vertex iPrime = addedEvent.getVertex(Direction.OUT);
+            Vertex jPrime = addedEvent.getVertex(Direction.IN);
+
+            // Step 1: Computing affected subgraph
+            VertexEvent sourcePrime = new MChronoVertexEvent(jPrime, addedEvent.getTime());
+            String gammaPrimePath = String.format("%s\\onAdd\\%s", ((FixedSizedGammaTable<String, Long>) this.gammaTable).getDirectory().getPath(), sourcePrime.getId());
+
+            try {
+                TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
+                Map<String, LongGammaElement> gammaPrime = new HashMap<>();
+                algorithm.compute(this.graph, sourcePrime, TR, this.edgeLabel)
+                        .toMap(true).entrySet().stream().filter(entry -> entry.getValue() != null)
+                        .forEach(entry -> {
+                            gammaPrime.put(entry.getKey(), new LongGammaElement(entry.getValue()));
+                        });
+
+                // Step 2: Updating the Gamma Table
+                ((FixedSizedGammaTable) this.gammaTable).update(iPrime.getId(), IS_SOURCE_VALID, addedEvent.getTime(), gammaPrime, IS_AFTER);
+
+                algorithm.getGammaTable().clear();
+
+            } catch (NotDirectoryException | FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            long computationTime = System.currentTimeMillis() - pre;
+            resultBW.write(computationTime + "\n");
+
+            resultBW.close();
+            resultFW.close();
+
+            this.gammaTable.print();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        this.gammaTable.print();
+
+
     }
 
     @Override
