@@ -33,6 +33,7 @@ public class FixedSizedGamma<K, E> implements Gamma<K, E> {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void setElement(K to, GammaElement<E> element) {
 		Integer toIdx = gammaTable.getID(to);
@@ -52,7 +53,7 @@ public class FixedSizedGamma<K, E> implements Gamma<K, E> {
 		try {
 			for (int i = 0; i < gammaTable.cnt; i++) {
 				E elem = gammaTable.getElement(i * gammaTable.elementByteSize, gamma);
-				if(elem.equals(gammaTable.gammaElementConverter.getDefaultValue())){
+				if (elem.equals(gammaTable.gammaElementConverter.getDefaultValue())) {
 					elem = null;
 				}
 				K key = gammaTable.idList.get(i);
@@ -63,14 +64,14 @@ public class FixedSizedGamma<K, E> implements Gamma<K, E> {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public JsonObject toJson(boolean setDefaultToNull) {
 		JsonObject result = new JsonObject();
 		try {
 			for (int i = 0; i < gammaTable.cnt; i++) {
 				Object elem = gammaTable.getJsonValue(i * gammaTable.elementByteSize, gamma);
-				if(elem.equals(gammaTable.gammaElementConverter.getDefaultValue())){
+				if (elem.equals(gammaTable.gammaElementConverter.getDefaultValue())) {
 					elem = null;
 				}
 				K key = gammaTable.idList.get(i);
