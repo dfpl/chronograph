@@ -7,9 +7,14 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.Logger;
 import org.dfpl.chronograph.chronoweb.router.ManipulationRouter;
 import org.dfpl.chronograph.chronoweb.router.SubscriptionRouter;
+import org.dfpl.chronograph.chronoweb.visualization.GraphPane;
 import org.dfpl.chronograph.kairos.KairosEngine;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
+import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.ui.swing_viewer.SwingViewer;
+import org.graphstream.ui.view.View;
+import org.graphstream.ui.view.Viewer.ThreadingModel;
 
 import com.tinkerpop.blueprints.Graph;
 
@@ -132,5 +137,11 @@ public class Server extends AbstractVerticle {
 		Bootstrap.bootstrap(args);
 		Vertx.vertx().deployVerticle("org.dfpl.chronograph.chronoweb.Server",
 				new DeploymentOptions().setInstances(Server.numberOfVerticles));
+		System.setProperty("org.graphstream.ui", "swing");
+		
+		MultiGraph graph = new MultiGraph("g");
+		SwingViewer viewer = new SwingViewer(graph, ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+		View view = viewer.addDefaultView(false);
+		new GraphPane(graph, viewer, view);
 	}
 }

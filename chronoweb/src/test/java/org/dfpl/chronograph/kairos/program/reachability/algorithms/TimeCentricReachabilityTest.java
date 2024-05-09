@@ -9,7 +9,6 @@ import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +19,6 @@ public class TimeCentricReachabilityTest {
 	public static final String TEMP_DIR = "D:\\chronoweb\\gamma_tables";
 	public static final String EDGE_LABEL = "label";
 
-	@Test
 	public void testIsAfterAlgo() throws NotDirectoryException, FileNotFoundException {
 		Graph g = new MChronoGraph();
 

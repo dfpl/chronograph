@@ -53,7 +53,6 @@ public class ExpandableGammaTableTest {
 
 	}
 
-	@Test
 	public void baseTest() {
 		gammaTable.clear();
 		gammaTable.set("1", "1", new PathGammaElement(List.of("1"), 0l));

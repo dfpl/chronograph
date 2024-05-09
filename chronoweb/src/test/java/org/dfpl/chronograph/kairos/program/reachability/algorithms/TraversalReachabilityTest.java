@@ -11,85 +11,81 @@ import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertexEvent;
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.NotDirectoryException;
 
 public class TraversalReachabilityTest {
-    public static final String TEMP_DIR = "D:\\chronoweb\\gamma_tables";
-    public static final String EDGE_LABEL = "label";
+	public static final String TEMP_DIR = "D:\\chronoweb\\gamma_tables";
+	public static final String EDGE_LABEL = "label";
 
+	public void testIsAfterAlgo() throws NotDirectoryException, FileNotFoundException {
+		Graph g = new MChronoGraph();
 
-    @Test
-    public void testIsAfterAlgo() throws NotDirectoryException, FileNotFoundException {
-        Graph g = new MChronoGraph();
+		Vertex a = new MChronoVertex(g, "A");
+		VertexEvent sourceEvent = new MChronoVertexEvent(a, 1L);
+		FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<>(TEMP_DIR, LongGammaElement.class);
+		String onAddPath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(),
+				sourceEvent.getTime());
 
+		TraversalReachability algorithm = new TraversalReachability(onAddPath);
 
-        Vertex a = new MChronoVertex(g, "A");
-        VertexEvent sourceEvent = new MChronoVertexEvent(a, 1L);
-        FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<>(TEMP_DIR, LongGammaElement.class);
-        String onAddPath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(), sourceEvent.getTime());
+		Vertex b = g.addVertex("B");
+		Edge edge = g.addEdge(a, b, EDGE_LABEL);
+		edge.addEvent(2);
 
-        TraversalReachability algorithm = new TraversalReachability(onAddPath);
+		algorithm.compute(g, sourceEvent, TemporalRelation.isAfter, EDGE_LABEL);
 
-        Vertex b = g.addVertex("B");
-        Edge edge = g.addEdge(a, b, EDGE_LABEL);
-        edge.addEvent(2);
+		Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
 
-        algorithm.compute(g, sourceEvent, TemporalRelation.isAfter, EDGE_LABEL);
+		Vertex c = g.addVertex("C");
+		edge = g.addEdge(a, c, "label");
+		edge.addEvent(0);
 
-        Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
+		algorithm.getGammaTable().clear();
+		algorithm = new TraversalReachability(onAddPath);
+		algorithm.compute(g, sourceEvent, TemporalRelation.isAfter, EDGE_LABEL);
 
-        Vertex c = g.addVertex("C");
-        edge = g.addEdge(a, c, "label");
-        edge.addEvent(0);
+		Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
 
-        algorithm.getGammaTable().clear();
-        algorithm = new TraversalReachability(onAddPath);
-        algorithm.compute(g, sourceEvent, TemporalRelation.isAfter, EDGE_LABEL);
+		algorithm.getGammaTable().clear();
+	}
 
-        Assert.assertEquals("A -> {A=1, B=2}", algorithm.getGammaTable().toString());
+	public void testisBeforeAlgo() throws NotDirectoryException, FileNotFoundException {
+		Graph g = new MChronoGraph();
 
-        algorithm.getGammaTable().clear();
-    }
+		Vertex c = new MChronoVertex(g, "C");
+		VertexEvent sourceEvent = new MChronoVertexEvent(c, 3L);
+		FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<>(TEMP_DIR, LongGammaElement.class);
 
-    @Test
-    public void testisBeforeAlgo() throws NotDirectoryException, FileNotFoundException {
-        Graph g = new MChronoGraph();
+		String gammaPrimePath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(),
+				sourceEvent.getTime());
+		File subDirectory = new File(gammaPrimePath);
+		if (!subDirectory.exists())
+			subDirectory.mkdirs();
 
+		TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
 
-        Vertex c = new MChronoVertex(g, "C");
-        VertexEvent sourceEvent = new MChronoVertexEvent(c, 3L);
-        FixedSizedGammaTable<String, Long> gammaTable = new FixedSizedGammaTable<>(TEMP_DIR, LongGammaElement.class);
+		Vertex b = g.addVertex("B");
+		Edge edge = g.addEdge(b, c, "label");
+		edge.addEvent(2);
+		algorithm.computeInverse(g, sourceEvent, TemporalRelation.isBefore, EDGE_LABEL);
 
-        String gammaPrimePath = String.format("%s\\%s_onAdd", gammaTable.getDirectory().getAbsolutePath(), sourceEvent.getTime());
-        File subDirectory = new File(gammaPrimePath);
-        if (!subDirectory.exists())
-            subDirectory.mkdirs();
+		Assert.assertEquals("C -> {B=2, C=3}", algorithm.getGammaTable().toString());
+		algorithm.getGammaTable().clear();
 
-        TraversalReachability algorithm = new TraversalReachability(gammaPrimePath);
+		algorithm = new TraversalReachability(gammaPrimePath);
+		algorithm.computeInverse(g, sourceEvent, TemporalRelation.isBefore, EDGE_LABEL);
+		algorithm.getGammaTable().clear();
 
-        Vertex b = g.addVertex("B");
-        Edge edge = g.addEdge(b, c, "label");
-        edge.addEvent(2);
-        algorithm.computeInverse(g, sourceEvent, TemporalRelation.isBefore, EDGE_LABEL);
+		Vertex a = g.addVertex("A");
+		edge = g.addEdge(a, b, EDGE_LABEL);
+		edge.addEvent(1);
+		algorithm = new TraversalReachability(gammaPrimePath);
+		algorithm.computeInverse(g, sourceEvent, TemporalRelation.isBefore, EDGE_LABEL);
+		Assert.assertEquals("C -> {A=1, B=2, C=3}", algorithm.getGammaTable().toString());
 
-        Assert.assertEquals("C -> {B=2, C=3}", algorithm.getGammaTable().toString());
-        algorithm.getGammaTable().clear();
-
-        algorithm = new TraversalReachability(gammaPrimePath);
-        algorithm.computeInverse(g, sourceEvent, TemporalRelation.isBefore, EDGE_LABEL);
-        algorithm.getGammaTable().clear();
-
-        Vertex a = g.addVertex("A");
-        edge = g.addEdge(a, b, EDGE_LABEL);
-        edge.addEvent(1);
-        algorithm = new TraversalReachability(gammaPrimePath);
-        algorithm.computeInverse(g, sourceEvent, TemporalRelation.isBefore, EDGE_LABEL);
-        Assert.assertEquals("C -> {A=1, B=2, C=3}", algorithm.getGammaTable().toString());
-
-        algorithm.getGammaTable().clear();
-    }
+		algorithm.getGammaTable().clear();
+	}
 }

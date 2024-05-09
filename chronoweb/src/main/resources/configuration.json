@@ -15,7 +15,7 @@
 	"number_of_verticles" : 1,
 	
 	"_gamma_base_directory" : "The root directory for gamma tables",
-	"gamma_base_directory" : "D:\\chronoweb\\gamma_tables",
+	"gamma_base_directory" : "d:\\chronoweb\\gamma_tables",
 	
 	"_gamma_database" : "The Mongo database for gamma tables",
 	"gamma_database" : "gamma"
