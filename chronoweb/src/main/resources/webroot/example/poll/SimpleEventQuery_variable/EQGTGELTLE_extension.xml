@@ -1,0 +1,107 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>EQ_http://dfpl.sejong.ac.kr/epcis/resource#default</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>A string extension value as a default type</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_http://dfpl.sejong.ac.kr/epcis/resource#string</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>A string extension value (dfpl)</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_https://autoidlab.kaist.ac.kr/resource#string</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>A string extension value (autoid)</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_http://dfpl.sejong.ac.kr/epcis/resource#int</name>
+					<value xsi:type="xsd:int">3</value>
+				</param>
+				<param>
+					<name>GT_http://dfpl.sejong.ac.kr/epcis/resource#int</name>
+					<value xsi:type="xsd:int">2</value>
+				</param>
+				<param>
+					<name>GE_http://dfpl.sejong.ac.kr/epcis/resource#int</name>
+					<value xsi:type="xsd:int">3</value>
+				</param>
+				<param>
+					<name>LT_http://dfpl.sejong.ac.kr/epcis/resource#int</name>
+					<value xsi:type="xsd:int">4</value>
+				</param>
+				<param>
+					<name>LE_http://dfpl.sejong.ac.kr/epcis/resource#int</name>
+					<value xsi:type="xsd:int">3</value>
+				</param>
+				<param>
+					<name>EQ_http://dfpl.sejong.ac.kr/epcis/resource#double</name>
+					<value xsi:type="xsd:double">35.7</value>
+				</param>
+				<param>
+					<name>GT_http://dfpl.sejong.ac.kr/epcis/resource#double</name>
+					<value xsi:type="xsd:double">35</value>
+				</param>
+				<param>
+					<name>GE_http://dfpl.sejong.ac.kr/epcis/resource#double</name>
+					<value xsi:type="xsd:double">35.7</value>
+				</param>
+				<param>
+					<name>LE_http://dfpl.sejong.ac.kr/epcis/resource#double</name>
+					<value xsi:type="xsd:double">35.7</value>
+				</param>
+				<param>
+					<name>LT_http://dfpl.sejong.ac.kr/epcis/resource#double</name>
+					<value xsi:type="xsd:double">135.7</value>
+				</param>
+				<param>
+					<name>EQ_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp
+					</name>
+					<value xsi:type="query:DateTimeStamp">2022-11-11T14:59:02.099+09:00</value>
+				</param>
+				<param>
+					<name>LT_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp
+					</name>
+					<value xsi:type="query:DateTimeStamp">2032-11-11T14:59:02.099+09:00</value>
+				</param>
+				<param>
+					<name>LE_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp
+					</name>
+					<value xsi:type="query:DateTimeStamp">2022-11-11T14:59:02.099+09:00</value>
+				</param>
+				<param>
+					<name>GE_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp
+					</name>
+					<value xsi:type="query:DateTimeStamp">2022-11-11T14:59:02.099+09:00</value>
+				</param>
+				<param>
+					<name>GT_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp
+					</name>
+					<value xsi:type="query:DateTimeStamp">2002-11-11T14:59:02.099+09:00</value>
+				</param>
+				<param>
+					<name>EQ_http://dfpl.sejong.ac.kr/epcis/resource#array</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>A string extension value #2</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_http://dfpl.sejong.ac.kr/epcis/resource#array</name>
+					<value xsi:type="xsd:int">4</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

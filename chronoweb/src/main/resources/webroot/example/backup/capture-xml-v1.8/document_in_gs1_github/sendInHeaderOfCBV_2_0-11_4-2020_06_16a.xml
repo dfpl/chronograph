@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+    CBV 2.0 example 11.4
+    This file demonstrates demonstrates an EPCIS Master Data document
+-->
+<!DOCTYPE project>
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:1"
+                     xmlns:p="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+                     creationDate="2005-07-11T11:30:47.0Z" schemaVersion="1.2">
+    <EPCISHeader>
+        <p:StandardBusinessDocumentHeader>
+            <!-- Required -->
+            <p:HeaderVersion>1.0</p:HeaderVersion>
+            <p:Sender>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Sender>
+            <p:Receiver>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Receiver>
+            <p:DocumentIdentification>
+                <!-- Required -->
+                <p:Standard>EPCglobal</p:Standard>
+                <!-- Required -->
+                <p:TypeVersion>1.0</p:TypeVersion>
+                <p:InstanceIdentifier>p:InstanceIdentifier</p:InstanceIdentifier>
+                <!-- Required -->
+                <p:Type>MasterData</p:Type>
+                <p:MultipleType>true</p:MultipleType>
+                <p:CreationDateAndTime>2001-12-31T12:00:00</p:CreationDateAndTime>
+            </p:DocumentIdentification>
+        </p:StandardBusinessDocumentHeader>
+        <extension>
+            <EPCISMasterData>
+                <VocabularyList>
+                    <Vocabulary type="urn:epcglobal:epcis:vtype:ReadPoint">
+                        <VocabularyElementList>
+                            <!-- Section ‎10.3 - Location Master Data Names -->
+                            <VocabularyElement id="urn:epc:id:sgln:0614141.00300.0">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0614141003006</attribute>
+                            </VocabularyElement>
+
+                            <!-- Section ‎10.3 - Location Master Data Names -->
+                            <VocabularyElement id="urn:epc:id:sgln:0614141.00300.1">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0614141003006</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:ssd">Line #1 at Manufacturing Plant 1</attribute>
+                            </VocabularyElement>
+
+                            <!-- Section ‎10.3 - Location Master Data Names -->
+                            <VocabularyElement id="urn:epc:id:sgln:0614141.00300.2">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0614141003006</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:ssd">Line #2 at Manufacturing Plant 1</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                </VocabularyList>
+            </EPCISMasterData>
+        </extension>
+    </EPCISHeader>
+    <EPCISBody>
+        <EventList>
+        </EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>J0 - deletePageToken - DELETE /epcis/nextPageToken/:token
+	(application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function deletePageToken() {
+
+		var token = $('#token').val();
+		if (token == null || token.length === 0)
+			token = $('#token').attr('placeholder');
+		$('#url').html('HTTP.DELETE /epcis/nextPageToken/' + token + ' (application/json)');
+		$('#token').val(token);
+
+		console.log(token);
+		
+		$.ajax({
+			type: "DELETE",
+			url: "http://localhost:8080/epcis/nextPageToken/" + token,
+			contentType: "application/json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			if (xhr.responseText != null && xhr.responseText.length != 0)
+				$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' +  JSON.stringify(data, null, 4) + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			if (xhr.responseText != null && xhr.responseText.length != 0)
+				$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+</script>
+
+<body>
+	<div id="url">HTTP.DELETE /epcis/nextPageToken/:token
+		(application/json)</div>
+	<input type="text" value=":token" readonly />
+	<input id="token" type="text"
+		placeholder="e81a16ba-df04-442b-bde8-1776eeb71542" />
+	<br>
+	<input id="button" type="button" onclick="deletePageToken()"
+		value="invoke" />
+	<br>
+	<div id="result"></div>
+</body>
+<script>
+
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

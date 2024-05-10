@@ -1,0 +1,7 @@
+{
+    "includeAttributes": true,
+    "includeChildren": true,
+    "HASATTR" : [
+        "urn:epcglobal:cbv:mda:site", "urn:epcglobal:cbv:mda#countryOfOrigin", "urn:epcglobal:cbv:mda#descriptionShort"
+    ]
+}

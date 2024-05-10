@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J64 - deleteQuery - DELETE /epcis/queries/:queryName (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function deleteQuery() {
+
+		var queryName = $('#queryName').val();
+		if (queryName == null || queryName.length === 0)
+			queryName = $('#queryName').attr('placeholder');
+		$('#url').html('HTTP.DELETE /epcis/queries/' + queryName + ' (application/json)');
+		$('#queryName').val(queryName);
+
+		$.ajax({
+			type: "DELETE",
+			url: "http://localhost:8080/epcis/queries/" + queryName,
+			contentType: "application/json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			if (xhr.responseText != null && xhr.responseText.length != 0)
+				$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText)) + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			if (xhr.responseText != null && xhr.responseText.length != 0)
+				$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText)) + ' </textarea>');
+		});
+	}
+</script>
+
+<body>
+	<div id="url">HTTP.DELETE /epcis/queries/:queryName (application/json)</div>
+	<input type="text" value=":queryName" readonly />
+	<input id="queryName" type="text" placeholder="latestEvent" />
+	<br>
+	<input id="button" type="button" onclick="deleteQuery()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<script>
+	$(document).ready(function () {
+		$("#captureID").on('change', function postinput() {
+			var captureID = $(this).val(); // this.value
+			$('#url').html('HTTP.GET /epcis/queries/' + queryName + ' (application/json)');
+
+		});
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

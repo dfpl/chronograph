@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>X70 - getEventsWithNamedQuery - Websocket
+	/epcis/queries/:queryName/events (schedule)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function connect() {
+		var resourceType = "queries";
+
+		var resource = $("#resource").val();
+
+		if (resource.length == 0) {
+			alert("no queryName is given");
+			return;
+		}
+
+		var url = 'ws://localhost:8080/epcis/' + resourceType + '/' + resource
+				+ '/events';
+		var tURL = new URL('ws://localhost:8080/epcis/' + resourceType + '/'
+				+ resource + '/events');
+
+		var sec = $('#sec').val();
+		if (sec != null && sec.length != 0)
+			tURL.searchParams.set('GS1-Query-Second', sec);
+
+		var min = $('#min').val();
+		if (min != null && min.length != 0)
+			tURL.searchParams.set('GS1-Query-Minute', min);
+
+		var hour = $('#hour').val();
+		if (hour != null && hour.length != 0)
+			tURL.searchParams.set('GS1-Query-Hour', hour);
+
+		var dayOfMonth = $('#dayOfMonth').val();
+		if (dayOfMonth != null && dayOfMonth.length != 0)
+			tURL.searchParams.set('GS1-Query-DayOfMonth', hour);
+
+		var month = $('#month').val();
+		if (month != null && month.length != 0)
+			tURL.searchParams.set('GS1-Query-Month', hour);
+
+		var reportIfEmpty = $('#reportIfEmpty').val();
+		if (reportIfEmpty != null && reportIfEmpty.length != 0)
+			tURL.searchParams.set('GS1-Query-ReportIfEmpty', reportIfEmpty);
+
+		var initialRecordTime = $('#initialRecordTime').val();
+		if (initialRecordTime != null && initialRecordTime.length != 0)
+			tURL.searchParams.set('GS1-Query-InitialRecordTime',
+					initialRecordTime);
+
+		socket = new WebSocket(tURL.toString());
+
+		socket.onopen = function(e) {
+			$("#result").val("Websocket is opened");
+		};
+
+		socket.onmessage = function(event) {
+			$("#result").val(JSON.stringify(JSON.parse(event.data), null, 4));
+		};
+
+		socket.onclose = function(event) {
+			$("#result").val("Websocket is closed");
+		};
+
+		socket.onerror = function(error) {
+			console.log(error);
+			$("#result").val(error);
+		};
+	}
+</script>
+
+<body>
+	<div id="url">WebSocket /epcis/queries/:queryName/events
+		(application/xml)</div>
+	<input type="text" value=":queryName" readonly />
+	<input id="resource" type="text" placeholder="latestEvent" />
+	<br>
+	<input type="text" value="Upgrade" readonly />
+	<input id="upgrade" type="text" value="websocket" />
+	<br>
+	<input type="text" value="Connection" readonly />
+	<input id="connection" type="text" value="upgrade" />
+	<br>
+	<p>schedule</p>
+	<input type="text" value="GS1-Query-Second" readonly />
+	<input id="sec" type="text" value="0/5" />
+	<br>
+	<input type="text" value="GS1-Query-Minute" readonly />
+	<input id="min" type="text" value="" />
+	<br>
+	<input type="text" value="GS1-Query-Hour" readonly />
+	<input id="hour" type="text" value="" />
+	<br>
+	<input type="text" value="GS1-Query-DayOfMonth" readonly />
+	<input id="dayOfMonth" type="text" value="" />
+	<br>
+	<input type="text" value="GS1-Query-Month" readonly />
+	<input id="month" type="text" value="" />
+	<br>
+	<p>Common subscription parameters</p>
+	<input type="text" value="GS1-Query-ReportIfEmpty" readonly />
+	<input id="reportIfEmpty" type="text" value="true" />
+	<br>
+	<input type="text" value="GS1-Query-InitialRecordTime" readonly />
+	<input id="initialRecordTime" type="text" value="" />
+	<br>
+	<input id="button" type="button" onclick="connect()" value="invoke" />
+	<br>
+	<div id="resultDiv">
+		<textarea id="result" cols=100 rows=15></textarea>
+	</div>
+</body>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

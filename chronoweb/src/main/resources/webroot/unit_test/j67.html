@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J67 - getMetadata - OPTIONS /epcis/queries/:queryName/vocabularies (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function getMetadata() {
+
+		var queryName = $('#queryName').val();
+		if (queryName == null || queryName.length === 0)
+			queryName = $('#queryName').attr('placeholder');
+		$('#url').html('HTTP.OPTIONS /epcis/queries/' + queryName + '/vocabularies (application/json)');
+		$('#queryName').val(queryName);
+
+		$.ajax({
+			type: "OPTIONS",
+			url: "http://localhost:8080/epcis/queries/" + queryName + "/vocabularies",
+			contentType: "application/json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+</script>
+
+<body>
+	<div id="url">HTTP.OPTIONS /epcis/queries/:queryName/vocabularies (application/json)</div>
+	<input type="text" value=":queryName" readonly />
+	<input id="queryName" type="text" placeholder="latestEvent" />
+	<br>
+	<input id="button" type="button" onclick="getMetadata()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<script>
+	$(document).ready(function () {
+		$("#queryName").on('change', function postinput() {
+			var queryName = $(this).val(); // this.value
+			$('#url').html('HTTP.OPTIONS /epcis/queries/' + queryName + '/vocabularies (application/json)');
+
+		});
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

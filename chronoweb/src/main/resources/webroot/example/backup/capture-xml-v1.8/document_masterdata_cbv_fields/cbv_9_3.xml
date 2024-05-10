@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:1"
+                     xmlns:p="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+                     xmlns:cbvmda="urn:epcglobal:cbv:mda"
+                     creationDate="2005-07-11T11:30:47.0Z" schemaVersion="1.2">
+    <EPCISHeader>
+        <p:StandardBusinessDocumentHeader>
+            <!-- Required -->
+            <p:HeaderVersion>1.0</p:HeaderVersion>
+            <p:Sender>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Sender>
+            <p:Receiver>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Receiver>
+            <p:DocumentIdentification>
+                <!-- Required -->
+                <p:Standard>EPCglobal</p:Standard>
+                <!-- Required -->
+                <p:TypeVersion>1.0</p:TypeVersion>
+                <p:InstanceIdentifier>p:InstanceIdentifier</p:InstanceIdentifier>
+                <!-- Required -->
+                <p:Type>MasterData</p:Type>
+                <p:MultipleType>true</p:MultipleType>
+                <p:CreationDateAndTime>2001-12-31T12:00:00</p:CreationDateAndTime>
+            </p:DocumentIdentification>
+        </p:StandardBusinessDocumentHeader>
+        <extension>
+            <EPCISMasterData>
+                <VocabularyList>
+                    <Vocabulary type="urn:epcglobal:epcis:vtype:BusinessLocation">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.0">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0037000007296</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:sst">201</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:ssa">402</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:ssd">shelf #4567</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#name">Nowhere</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#streetAddressOne">100</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#streetAddressTwo">Nowhere</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#streetAddressThree">Street</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#city">Fancy</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#state">DC</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#postalCode">99999</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#countryCode">US</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#geoLocation">geo:50.942239,6.898350</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#geoFence">[[geo:50.942499,6.898247],[geo:50.942275,6.898292],[geo:50.942263,6.898094],[geo:50.942106,6.898126],[geo:50.942130,6.898526],[geo:50.942512,6.898451],[geo:50.942499,6.898247]]</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#additionalPartyIDList">
+                                    <AdditionalPartyID>
+                                        <additionalPartyID>SE 123456789001</additionalPartyID>
+                                        <partyIDTypeCode>EU_VAT_IDENTIFICATION_NUMBER</partyIDTypeCode>
+                                    </AdditionalPartyID>
+                                </attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                </VocabularyList>
+            </EPCISMasterData>
+        </extension>
+    </EPCISHeader>
+    <EPCISBody>
+        <EventList>
+        </EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

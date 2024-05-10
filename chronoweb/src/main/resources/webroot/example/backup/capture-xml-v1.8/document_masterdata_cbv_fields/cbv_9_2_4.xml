@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:1"
+                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                     xmlns:cbvmda="urn:epcglobal:cbv:mda"
+                     creationDate="2005-07-11T11:30:47.0Z"
+                     schemaVersion="1.2">
+    <EPCISBody>
+        <EventList>
+            <ObjectEvent>
+                <eventTime>2005-04-03T20:33:31.116-06:00</eventTime>
+                <eventTimeZoneOffset>-06:00</eventTimeZoneOffset>
+                <epcList>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2017</epc>
+                </epcList>
+                <action>OBSERVE</action>
+                <extension>
+                    <ilmd>
+                        <cbvmda:countryOfOrigin>GB</cbvmda:countryOfOrigin>
+                        <cbvmda:countryOfExport>KR</cbvmda:countryOfExport>
+                        <cbvmda:drainedWeight measurementUnitCode="KGM">3.5</cbvmda:drainedWeight>
+                        <cbvmda:grossWeight measurementUnitCode="KGM">3.5</cbvmda:grossWeight>
+                        <cbvmda:lotNumber>ABC123</cbvmda:lotNumber>
+                        <cbvmda:netWeight measurementUnitCode="KGM">3.5</cbvmda:netWeight>
+                    </ilmd>
+                </extension>
+            </ObjectEvent>
+        </EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

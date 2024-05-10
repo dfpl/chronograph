@@ -1,0 +1,18 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleMasterDataQuery</queryName>
+			<params>
+				<param>
+					<name>maxElementCount</name>
+					<value xsi:type="xsd:int">1</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

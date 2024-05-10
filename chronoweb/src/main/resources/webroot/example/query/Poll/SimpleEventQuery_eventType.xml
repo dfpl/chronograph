@@ -1,0 +1,17 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:query="urn:epcglobal:epcis-query:xsd:2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <query:Poll>
+            <queryName>SimpleEventQuery</queryName>
+            <params>
+                <param>
+                    <name>eventType</name>
+                    <value xsi:type="query:ArrayOfString">
+                        <string>AggregationEvent</string>
+                    </value>
+                </param>
+            </params>
+        </query:Poll>
+    </soapenv:Body>
+</soapenv:Envelope>

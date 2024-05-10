@@ -1,0 +1,9 @@
+{
+    "includeAttributes": true,
+    "includeChildren": true,
+    "attributeNames": [
+        "urn:epcglobal:cbv:mda:site",
+        "urn:epcglobal:cbv:mda#countryOfOrigin",
+        "urn:epcglobal:cbv:mda#descriptionShort"
+    ]
+}

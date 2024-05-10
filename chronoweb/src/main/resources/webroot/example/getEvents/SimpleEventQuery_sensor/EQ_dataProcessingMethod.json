@@ -1,0 +1,11 @@
+{
+    "EQ_dataProcessingMethod": [
+        "urn:epc:id:gdti:0614141.12345.006849", "https://id.gs1.org/253/0614141123452006849"
+    ],
+    "EQ_SENSORMETADATA_dataProcessingMethod" : [
+        "urn:epc:id:gdti:0614141.12345.006849", "https://id.gs1.org/253/0614141123452006849"
+    ],
+    "EQ_SENSORREPORT_dataProcessingMethod" : [
+        "urn:epc:id:gdti:0614141.12345.006850", "https://id.gs1.org/253/0614141123452006850"
+    ]
+}

@@ -1,0 +1,29 @@
+{
+	"EQ_http://dfpl.sejong.ac.kr/epcis/resource#default": [
+		"A string extension value as a default type"
+	],
+	"EQ_http://dfpl.sejong.ac.kr/epcis/resource#string": [
+		"A string extension value (dfpl)"
+	],
+	"EQ_https://autoidlab.kaist.ac.kr/resource#string": [
+		"A string extension value (autoid)"
+	],
+	"EQ_http://dfpl.sejong.ac.kr/epcis/resource#int": 3,
+	"GT_http://dfpl.sejong.ac.kr/epcis/resource#int": 2,
+	"GE_http://dfpl.sejong.ac.kr/epcis/resource#int": 3,
+	"LT_http://dfpl.sejong.ac.kr/epcis/resource#int": 4,
+	"LE_http://dfpl.sejong.ac.kr/epcis/resource#int": 3,
+	"EQ_http://dfpl.sejong.ac.kr/epcis/resource#double": 35.7,
+	"GT_http://dfpl.sejong.ac.kr/epcis/resource#double": 35.0,
+	"GE_http://dfpl.sejong.ac.kr/epcis/resource#double": 35.7,
+	"LE_http://dfpl.sejong.ac.kr/epcis/resource#double": 35.7,
+	"LT_http://dfpl.sejong.ac.kr/epcis/resource#double": 135.7,
+	"EQ_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp": "2022-11-11T14:59:02.099+09:00",
+	"LT_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp": "2032-11-11T14:59:02.099+09:00",
+	"LE_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp": "2022-11-11T14:59:02.099+09:00",
+	"GE_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp": "2022-11-11T14:59:02.099+09:00",
+	"GT_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp": "2002-11-11T14:59:02.099+09:00",
+	"EQ_http://dfpl.sejong.ac.kr/epcis/resource#array": [
+		"A string extension value #2"
+	]
+}

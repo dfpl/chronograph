@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:2" schemaVersion="2.0" creationDate="2022-11-11T14:59:02.099+09:00"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dfpl="http://dfpl.sejong.ac.kr/epcis/resource"
+    xmlns:autoid="https://autoidlab.kaist.ac.kr/resource">
+    <EPCISHeader>
+        <extension>
+            <EPCISMasterData>
+                <VocabularyList>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:EPCClass">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:idpat:sgtin:8801094.001300.*">
+                                <attribute id="http://schema.org/NutritionInformation#category">beverage</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#name">Coca-cola</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#servingSize">600</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#calories">258126.195</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#sugarContent">64</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#saturatedFatContent">0</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#fatContent">0</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#sodiumContent">60</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#fiberContent">0</attribute>
+                                <attribute id="http://schema.org/NutritionInformation#proteinContent">0</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                </VocabularyList>
+            </EPCISMasterData>
+        </extension>
+    </EPCISHeader>
+    <EPCISBody>
+        <EventList>
+		</EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

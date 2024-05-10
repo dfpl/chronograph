@@ -1,0 +1,7 @@
+{
+    "EQ_percValue_CEL": 26.0,
+    "GT_percValue_CEL" : 18.0,
+    "GE_percValue_FAH" : -50.0,
+    "LT_percValue_KEL" : 525.0,
+    "LE_percValue_FAH" : 100.0
+}

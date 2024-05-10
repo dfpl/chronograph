@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J9 - captureXMLDocument - POST /epcis/capture (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function capture() {
+
+		var body = $('#body').val();
+
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:8080/epcis/capture",
+			contentType: "application/json",
+			data: body,
+			crossOrigin: true,
+			beforeSend: function (xhr) {  // add required headers
+				xhr.setRequestHeader("GS1-EPCIS-Version", "2.0.0");
+				xhr.setRequestHeader("GS1-CBV-Version", "2.0.0");
+				xhr.setRequestHeader("GS1-EPCIS-Capture-Error-Behaviour", "rollback");
+			}
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+
+</script>
+
+<body>
+	<div id="url">HTTP.POST /epcis/capture (application/json)</div>
+	<input type="text" value="Request Body" readonly />
+	<textarea id="body" cols="100" rows="25"></textarea>
+	<br>
+	<input id="button" type="button" onclick="capture()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+
+<script>
+	$(document).ready(function () {
+		$.ajax({
+			url: "../example/capture-json/success/accepted202event.json",
+			async: false,
+			success: function (data) {
+				$('#body').val(JSON.stringify(data, null, 4));
+			}
+		});
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

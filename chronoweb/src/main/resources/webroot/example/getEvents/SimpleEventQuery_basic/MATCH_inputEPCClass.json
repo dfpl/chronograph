@@ -1,0 +1,6 @@
+{
+	"MATCH_inputEPCClass": [
+		"https://id.gs1.org/01/04012345111118/10/4444",
+		"urn:epc:class:lgtin:4012345.011111.4444"
+	]
+}

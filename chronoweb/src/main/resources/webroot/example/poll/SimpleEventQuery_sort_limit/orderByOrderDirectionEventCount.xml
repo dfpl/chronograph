@@ -1,0 +1,26 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>orderBy</name>
+					<value xsi:type="xsd:string">eventTime</value>
+				</param>
+				<param>
+					<name>orderDirection</name>
+					<value xsi:type="xsd:string">DESC</value>
+				</param>
+				<param>
+					<name>eventCountLimit</name>
+					<value xsi:type="xsd:int">2</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

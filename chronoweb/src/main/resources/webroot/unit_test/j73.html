@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>J73 - postSubscription - POST
+	/epcis/queries/:queryName/subscriptions (json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function subscribe() {
+		var resourceType = "queries";
+
+		var resource = $("#resource").val();
+
+		if (resource.length == 0) {
+			alert("no queryName is given");
+			return;
+		}
+
+		var tURL = 'http://localhost:8080/epcis/' + resourceType + '/' + resource + '/subscriptions';
+		var body = $('#body').val();
+		$.ajax({
+			type: "POST",
+			url: tURL,
+			contentType: "application/json",
+			data: body,
+			dataType: "json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+</script>
+
+<body>
+	<div id="url">POST /epcis/queries/:queryName/subscriptions
+		(application/json)</div>
+	<input type="text" value=":queryName" readonly />
+	<input id="resource" type="text" placeholder="latestEvent" />
+	<br>
+	<textarea id="body" cols="100" rows="10">
+{
+   "dest": "http://localhost:8080/epcis/echo",
+   "signatureToken" : "13df38d8275b13f05704629e5f1cf3d45d6132d5",
+   "reportIfEmpty" : true,
+   "initialRecordTime" : "2005-04-04T20:33:31.116-06:00",
+   "schedule" : {
+        "second" : "0/5"
+   }
+}
+	</textarea>
+	<br>
+	
+	<input id="button" type="button" onclick="subscribe()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

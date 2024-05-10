@@ -1,0 +1,5 @@
+{
+    "MATCH_inputEPC" : [
+        "urn:epc:id:sgtin:4012345.011122.*", "https://id.gs1.org/01/04012345111224/21/25"
+    ]
+}

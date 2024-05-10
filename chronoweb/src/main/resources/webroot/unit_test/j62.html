@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J62 - postQuery - POST /epcis/queries (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function postQuery() {
+
+		var queryName = $("#queryName").val();
+
+		var tURL = 'http://localhost:8080/epcis/queries';
+
+		var body = $('#body').val();
+		$.ajax({
+			type: "POST",
+			url: tURL,
+			contentType: "application/json",
+			data: body,
+			dataType: "json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			if (data != null)
+				$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(data, null, 4) + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+
+			try {
+				$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+			} catch (e) {
+
+			}
+		});
+	}
+</script>
+
+<body>
+	<div id="url">HTTP.POST /epcis/queries (application/json)</div>
+	<textarea id="body" cols="100" rows="15"></textarea>
+	<br>
+	<input id="button" type="button" onclick="postQuery()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<script>
+	$(document).ready(function () {
+		$.ajax({
+			url: "../example/createQuery-json/latestEvent.json",
+			async: false,
+			success: function (data) {
+				$('#body').val(JSON.stringify(data, null, 4));
+			}
+		});
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

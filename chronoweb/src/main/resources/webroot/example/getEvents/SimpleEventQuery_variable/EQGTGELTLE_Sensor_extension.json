@@ -1,0 +1,9 @@
+{
+    "EQ_SENSORELEMENT_http://dfpl.sejong.ac.kr/epcis/resource#string": [
+        "C"
+    ],
+    "GT_SENSORELEMENT_http://dfpl.sejong.ac.kr/epcis/resource#int" : 0,
+    "LT_SENSORELEMENT_http://dfpl.sejong.ac.kr/epcis/resource#double" : 5.0,
+    "GE_SENSORELEMENT_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp" : "1999-11-11T14:59:02.099+09:00",
+    "EXISTS_SENSORELEMENT_http://dfpl.sejong.ac.kr/epcis/resource#int" : null
+}

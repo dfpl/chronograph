@@ -1,0 +1,5 @@
+{
+    "orderBy" : "eventTime",
+    "orderDirection" : "DESC",
+    "eventCountLimit" : 2
+}

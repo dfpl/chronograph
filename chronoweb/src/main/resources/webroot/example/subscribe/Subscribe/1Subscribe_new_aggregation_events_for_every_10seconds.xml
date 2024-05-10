@@ -1,0 +1,28 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:query="urn:epcglobal:epcis-query:xsd:1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <query:Subscribe>
+            <!-- This subscription 1 will deliver (1) all the aggregation events since 2005-04-04~ at the first time  -->
+            <!-- (2) newly incoming aggregation events for every 10 seconds if existing -->
+            <!-- to the http://localhost/epcis/test -->
+            <queryName>SimpleEventQuery</queryName>
+            <params>
+                <param>
+                    <name>eventType</name>
+                    <value xsi:type="query:ArrayOfString">
+                        <string>AggregationEvent</string>
+                    </value>
+                </param>
+            </params>
+            <dest>http://localhost:8080/epcis/test</dest>
+            <controls>
+                <schedule>
+                    <second>0/10</second>
+                </schedule>
+                <initialRecordTime>2005-04-04T20:33:31.116-06:00</initialRecordTime>
+                <reportIfEmpty>true</reportIfEmpty>
+            </controls>
+            <subscriptionID>1</subscriptionID>
+        </query:Subscribe>
+    </soapenv:Body>
+</soapenv:Envelope>

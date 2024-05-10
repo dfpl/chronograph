@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J43 - getResourceQueries - GET /epcis/dispositions/:disposition (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function getQueries() {
+
+		var resourceType = 'dispositions';
+
+		var resource = $('#resource').val();
+		if (resource == null || resource.length === 0)
+			resource = $('#resource').attr('placeholder');
+		$('#url').html('HTTP.GET /epcis/' + resourceType + '/' + resource + ' (application/json)');
+		$('#resource').val(resource);
+		$.ajax({
+			type: "GET",
+			url: "http://localhost:8080/epcis/" + resourceType + "/" + resource,
+			contentType: "application/json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(data, null, 4) + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+
+</script>
+
+<body>
+	<div id="url">HTTP.GET /epcis/dispositions/:disposition (application/json)</div>
+	<input type="text" value=":disposition" readonly />
+	<input id="resource" type="text" placeholder="disposed" />
+	<br>
+	<input id="button" type="button" onclick="getQueries()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<script>
+	$(document).ready(function () {
+		$("#resource").on('change', function postinput() {
+			var eventType = $(this).val(); // this.value
+			$('#url').html('HTTP.GET /epcis/' + resourceType + '/' + resource + ' (application/json)');
+		});
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

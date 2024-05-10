@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument schemaVersion="1.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                     xmlns:p="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+                     creationDate="2013-06-04T14:59:02.099+02:00" xmlns:epcis="urn:epcglobal:epcis:xsd:1">
+    <EPCISHeader>
+        <p:StandardBusinessDocumentHeader>
+            <!-- Required -->
+            <p:HeaderVersion>1.0</p:HeaderVersion>
+            <p:Sender>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Sender>
+            <p:Receiver>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Receiver>
+            <p:DocumentIdentification>
+                <!-- Required -->
+                <p:Standard>EPCglobal</p:Standard>
+                <!-- Required -->
+                <p:TypeVersion>1.0</p:TypeVersion>
+                <p:InstanceIdentifier>p:InstanceIdentifier</p:InstanceIdentifier>
+                <!-- Required -->
+                <p:Type>MasterData</p:Type>
+                <p:MultipleType>true</p:MultipleType>
+                <p:CreationDateAndTime>2001-12-31T12:00:00</p:CreationDateAndTime>
+            </p:DocumentIdentification>
+        </p:StandardBusinessDocumentHeader>
+        <extension>
+            <EPCISMasterData>
+                <VocabularyList>
+                    <Vocabulary type="urn:epcglobal:epcis:vtype:EPCClass">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:class:lgtin:9524141.112345.L123">
+                                <attribute id="urn:epcglobal:cbv:mda#bestBeforeDate">2017-03-15</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#countryOfOrigin">GB</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#countryOfExport">KR</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#farmList">
+                                    <farm>
+                                        <farmIdentification>urn:epc:id:sgln:950414.00001.0</farmIdentification>
+                                        <farmIdentificationTypeCode>EPC-GLN</farmIdentificationTypeCode>
+                                    </farm>
+                                </attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#firstFreezeDate">2016-03-15</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#growingMethodCode">HYDROPONIC</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#harvestEndDate">2016-03-15</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#harvestStartDate">2016-03-15</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#itemExpirationDate">2016-03-15</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#productionMethodForFishAndSeafoodCode">AQUACULTURE</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#sellByDate">2017-03-15</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#storageStateCode">PREVIOUSLY_FROZEN</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#unloadingPort">DE BRU</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#vesselCatchInformationList">
+                                    <vesselCatchInformation>
+                                        <vesselOperatorG>urn:epc:id:pgln:952414.00001</vesselOperatorG>
+                                        <vesselID>DE-X-1234</vesselID>
+                                        <vesselName>HMS Gena</vesselName>
+                                        <vesselFlagState>UK</vesselFlagState>
+                                        <catchArea>37.2</catchArea>
+                                        <fishingGearTypeCode>TM</fishingGearTypeCode>
+                                        <economicZone>GRL</economicZone>
+                                        <fishConservationReferenceSizeCode>LEGAL</fishConservationReferenceSizeCode>
+                                    </vesselCatchInformation>
+                                </attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                </VocabularyList>
+            </EPCISMasterData>
+        </extension>
+    </EPCISHeader>
+    <EPCISBody>
+        <EventList>
+        </EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

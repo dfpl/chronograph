@@ -1,0 +1,8 @@
+{
+    "EQ_SENSORMETADATA_deviceMetadata": [
+        "urn:epc:id:gdti:0614141.12345.006848", "https://id.gs1.org/253/0614141123452006847"
+    ],
+    "EQ_SENSORREPORT_deviceMetadata" : [
+        "urn:epc:id:gdti:0614141.12345.006849", "https://id.gs1.org/253/0614141123452006848"
+    ]
+}

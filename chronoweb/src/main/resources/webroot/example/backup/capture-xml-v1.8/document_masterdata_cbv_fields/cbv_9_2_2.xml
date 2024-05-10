@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument schemaVersion="1.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                     xmlns:p="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+                     creationDate="2013-06-04T14:59:02.099+02:00" xmlns:epcis="urn:epcglobal:epcis:xsd:1">
+    <EPCISHeader>
+        <p:StandardBusinessDocumentHeader>
+            <!-- Required -->
+            <p:HeaderVersion>1.0</p:HeaderVersion>
+            <p:Sender>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Sender>
+            <p:Receiver>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Receiver>
+            <p:DocumentIdentification>
+                <!-- Required -->
+                <p:Standard>EPCglobal</p:Standard>
+                <!-- Required -->
+                <p:TypeVersion>1.0</p:TypeVersion>
+                <p:InstanceIdentifier>p:InstanceIdentifier</p:InstanceIdentifier>
+                <!-- Required -->
+                <p:Type>MasterData</p:Type>
+                <p:MultipleType>true</p:MultipleType>
+                <p:CreationDateAndTime>2001-12-31T12:00:00</p:CreationDateAndTime>
+            </p:DocumentIdentification>
+        </p:StandardBusinessDocumentHeader>
+        <extension>
+            <EPCISMasterData>
+                <VocabularyList>
+                    <Vocabulary type="urn:epcglobal:epcis:vtype:EPCClass">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:idpat:sgtin:9524141.112345.*">
+                                <attribute id="urn:epcglobal:cbv:mda#additionalTradeItemID">
+                                    <additionalTradeItemID tradeItemIDTypeCode="BUYER_ASSIGNED">IMP-125</additionalTradeItemID>
+                                    <additionalTradeItemID tradeItemIDTypeCode="SUPPLIER_ASSIGNED">ASD-987</additionalTradeItemID>
+                                </attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#countryOfOrigin">GB</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#descriptionShort">Acme Red Widgets</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#dosageFormType">PILL</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#drainedWeight" measurementUnitCode="KGM">2.5</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#functionalName">Widget</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#grossWeight" measurementUnitCode="KGM">4.5</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#manufacturerOfTradeItemPartyName">Acme Corporation</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#netContentDescription">253 grams</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#netWeight" measurementUnitCode="KGM">3.5</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#labelDescription">Acme Corporation Tiny Red Widgets</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#preservationTechniqueCode">COLD_SMOKE_CURING</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#regulatedProductName">Epcistra</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#speciesForFisheryStatisticsPurposesCode">COD</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#speciesForFisheryStatisticsPurposesName">Gadus morhua</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#strengthDescription">200mg/100mg</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#tradeItemConditionCode">GUS</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#tradeItemDescription">GS1 Brand Base Invisible Solid Deodorant AP Stick String Breeze</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda#certificationList">
+                                    <certification>
+                                        <certificationStandard>MSC</certificationStandard>
+                                        <certificationAgency>Global Certifation One AISBL</certificationAgency>
+                                        <certificationValue>4</certificationValue>
+                                        <certificationIdentification>MSC-C-12345</certificationIdentification>
+                                    </certification>
+                                </attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                </VocabularyList>
+            </EPCISMasterData>
+        </extension>
+    </EPCISHeader>
+    <EPCISBody>
+        <EventList>
+        </EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

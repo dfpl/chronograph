@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>J71 - getEventsWithNamedQuery - Websocket
+	/epcis/queries/:queryName/events (stream)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function connect() {
+		var resourceType = "queries";
+
+		var resource = $("#resource").val();
+
+		if (resource.length == 0) {
+			alert("no queryName is given");
+			return;
+		}
+
+		var tURL = new URL('ws://localhost:8080/epcis/' + resourceType + '/'
+				+ resource + '/events');
+
+		var stream = $('#stream').val();
+		
+		if (stream != null && stream.length != 0)
+			tURL.searchParams.set('GS1-Query-Stream', stream);
+
+		console.log(tURL.toString());
+		
+		socket = new WebSocket(tURL.toString());
+
+		socket.onopen = function(e) {
+			$("#result").val("Websocket is opened");
+		};
+
+		socket.onmessage = function(event) {
+			$("#result").val(JSON.stringify(JSON.parse(event.data), null, 4));
+		};
+
+		socket.onclose = function(event) {
+			$("#result").val("Websocket is closed");
+		};
+
+		socket.onerror = function(error) {
+			console.log(error);
+			$("#result").val(error);
+		};
+	}
+</script>
+
+<body>
+	<div id="url">WebSocket /epcis/queries/:queryName/events
+		(application/xml)</div>
+	<input type="text" value=":queryName" readonly />
+	<input id="resource" type="text" placeholder="latestEvent" />
+	<br>
+	<input type="text" value="Upgrade" readonly />
+	<input id="upgrade" type="text" value="websocket" />
+	<br>
+	<input type="text" value="Connection" readonly />
+	<input id="connection" type="text" value="upgrade" />
+	<br>
+	<input type="text" value="GS1-Query-Stream" readonly />
+	<input id="stream" type="text" value="true" />
+	<br>
+	
+	<input id="button" type="button" onclick="connect()" value="invoke" />
+	<br>
+	<div id="resultDiv">
+		<textarea id="result" cols=100 rows=15></textarea>
+	</div>
+</body>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

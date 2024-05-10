@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J15 - getEvent - GET /epcis/events/{eventID} (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function getEvent() {
+
+		var eventID = $('#eventID').val();
+		if (eventID == null || eventID.length === 0)
+			eventID = $('#eventID').attr('placeholder');
+		$('#url').html('HTTP.GET /epcis/events/' + eventID + ' (application/json)');
+		$('#eventID').val(eventID);
+
+		$.ajax({
+			type: "GET",
+			url: "http://localhost:8080/epcis/events/" + eventID,
+			contentType: "application/json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(data, null, 4)  + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+</script>
+
+<body>
+	<div id="url">HTTP.GET /epcis/events/:eventID (application/json)</div>
+	<input type="text" value=":eventID" readonly />
+	<input id="eventID" type="text" placeholder="ni%3A%2F%2F%2Fsha-256%3B82e8276f168a1d4b083a6013f55f1883d279b007e20b1ed794f3f952adf49176%3Fver%3DCBV2.0" />
+	<br>
+	<input id="button" type="button" onclick="getEvent()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<script>
+	$(document).ready(function () {
+		$("#eventID").on('change', function postinput() {
+			var eventID = $(this).val(); // this.value
+			$('#url').html('HTTP.GET /epcis/events/' + eventID + ' (application/json)');
+		});
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

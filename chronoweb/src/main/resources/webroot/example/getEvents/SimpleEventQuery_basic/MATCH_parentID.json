@@ -1,0 +1,6 @@
+{
+	"MATCH_parentID": [
+		"urn:epc:id:sscc:0614141.*",
+		"https://id.gs1.org/00/106141412345678908"
+	]
+}

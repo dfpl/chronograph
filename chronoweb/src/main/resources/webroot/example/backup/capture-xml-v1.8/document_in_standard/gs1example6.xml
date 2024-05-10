@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:1"
+                     xmlns:p="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+                     xmlns:example="http://ns.example.com/epcis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     creationDate="2005-07-11T11:30:47.0Z" schemaVersion="1.2">
+    <EPCISHeader>
+        <p:StandardBusinessDocumentHeader>
+            <!-- Required -->
+            <p:HeaderVersion>1.0</p:HeaderVersion>
+            <p:Sender>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Sender>
+            <p:Receiver>
+                <p:Identifier Authority="">p:Identifier</p:Identifier>
+            </p:Receiver>
+            <p:DocumentIdentification>
+                <!-- Required -->
+                <p:Standard>EPCglobal</p:Standard>
+                <!-- Required -->
+                <p:TypeVersion>1.0</p:TypeVersion>
+                <p:InstanceIdentifier>p:InstanceIdentifier</p:InstanceIdentifier>
+                <!-- Required -->
+                <p:Type>MasterData</p:Type>
+                <p:MultipleType>true</p:MultipleType>
+                <p:CreationDateAndTime>2001-12-31T12:00:00</p:CreationDateAndTime>
+            </p:DocumentIdentification>
+        </p:StandardBusinessDocumentHeader>
+        <extension>
+            <EPCISMasterData>
+                <VocabularyList>
+                    <Vocabulary type="urn:epcglobal:epcis:vtype:BusinessLocation">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.0">
+                                <attribute id="http://epcis.example.com/mda/latitude">+18.0000</attribute>
+                                <attribute id="http://epcis.example.com/mda/longitude">-70.0000</attribute>
+                                <attribute id="http://epcis.example.com/mda/address">
+                                    <example:Address xmlns:example="http://epcis.example.com/ns">
+                                        <Street>100 Nowhere Street</Street>
+                                        <City>Fancy</City>
+                                        <State>DC</State>
+                                        <Zip>99999</Zip>
+                                    </example:Address>
+                                </attribute>
+                                <children>
+                                    <id>urn:epc:id:sgln:0037000.00729.8201</id>
+                                    <id>urn:epc:id:sgln:0037000.00729.8202</id>
+                                    <id>urn:epc:id:sgln:0037000.00729.8203</id>
+                                </children>
+                            </VocabularyElement>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.8201">
+                                <attribute id="urn:epcglobal:cbv:mda:sst">201</attribute>
+                            </VocabularyElement>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.8202">
+                                <attribute id="urn:epcglobal:cbv:mda:sst">202</attribute>
+                                <children>
+                                    <id>urn:epc:id:sgln:0037000.00729.8203</id>
+                                </children>
+                            </VocabularyElement>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.8203">
+                                <attribute id="urn:epcglobal:cbv:mda:sst">202</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:ssa">402</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary type="urn:epcglobal:epcis:vtype:ReadPoint">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.8201">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0037000007296</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:sst">201</attribute>
+                            </VocabularyElement>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.8202">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0037000007296</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:sst">202</attribute>
+                            </VocabularyElement>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.8203">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0037000007296</attribute>
+                                <attribute id="urn:epcglobal:cbv:mda:sst">203</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                </VocabularyList>
+            </EPCISMasterData>
+        </extension>
+    </EPCISHeader>
+    <EPCISBody>
+        <EventList>
+            <!-- #1 -->
+            <ObjectEvent>
+                <eventTime>2005-04-03T20:33:31.116-06:00</eventTime>
+                <eventTimeZoneOffset>-06:00</eventTimeZoneOffset>
+                <epcList>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2017</epc>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2018</epc>
+                </epcList>
+                <action>OBSERVE</action>
+                <bizStep>urn:epcglobal:cbv:bizstep:shipping</bizStep>
+                <disposition>urn:epcglobal:cbv:disp:in_transit</disposition>
+                <readPoint>
+                    <id>urn:epc:id:sgln:0614141.07346.1234</id>
+                </readPoint>
+                <bizTransactionList>
+                    <bizTransaction type="urn:epcglobal:cbv:btt:po">http://transaction.acme.com/po/12345678</bizTransaction>
+                </bizTransactionList>
+            </ObjectEvent>
+            <!-- #2 -->
+            <ObjectEvent>
+                <eventTime>2005-04-04T20:33:31.116-06:00</eventTime>
+                <eventTimeZoneOffset>-06:00</eventTimeZoneOffset>
+                <epcList>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2018</epc>
+                </epcList>
+                <action>OBSERVE</action>
+                <bizStep>urn:epcglobal:cbv:bizstep:receiving</bizStep>
+                <disposition>urn:epcglobal:cbv:disp:in_progress</disposition>
+                <readPoint>
+                    <id>urn:epc:id:sgln:0012345.11111.400</id>
+                </readPoint>
+                <bizLocation>
+                    <id>urn:epc:id:sgln:0012345.11111.0</id>
+                </bizLocation>
+                <bizTransactionList>
+                    <bizTransaction type="urn:epcglobal:cbv:btt:po">http://transaction.acme.com/po/12345678</bizTransaction>
+                    <bizTransaction type="urn:epcglobal:cbv:btt:desadv">urn:epcglobal:cbv:bt:0614141073467:1152</bizTransaction>
+                </bizTransactionList>
+                <example:myField>Example of a vendor/user extension</example:myField>
+            </ObjectEvent>
+            <!-- #3 -->
+            <ObjectEvent>
+                <eventTime>2013-06-08T14:58:56.591Z</eventTime>
+                <eventTimeZoneOffset>+02:00</eventTimeZoneOffset>
+                <epcList/>
+                <action>OBSERVE</action>
+                <bizStep>urn:epcglobal:cbv:bizstep:receiving</bizStep>
+                <disposition>urn:epcglobal:cbv:disp:in_progress</disposition>
+                <readPoint>
+                    <id>urn:epc:id:sgln:0614141.00777.0</id>
+                </readPoint>
+                <bizLocation>
+                    <id>urn:epc:id:sgln:0614141.00888.0</id>
+                </bizLocation>
+                <extension>
+                    <quantityList>
+                        <quantityElement>
+                            <epcClass>urn:epc:class:lgtin:4012345.012345.998877</epcClass>
+                            <quantity>200</quantity>
+                            <uom>KGM</uom>
+                            <!-- Meaning: 200 kg of GTIN '04012345123456' belonging to lot '998877' -->
+                        </quantityElement>
+                    </quantityList>
+                    <sourceList>
+                        <source type="urn:epcglobal:cbv:sdt:possessing_party">urn:epc:id:sgln:4012345.00001.0</source>
+                        <!-- Party which had physical possession at the originating endpoint of the business transfer, e.g., a forwarder -->
+                        <source type="urn:epcglobal:cbv:sdt:location">urn:epc:id:sgln:4012345.00225.0</source>
+                        <!-- Physical location of the originating endpoint, e.g., a distribution centre of the forwarder -->
+                    </sourceList>
+                    <destinationList>
+                        <destination type="urn:epcglobal:cbv:sdt:owning_party">urn:epc:id:sgln:0614141.00001.0</destination>
+                        <!-- Party which owns the physical objects at the terminating endpoint, e.g., a retail company -->
+                        <destination type="urn:epcglobal:cbv:sdt:location">urn:epc:id:sgln:0614141.00777.0</destination>
+                        <!-- Physical location of the terminating endpoint, e.g., a warehouse of the retail company -->
+                    </destinationList>
+                </extension>
+                <example:myField>Example of a vendor/user extension</example:myField>
+            </ObjectEvent>
+            <!-- #4 -->
+            <AggregationEvent>
+                <eventTime>2013-06-08T14:58:56.591Z</eventTime>
+                <eventTimeZoneOffset>+02:00</eventTimeZoneOffset>
+                <parentID>urn:epc:id:sscc:0614141.1234567890</parentID>
+                <childEPCs>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2017</epc>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2018</epc>
+                </childEPCs>
+                <action>OBSERVE</action>
+                <bizStep>urn:epcglobal:cbv:bizstep:receiving</bizStep>
+                <disposition>urn:epcglobal:cbv:disp:in_progress</disposition>
+                <readPoint>
+                    <id>urn:epc:id:sgln:0614141.00777.0</id>
+                </readPoint>
+                <bizLocation>
+                    <id>urn:epc:id:sgln:0614141.00888.0</id>
+                </bizLocation>
+                <extension>
+                    <childQuantityList>
+                        <quantityElement>
+                            <epcClass>urn:epc:idpat:sgtin:4012345.098765.*</epcClass>
+                            <quantity>10</quantity>
+                            <!-- Meaning: 10 units of GTIN '04012345987652' -->
+                        </quantityElement>
+                        <quantityElement>
+                            <epcClass>urn:epc:class:lgtin:4012345.012345.998877</epcClass>
+                            <quantity>200.5</quantity>
+                            <uom>KGM</uom>
+                            <!-- Meaning: 200.5 kg of GTIN '04012345123456' belonging to lot '998877' -->
+                        </quantityElement>
+                    </childQuantityList>
+                </extension>
+                <example:myField>Example of a vendor/user extension</example:myField>
+            </AggregationEvent>
+            <!-- #5 -->
+            <extension>
+                <TransformationEvent>
+                    <eventTime>2013-10-31T14:58:56.591Z</eventTime>
+                    <eventTimeZoneOffset>+02:00</eventTimeZoneOffset>
+                    <inputEPCList>
+                        <epc>urn:epc:id:sgtin:4012345.011122.25</epc>
+                        <epc>urn:epc:id:sgtin:4000001.065432.99886655</epc>
+                    </inputEPCList>
+                    <inputQuantityList>
+                        <quantityElement>
+                            <epcClass>urn:epc:class:lgtin:4012345.011111.4444</epcClass>
+                            <quantity>10</quantity>
+                            <uom>KGM</uom>
+                        </quantityElement>
+                        <quantityElement>
+                            <epcClass>urn:epc:class:lgtin:0614141.077777.987</epcClass>
+                            <quantity>30</quantity>
+                            <!-- As the uom field has been omitted, 30 instances (e.g., pieces)
+                                of GTIN '00614141777778' belonging to lot '987' have been used. -->
+                        </quantityElement>
+                        <quantityElement>
+                            <epcClass>urn:epc:idpat:sgtin:4012345.066666.*</epcClass>
+                            <quantity>220</quantity>
+                            <!-- As the uom field has been omitted and as an EPC pattern is indicated,
+                                220 instances (e.g., pieces) of GTIN '04012345666663' have been used. -->
+                        </quantityElement>
+                    </inputQuantityList>
+                    <outputEPCList>
+                        <epc>urn:epc:id:sgtin:4012345.077889.25</epc>
+                        <epc>urn:epc:id:sgtin:4012345.077889.26</epc>
+                        <epc>urn:epc:id:sgtin:4012345.077889.27</epc>
+                        <epc>urn:epc:id:sgtin:4012345.077889.28</epc>
+                    </outputEPCList>
+                    <bizStep>urn:epcglobal:cbv:bizstep:transforming</bizStep>
+                    <disposition>urn:epcglobal:cbv:disp:in_progress</disposition>
+                    <readPoint>
+                        <id>urn:epc:id:sgln:4012345.00001.0</id>
+                    </readPoint>
+                    <ilmd>
+                        <!-- Section, in which the instance/ lot master data referring to the
+                            objects indicated in the outputEPCList are defined. -->
+                        <example:bestBeforeDate>2014-12-10</example:bestBeforeDate>
+                        <!-- The namespace 'example' is just a placeholder for the domain under
+                            which the ILMD attributes are defined (for instance, by a GS1 working group).
+                            Meaning: the best before date of the above GTIN + lot is the 10th December
+                            2014. -->
+                        <example:batch>XYZ</example:batch>
+                    </ilmd>
+                    <example:myField>Example of a vendor/user extension</example:myField>
+                </TransformationEvent>
+            </extension>
+        </EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

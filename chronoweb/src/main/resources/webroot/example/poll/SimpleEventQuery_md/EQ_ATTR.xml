@@ -1,0 +1,72 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>EQ_ATTR_readPoint_urn:epcglobal:cbv:mda:site</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>0614141003006</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_bizLocation_urn:epcglobal:cbv:mda:ssd</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>Line #1 at Manufacturing Plant 1</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_BusinessTransaction_http://dfpl.sejong.ac.kr/epcis/resource#testAttr
+					</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>test value</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_EPCClass_urn:epcglobal:cbv:mda#countryOfOrigin</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>GB</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_SourceDestID_urn:epcglobal:cbv:mda#city</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>Fancy</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_LocationID_urn:epcglobal:cbv:mda#streetAddressOne
+					</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>100</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_PartyID_urn:epcglobal:cbv:mda#postalCode</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>99999</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_MicroorganismID_http://dfpl.sejong.ac.kr/epcis/resource#testAttr
+					</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>test value</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_ATTR_ChemicalSubstanceID_http://dfpl.sejong.ac.kr/epcis/resource#testAttr
+					</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>test value</string>
+					</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

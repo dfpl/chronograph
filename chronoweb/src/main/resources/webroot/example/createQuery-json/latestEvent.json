@@ -1,0 +1,8 @@
+{
+	"name": "latestEvent",
+	"query": {
+		"orderBy": "eventTime",
+		"orderDirection": "DESC",
+		"eventCountLimit": 1
+	}
+}

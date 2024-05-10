@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:query="urn:epcglobal:epcis-query:xsd:1">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <query:Unsubscribe>
+            <subscriptionID>1</subscriptionID>
+        </query:Unsubscribe>
+    </soapenv:Body>
+</soapenv:Envelope>

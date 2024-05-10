@@ -1,0 +1,7 @@
+{
+    "EQ_sDev_CEL": 0.3,
+    "GT_sDev_CEL" : 0.1,
+    "GE_sDev_CEL" : 0.3,
+    "LT_sDev_CEL" : 0.4,
+    "LE_sDev_CEL" : 0.3
+}

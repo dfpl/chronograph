@@ -1,0 +1,8 @@
+{
+	"EQ_quantity_": 20.0,
+	"EQ_quantity_KHZ": 30.0,
+	"GT_quantity_KHZ": 20.0,
+	"GE_quantity_": 15.0,
+	"LT_quantity_KHZ": 50.0,
+	"LE_quantity_": 40.0
+}

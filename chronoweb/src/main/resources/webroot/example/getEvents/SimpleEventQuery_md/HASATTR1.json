@@ -1,0 +1,26 @@
+{
+    "HASATTR_readPoint": [
+        "urn:epc:id:sgln:0037000.00729.0", "https://id.gs1.org/414/0037000007296"
+    ], 
+    "HASATTR_bizLocation" : [
+        "urn:epc:id:sgln:0037000.00730.0", "https://id.gs1.org/414/0037000007302"
+    ],
+    "HASATTR_BusinessTransaction" : [
+        "urn:epc:id:gdti:0614141.00001.1618034", "https://id.gs1.org/253/06141410000121618034"
+    ],
+    "HASATTR_EPCClass" : [
+        "urn:epc:class:lgtin:4012345.012345.998877", "https://id.gs1.org/01/04012345123456/10/998877"
+    ],
+    "HASATTR_SourceDestID" : [
+        "urn:epc:id:pgln:4012345.00225", "https://id.gs1.org/417/4012345002256"
+    ],
+    "HASATTR_LocationID" : [
+        "urn:epc:id:sgln:0037000.00729.0", "https://id.gs1.org/414/0037000007296"
+    ],
+    "HASATTR_PartyID" : [
+        "urn:epc:id:pgln:4012345.00226", "https://id.gs1.org/417/4012345002263"
+    ],
+    "HASATTR_MicroorganismID" : [
+        "https://www.ncbi.nlm.nih.gov/taxonomy/1126011"
+    ]
+}

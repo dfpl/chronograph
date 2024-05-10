@@ -1,0 +1,7 @@
+{
+    "EQ_maxValue_CEL": 26.0,
+    "GT_maxValue_CEL" : 18.0,
+    "GE_maxValue_FAH" : 50.0,
+    "LT_maxValue_KEL" : 525.0,
+    "LE_maxValue_FAH" : 100.0
+}

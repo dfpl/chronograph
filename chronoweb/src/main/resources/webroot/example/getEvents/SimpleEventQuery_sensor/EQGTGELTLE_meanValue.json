@@ -1,0 +1,7 @@
+{
+    "EQ_meanValue_CEL": 23.0,
+    "GT_meanValue_CEL" : 18.0,
+    "GE_meanValue_FAH" : 50.0,
+    "LT_meanValue_KEL" : 525.0,
+    "LE_meanValue_FAH" : 100.0
+}

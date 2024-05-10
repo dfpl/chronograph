@@ -7,14 +7,9 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.Logger;
 import org.dfpl.chronograph.chronoweb.router.ManipulationRouter;
 import org.dfpl.chronograph.chronoweb.router.SubscriptionRouter;
-import org.dfpl.chronograph.chronoweb.visualization.GraphPane;
 import org.dfpl.chronograph.kairos.KairosEngine;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
-import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.swing_viewer.SwingViewer;
-import org.graphstream.ui.view.View;
-import org.graphstream.ui.view.Viewer.ThreadingModel;
 
 import com.tinkerpop.blueprints.Graph;
 
@@ -27,6 +22,7 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 
 /**
  * The in-memory implementation of temporal graph database.
@@ -77,7 +73,12 @@ public class Server extends AbstractVerticle {
 	private SubscriptionRouter subscriptionRouter;
 
 	public static String gammaBaseDirectory;
-
+	
+	// for development
+		public static String baseWebRoot = "src/main/resources/webroot";
+		// for deployment
+		// public static String baseWebRoot = "resources/webroot";
+	
 	public void setModules() {
 		if (backendType.equals("memory")) {
 			graph = new MChronoGraph(eventBus);
@@ -86,14 +87,8 @@ public class Server extends AbstractVerticle {
 		}
 		kairos = new KairosEngine(graph, eventBus, connectionString, gammaDBName);
 	}
-	
-	public void launchTPVis(Graph graph) {
-		MultiGraph g = new MultiGraph("g");
-		SwingViewer viewer = new SwingViewer(g, ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-		View view = viewer.addDefaultView(false);
-		new GraphPane(graph, g, viewer, view);
-	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		super.start(startPromise);
@@ -104,8 +99,10 @@ public class Server extends AbstractVerticle {
 				.setDeleteUploadedFilesOnEnd(true));
 		this.eventBus = vertx.eventBus();
 
+		router.get("/chronoweb/home/*").handler(StaticHandler.create().setWebRoot(baseWebRoot).setIndexPage("index.html")
+				.setDirectoryListing(true).setCachingEnabled(false));
+		
 		setModules();
-		launchTPVis(graph);
 
 		registerManipulationRouter();
 		registerSubscriptionRouter();
@@ -118,6 +115,7 @@ public class Server extends AbstractVerticle {
 	public void registerManipulationRouter() {
 
 		manipulationRouter = new ManipulationRouter(graph);
+		manipulationRouter.registerPingRouter(router);
 		manipulationRouter.registerAddElementRouter(router, eventBus);
 		manipulationRouter.registerGetElementRouter(router, eventBus);
 		manipulationRouter.registerGetElementsRouter(router, eventBus);

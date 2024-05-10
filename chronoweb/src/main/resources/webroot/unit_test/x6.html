@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>X6 - getMetadata - OPTIONS /epcis/query (application/xml)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function getMetadata() {
+		$.ajax({
+			type: "OPTIONS",
+			url: "http://localhost:8080/epcis/query",
+			contentType: "application/xml",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + '</textarea>');
+		}).fail((result) => {
+			console.log(result);
+		});
+	}
+</script>
+<body>
+	<div> HTTP.OPTIONS /epcis/query (application/xml) </div>
+	<br>
+	<input  id="button" type="button" onclick="getMetadata()" value="invoke"/>
+	<br>
+	<div id="result">
+	</div>
+</body>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

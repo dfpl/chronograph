@@ -29,6 +29,12 @@ public class ManipulationRouter extends BaseRouter {
 	public ManipulationRouter(Graph graph) {
 		super(graph);
 	}
+	
+	public void registerPingRouter(Router router) {
+		router.get("/chronoweb").handler(routingContext -> {
+			routingContext.response().end();
+		});
+	}
 
 	public void registerAddElementRouter(Router router, EventBus eventBus) {
 		router.put("/chronoweb/graph/:resource").consumes("application/json").handler(routingContext -> {

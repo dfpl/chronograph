@@ -1,0 +1,27 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Subscribe>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>eventType</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>AggregationEvent</string>
+					</value>
+				</param>
+			</params>
+			<dest>http://localhost:8080/epcis/echo</dest>
+			<controls>
+				<schedule>
+					<second>0/5</second>
+				</schedule>
+				<reportIfEmpty>true</reportIfEmpty>
+			</controls>
+			<subscriptionID>3</subscriptionID>
+		</query:Subscribe>
+	</soapenv:Body>
+</soapenv:Envelope>

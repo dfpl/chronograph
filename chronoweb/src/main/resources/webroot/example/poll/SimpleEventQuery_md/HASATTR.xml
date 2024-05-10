@@ -1,0 +1,69 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>HASATTR_readPoint</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:sgln:0037000.00729.0</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_bizLocation</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:sgln:0037000.00730.0</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_BusinessTransaction</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:gdti:0614141.00001.1618034</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_EPCClass</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:class:lgtin:4012345.012345.998877</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_SourceDestID</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:pgln:4012345.00225</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_LocationID</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:sgln:0037000.00729.0</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_PartyID</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:pgln:4012345.00226</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_MicroorganismID</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>https://www.ncbi.nlm.nih.gov/taxonomy/1126011</string>
+					</value>
+				</param>
+				<param>
+					<name>HASATTR_ChemicalSubstanceID</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>https://identifiers.org/inchikey:CZMRCDWAGMRECN-UGDNZRGBSA-N
+						</string>
+					</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

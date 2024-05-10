@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J50 - getMetadata - OPTIONS /epcis/bizLocations/:bizLocation/vocabularies (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function getMetadata() {
+
+		var resourceType = 'bizLocations';
+		var resource = $('#resource').val();
+		if (resource == null || resource.length === 0)
+			resource = $('#resource').attr('placeholder');
+		$('#url').html('HTTP.OPTIONS /epcis/' + resourceType + '/' + resource + '/vocabularies (application/json)');
+		$('#resource').val(resource);
+		$.ajax({
+			type: "OPTIONS",
+			url: "http://localhost:8080/epcis/" + resourceType + "/" + resource + "/vocabularies",
+			contentType: "application/json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+</script>
+
+<body>
+	<div id="url">HTTP.OPTIONS /epcis/bizLocations/:bizLocation/vocabularies (application/json)</div>
+	<input type="text" value=":bizLocation" readonly />
+	<input id="resource" type="text" placeholder="https%3A%2F%2Fid.gs1.org%2F414%2F0037000007302%2F254%2F1" />
+	<br>
+	<input id="button" type="button" onclick="getMetadata()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<script>
+	$(document).ready(function () {
+		$("#resource").on('change', function postinput() {
+			var resource = $(this).val(); // this.value
+			$('#url').html('HTTP.OPTIONS /epcis/' + resourceType + '/' + resource + '/vocabularies (application/xml)');
+		});
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:2" schemaVersion="2.0" creationDate="2022-11-11T14:59:02.099+09:00"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dfpl="http://dfpl.sejong.ac.kr/epcis/resource"
+    xmlns:autoid="https://autoidlab.kaist.ac.kr/resource">
+    <EPCISHeader>
+        <extension>
+            <EPCISMasterData>
+                <VocabularyList>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:ReadPoint">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.0">
+                                <attribute id="urn:epcglobal:cbv:mda:site">0614141003006</attribute>
+                                <children>
+                                    <id>urn:epc:id:sgln:0037000.00729.8201</id>
+                                </children>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:BusinessLocation">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00730.0">
+                                <attribute id="urn:epcglobal:cbv:mda:ssd">Line #1 at Manufacturing Plant 1</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:BusinessTransaction">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:gdti:0614141.00001.1618034">
+                                <attribute id="http://dfpl.sejong.ac.kr/epcis/resource#testAttr">test value</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:EPCClass">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:class:lgtin:4012345.012345.998877">
+                                <attribute id="urn:epcglobal:cbv:mda#countryOfOrigin">GB</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:SourceDest">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:pgln:4012345.00225">
+                                <attribute id="urn:epcglobal:cbv:mda#city">Fancy</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:Location">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:sgln:0037000.00729.0">
+                                <attribute id="urn:epcglobal:cbv:mda#streetAddressOne">100</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:Party">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:pgln:4012345.00225">
+                                <attribute id="urn:epcglobal:cbv:mda#postalCode">99999</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:Microorganism">
+                        <VocabularyElementList>
+                            <VocabularyElement id="https://www.ncbi.nlm.nih.gov/taxonomy/1126011">
+                                <attribute id="http://dfpl.sejong.ac.kr/epcis/resource#testAttr">test value</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:ChemicalSubstance">
+                        <VocabularyElementList>
+                            <VocabularyElement id="https://identifiers.org/inchikey:CZMRCDWAGMRECN-UGDNZRGBSA-N">
+                                <attribute id="http://dfpl.sejong.ac.kr/epcis/resource#testAttr">test value</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                    <Vocabulary
+						type="urn:epcglobal:epcis:vtype:Resource">
+                        <VocabularyElementList>
+                            <VocabularyElement id="urn:epc:id:gdti:0614141.00001.1618034">
+                                <attribute id="http://dfpl.sejong.ac.kr/epcis/resource#testAttr">test value</attribute>
+                            </VocabularyElement>
+                        </VocabularyElementList>
+                    </Vocabulary>
+                </VocabularyList>
+            </EPCISMasterData>
+        </extension>
+    </EPCISHeader>
+    <EPCISBody>
+        <EventList>
+		</EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

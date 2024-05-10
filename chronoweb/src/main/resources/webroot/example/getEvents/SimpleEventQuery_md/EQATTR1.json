@@ -1,0 +1,26 @@
+{
+    "EQ_ATTR_readPoint_urn:epcglobal:cbv:mda:site" : [
+        "0614141003006"
+    ],
+    "EQ_ATTR_bizLocation_urn:epcglobal:cbv:mda:ssd" : [
+        "Line #1 at Manufacturing Plant 1"
+    ],
+    "EQ_ATTR_BusinessTransaction_http://dfpl.sejong.ac.kr/epcis/resource#testAttr" : [
+        "test value"
+    ],
+    "EQ_ATTR_EPCClass_urn:epcglobal:cbv:mda#countryOfOrigin" : [
+        "GB"
+    ],
+    "EQ_ATTR_SourceDestID_urn:epcglobal:cbv:mda#city" : [
+        "Fancy"
+    ],
+    "EQ_ATTR_LocationID_urn:epcglobal:cbv:mda#streetAddressOne" : [
+        "100"
+    ],
+    "EQ_ATTR_PartyID_urn:epcglobal:cbv:mda#postalCode" : [
+        "99999"
+    ],
+    "EQ_ATTR_MicroorganismID_http://dfpl.sejong.ac.kr/epcis/resource#testAttr" : [
+        "test value"
+    ]
+}

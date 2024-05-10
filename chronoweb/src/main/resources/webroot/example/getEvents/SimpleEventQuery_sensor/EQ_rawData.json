@@ -1,0 +1,8 @@
+{
+    "EQ_SENSORMETADATA_rawData": [
+        "urn:epc:id:gdti:0614141.12345.006851", "https://id.gs1.org/253/0614141123452006850"
+    ],
+    "EQ_SENSORREPORT_rawData" : [
+        "urn:epc:id:gdti:0614141.12345.006852", "https://id.gs1.org/253/0614141123452006851"
+    ]
+}

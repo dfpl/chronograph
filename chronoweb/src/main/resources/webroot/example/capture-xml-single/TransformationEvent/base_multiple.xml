@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument
+	xmlns:epcis="urn:epcglobal:epcis:xsd:2" schemaVersion="2.0"
+	creationDate="2022-11-11T14:59:02.099+09:00">
+	<EPCISBody>
+		<EventList>
+			<TransformationEvent>
+				<eventTime>2022-11-11T14:59:02.099+09:00</eventTime>
+				<eventTimeZoneOffset>+09:00</eventTimeZoneOffset>
+				<inputEPCList>
+					<epc>urn:epc:id:sgtin:4012345.011122.25</epc>
+				</inputEPCList>
+				<inputQuantityList>
+					<quantityElement>
+						<epcClass>urn:epc:class:lgtin:4012345.011111.4444</epcClass>
+						<quantity>10</quantity>
+						<uom>KGM</uom>
+					</quantityElement>
+				</inputQuantityList>
+				<transformationID>urn:epc:id:gdti:0614141.12345.400</transformationID>
+			</TransformationEvent>
+			<TransformationEvent>
+				<eventTime>2022-11-11T16:59:02.099+09:00</eventTime>
+				<eventTimeZoneOffset>+09:00</eventTimeZoneOffset>
+				<outputEPCList>
+					<epc>urn:epc:id:sgtin:4012345.077889.25</epc>
+				</outputEPCList>
+				<outputQuantityList>
+					<quantityElement>
+						<epcClass>urn:epc:class:lgtin:4012345.011111.4444</epcClass>
+						<quantity>10</quantity>
+						<uom>KGM</uom>
+					</quantityElement>
+				</outputQuantityList>
+				<transformationID>urn:epc:id:gdti:0614141.12345.400</transformationID>
+			</TransformationEvent>
+		</EventList>
+	</EPCISBody>
+</epcis:EPCISDocument>

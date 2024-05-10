@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE project>
+<epcis:EPCISDocument schemaVersion="1.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext1="http://ext.com/ext1"
+                     xmlns:ext2="http://ext.com/ext2" xmlns:ext3="http://ext.com/ext3"
+                     creationDate="2013-06-04T14:59:02.099+02:00" xmlns:epcis="urn:epcglobal:epcis:xsd:1">
+    <EPCISBody>
+        <EventList>
+            <ObjectEvent>
+                <eventTime>2005-04-03T20:33:31.116-06:00</eventTime>
+                <eventTimeZoneOffset>-06:00</eventTimeZoneOffset>
+                <baseExtension>
+                    <!--[correction] event of 1erroneous_event will be overwritten by this event-->
+                    <errorDeclaration>
+                        <declarationTime>2005-04-04T20:33:31.116-06:00</declarationTime>
+                        <reason>urn:epcglobal:cbv:er:incorrect_data</reason>
+                        <correctiveEventIDs>
+                            <correctiveEventID>93259689d1a3ad0c4f3eddea45316a589d41a292d68860d88936d489e51e6d95</correctiveEventID>
+                        </correctiveEventIDs>
+                        <ext1:default>stringAsDefaultValue</ext1:default>
+                        <ext1:int xsi:type="xsd:integer">10</ext1:int>
+                        <ext1:float xsi:type="xsd:double">20</ext1:float>
+                        <ext1:time xsi:type="xsd:dateTime">2013-06-08T14:58:56.591Z</ext1:time>
+                        <ext1:boolean xsi:type="xsd:boolean">true</ext1:boolean>
+                        <ext1:string xsi:type="xsd:string">string</ext1:string>
+                        <ext1:object>
+                            <ext2:string xsi:type="xsd:string">stringInObject</ext2:string>
+                            <ext2:array xsi:type="xsd:integer">11</ext2:array>
+                            <ext2:array xsi:type="xsd:double">21</ext2:array>
+                            <ext2:array xsi:type="xsd:string">stringInArrayInObject</ext2:array>
+                            <ext2:object>
+                                <ext3:string xsi:type="xsd:string">stringInObjectInObject</ext3:string>
+                            </ext2:object>
+                        </ext1:object>
+                        <ext1:array xsi:type="xsd:integer">12</ext1:array>
+                        <ext1:array xsi:type="xsd:double">22</ext1:array>
+                        <ext1:array xsi:type="xsd:dateTime">2013-06-08T14:58:56.591Z</ext1:array>
+                        <ext1:array xsi:type="xsd:boolean">true</ext1:array>
+                        <ext1:array xsi:type="xsd:string">stringInArray</ext1:array>
+                        <ext1:array>
+                            <ext1:object>
+                                <ext2:int xsi:type="xsd:integer">13</ext2:int>
+                                <ext2:string xsi:type="xsd:string">stringInObjectInArray</ext2:string>
+                                <ext2:array xsi:type="xsd:integer">14</ext2:array>
+                                <ext2:array xsi:type="xsd:double">23.0</ext2:array>
+                                <ext2:array xsi:type="xsd:string">stringInArrayInObjectInArray</ext2:array>
+                                <ext2:object>
+                                    <ext3:string xsi:type="xsd:string">stringInObjectInObjectInArray</ext3:string>
+                                </ext2:object>
+                            </ext1:object>
+                        </ext1:array>
+                    </errorDeclaration>
+                </baseExtension>
+                <epcList>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2017</epc>
+                    <epc>urn:epc:id:sgtin:0614141.107346.2018</epc>
+                </epcList>
+                <action>OBSERVE</action>
+                <bizStep>urn:epcglobal:cbv:bizstep:shipping</bizStep>
+                <disposition>urn:epcglobal:cbv:disp:in_transit</disposition>
+                <readPoint>
+                    <id>urn:epc:id:sgln:0614141.07346.1234</id>
+                </readPoint>
+                <bizTransactionList>
+                    <bizTransaction type="urn:epcglobal:cbv:btt:po">urn:epc:id:gdti:0614141.00001.1618034</bizTransaction>
+                </bizTransactionList>
+            </ObjectEvent>
+        </EventList>
+    </EPCISBody>
+</epcis:EPCISDocument>

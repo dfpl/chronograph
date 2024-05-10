@@ -1,0 +1,41 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>EQ_INNER_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#string
+					</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>D</string>
+					</value>
+				</param>
+				<param>
+					<name>GT_INNER_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#int
+					</name>
+					<value xsi:type="xsd:int">0</value>
+				</param>
+				<param>
+					<name>LT_INNER_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#double
+					</name>
+					<value xsi:type="xsd:double">5</value>
+				</param>
+				<param>
+					<name>GE_INNER_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp
+					</name>
+					<value xsi:type="query:DateTimeStamp">1999-11-11T14:59:02.099+09:00</value>
+				</param>
+				<param>
+					<name>EXISTS_INNER_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#int
+					</name>
+					<value xsi:type="query:VoidHolder" />
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

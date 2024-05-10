@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>J23- getEventsWithEventType - GET /epcis/eventTypes/:eventType/events (application/json)</title>
+
+</head>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script>
+	function getEvents() {
+		var eventType = $("#eventType").val();
+		if (eventType == null || eventType.length === 0){
+			eventType = $('#eventType').attr('placeholder');
+			$('#eventType').val(eventType);
+		}
+		var perPage = $('#perPage').val();
+		if (perPage == null || perPage.length === 0){
+			perPage = $('#perPage').attr('placeholder');
+			$('#perPage').val(perPage);
+		}
+		var nextPageToken = $('#nextPageToken').val();
+		
+		
+		var tURL;
+		if (perPage.length != 0 && nextPageToken.length != 0) {
+			tURL = 'http://localhost:8080/epcis/eventTypes/' + eventType + '/events?perPage=' + perPage + '&nextPageToken=' + nextPageToken;
+		} else if (perPage.length != 0 && nextPageToken.length == 0) {
+			tURL = 'http://localhost:8080/epcis/eventTypes/' + eventType + '/events?perPage=' + perPage
+		} else {
+			tURL = 'http://localhost:8080/epcis/eventTypes/' + eventType + '/events';
+		}
+		var body = $('#body').val();
+		console.log(tURL);
+		$.ajax({
+			type: "GET",
+			url: tURL,
+			contentType: "application/json",
+			data: encodeURIComponent(body),
+			dataType: "json",
+			crossOrigin: true
+		}).done((data, textStatus, xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response headers" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + xhr.getAllResponseHeaders() + ' </textarea>');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' + JSON.stringify(data, null, 4) + ' </textarea>');
+		}).fail((xhr) => {
+			$('.result').remove();
+			$('#result').empty();
+			$('#result').append('<br><input class="result" type="text" value="response status" readonly />');
+			$('#result').append('<input class="result" type="text" value=' + xhr.status + ' readonly />');
+			$('#result').append('<br><input class="result" type="text" value="response body" readonly />');
+			$('#result').append('<textarea class="result" cols=100 rows=15 readonly>' +  JSON.stringify(JSON.parse(xhr.responseText), null, 4) + ' </textarea>');
+		});
+	}
+</script>
+
+<body>
+	<div id="url">HTTP.GET /epcis/events (application/json)</div>
+	<input type="text" value=":eventType" readonly />
+	<input id="eventType" type="text" placeholder="ObjectEvent" />
+	<br>
+	<input type="text" value="perPage" readonly />
+	<input id="perPage" type="text" placeholder="3" />
+	<br>
+	<input type="text" value="nextPageToken" readonly />
+	<input id="nextPageToken" type="text" placeholder="f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454" />
+	<br>
+	<textarea id="body" cols="100" rows="25"></textarea>
+	<br>
+	<input id="button" type="button" onclick="getEvents()" value="invoke" />
+	<br>
+	<div id="result">
+	</div>
+</body>
+<script>
+	$(document).ready(function () {
+		$.ajax({
+			url: "../example/getEvents/SimpleEventQuery_basic/all.json",
+			async: false,
+			success: function (data) {
+				$('#body').val(JSON.stringify(data, null, 4));
+			}
+		});
+
+		$("#eventType").on('change', function postinput() {
+			var eventType = $("#eventType").val();
+			var perPage = $("#perPage").val();
+			var nextPageToken = $('#nextPageToken').val();
+			if (perPage.length != 0 && nextPageToken.length != 0) {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events?perPage=' + perPage + '&nextPageToken=' + nextPageToken + ' (application/json)');
+			} else if (perPage.length != 0 && nextPageToken.length == 0) {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events?perPage=' + perPage + ' (application/json)');
+			} else {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events (application/json)');
+			}
+		});
+
+
+		$("#perPage").on('change', function postinput() {
+			var eventType = $("#eventType").val();
+			var perPage = $("#perPage").val();
+			var nextPageToken = $('#nextPageToken').val();
+			if (perPage.length != 0 && nextPageToken.length != 0) {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events?perPage=' + perPage + '&nextPageToken=' + nextPageToken + ' (application/json)');
+			} else if (perPage.length != 0 && nextPageToken.length == 0) {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events?perPage=' + perPage + ' (application/json)');
+			} else {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events (application/json)');
+			}
+		});
+
+		$("#nextPageToken").on('change', function postinput() {
+			var eventType = $("#eventType").val();
+			var perPage = $("#perPage").val();
+			var nextPageToken = $('#nextPageToken').val();
+			if (perPage.length != 0 && nextPageToken.length != 0) {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events?perPage=' + perPage + '&nextPageToken=' + nextPageToken + ' (application/json)');
+			} else if (perPage.length != 0 && nextPageToken.length == 0) {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events?perPage=' + perPage + ' (application/json)');
+			} else {
+				$('#url').html('HTTP.GET /epcis/eventTypes/' + eventType + '/events (application/json)');
+			}
+		});
+
+	}); 
+</script>
+<footer>
+	<p>Copyright © 2020-2024 Jaewook Byun all rights reserved.</p>
+	<p>Jaewook Byun, Ph.D., Assistant Professor, Sejong University, Republic of Korea, Associate Director, Auto-ID Labs, Korea</p>
+</footer>
+</html>

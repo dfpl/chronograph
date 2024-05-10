@@ -1,0 +1,9 @@
+{
+    "EQ_ILMD_http://dfpl.sejong.ac.kr/epcis/resource#string": [
+        "B"
+    ],
+    "GT_ILMD_http://dfpl.sejong.ac.kr/epcis/resource#int" : 0,
+    "LT_ILMD_http://dfpl.sejong.ac.kr/epcis/resource#double" : 5.0,
+    "GE_ILMD_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp" : "1999-11-11T14:59:02.099+09:00",
+    "EXISTS_ILMD_http://dfpl.sejong.ac.kr/epcis/resource#int" : null
+}

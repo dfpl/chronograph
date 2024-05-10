@@ -1,0 +1,7 @@
+{
+    "includeAttributes": true,
+    "includeChildren": true,
+    "EQATTR_urn:epcglobal:cbv:mda#countryOfOrigin": [
+        "GB"
+    ]
+}

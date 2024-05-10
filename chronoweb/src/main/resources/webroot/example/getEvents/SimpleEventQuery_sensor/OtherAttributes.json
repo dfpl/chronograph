@@ -1,0 +1,8 @@
+{
+    "EQ_SENSORMETADATA_http://dfpl.sejong.ac.kr/epcis/resource#textAttr" : [
+        "A Text Other Attribute"
+    ],
+    "EQ_SENSORREPORT_http://dfpl.sejong.ac.kr/epcis/resource#textAttr" : [
+        "A Text Other Attribute2"
+    ]
+}

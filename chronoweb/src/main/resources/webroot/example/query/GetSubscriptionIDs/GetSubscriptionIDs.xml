@@ -1,0 +1,11 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:GetSubscriptionIDs>
+			<queryName>SimpleEventQuery</queryName>
+		</query:GetSubscriptionIDs>
+	</soapenv:Body>
+</soapenv:Envelope>

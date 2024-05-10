@@ -1,0 +1,25 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>EQ_bizTransaction_urn:epcglobal:cbv:btt:po</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:gdti:0614141.00001.1618034</string>
+					</value>
+				</param>
+				<param>
+					<name>EQ_bizTransaction_</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>urn:epc:id:gdti:0614141.00002.1618034</string>
+					</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

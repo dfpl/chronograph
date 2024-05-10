@@ -1,0 +1,11 @@
+{
+    "EQ_deviceID": [
+        "urn:epc:id:giai:4000001.111", "https://id.gs1.org/8004/4000001111"
+    ],
+    "EQ_SENSORMETADATA_deviceID" : [
+        "urn:epc:id:giai:4000001.111", "https://id.gs1.org/8004/4000001111"
+    ],
+    "EQ_SENSORREPORT_deviceID" : [
+        "urn:epc:id:giai:4000001.112", "https://id.gs1.org/8004/4000001112"
+    ]
+}

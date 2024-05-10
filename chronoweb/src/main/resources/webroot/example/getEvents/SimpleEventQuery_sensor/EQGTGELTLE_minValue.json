@@ -1,0 +1,7 @@
+{
+    "EQ_minValue_CEL": 20.0,
+    "GT_minValue_CEL" : 18.0,
+    "GE_minValue_FAH" : 50.0,
+    "LT_minValue_KEL" : 525.0,
+    "LE_minValue_FAH" : 100.0
+}

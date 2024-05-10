@@ -1,0 +1,21 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>EQ_eventID</name>
+					<value xsi:type="query:ArrayOfString">
+						<string>myID</string>
+						<string>ni:///sha-256;8e633ca6d9121a7d7a21292a6049ee66c6d00b8b055094170712f418001e2ecd?ver=CBV2.0
+						</string>
+					</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

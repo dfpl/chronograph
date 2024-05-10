@@ -1,0 +1,9 @@
+{
+    "EQ_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#string": [
+        "D"
+    ],
+    "GT_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#int" : 0,
+    "LT_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#double" : 5.0,
+    "GE_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp" : "1999-11-11T14:59:02.099+09:00",
+    "EXISTS_bizLocation_http://dfpl.sejong.ac.kr/epcis/resource#int" : null
+}

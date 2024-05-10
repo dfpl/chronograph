@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE project>
+<epcis:TransactionEvent
+	xmlns:epcis="urn:epcglobal:epcis:xsd:2" schemaVersion="2.0"
+	creationDate="2022-11-11T14:59:02.099+09:00"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dfpl="http://dfpl.sejong.ac.kr/epcis/resource"
+	xmlns:autoid="https://autoidlab.kaist.ac.kr/resource">
+	<eventTime>2022-11-11T14:59:02.099+09:00</eventTime>
+	<eventTimeZoneOffset>+09:00</eventTimeZoneOffset>
+	<bizTransactionList>
+		<bizTransaction type="urn:epcglobal:cbv:btt:po">urn:epc:id:gdti:0614141.00001.1618034</bizTransaction>
+	</bizTransactionList>
+	<parentID>urn:epc:id:sscc:0614141.1234567890</parentID>
+	<epcList>
+		<epc>urn:epc:id:sgtin:0614141.107346.2017</epc>
+		<epc>urn:epc:id:sgtin:0614141.107346.2018</epc>
+	</epcList>
+	<action>ADD</action>
+	<bizLocation>
+		<id>urn:epc:id:sgln:0012345.11111.0</id>
+		<dfpl:default>A string extension value as a default type</dfpl:default>
+		<dfpl:string xsi:type="xsd:string">A string extension value (dfpl)</dfpl:string>
+		<autoid:string xsi:type="xsd:string">A string extension value
+			(autoid)</autoid:string>
+		<dfpl:int xsi:type="xsd:int">3</dfpl:int>
+		<dfpl:double xsi:type="xsd:double">35.7</dfpl:double>
+		<dfpl:dateTimeStamp xsi:type="epcis:DateTimeStamp">2022-11-11T14:59:02.099+09:00</dfpl:dateTimeStamp>
+		<dfpl:array xsi:type="xsd:string">A string extension value #2</dfpl:array>
+		<dfpl:array xsi:type="xsd:int">4</dfpl:array>
+		<dfpl:object>
+			<inner xsi:type="xsd:string">An inner string extension value</inner>
+			<autoid:inner xsi:type="xsd:int">5</autoid:inner>
+		</dfpl:object>
+	</bizLocation>
+</epcis:TransactionEvent>

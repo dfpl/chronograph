@@ -1,0 +1,7 @@
+{
+    "EQ_value_CEL": 26.0,
+    "GT_value_CEL" : 25.0,
+    "GE_value_FAH" : 0.0,
+    "LT_value_KEL" : 525.0,
+    "LE_value_FAH" : 100.0
+}

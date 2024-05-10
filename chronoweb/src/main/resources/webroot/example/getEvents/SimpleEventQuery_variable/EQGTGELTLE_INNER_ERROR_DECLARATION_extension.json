@@ -1,0 +1,9 @@
+{
+    "EQ_INNER_ERROR_DECLARATION_http://dfpl.sejong.ac.kr/epcis/resource#string": [
+        "F"
+    ],
+    "GT_INNER_ERROR_DECLARATION_http://dfpl.sejong.ac.kr/epcis/resource#int": 3,
+    "LT_INNER_ERROR_DECLARATION_http://dfpl.sejong.ac.kr/epcis/resource#double": 8.0,
+    "GE_INNER_ERROR_DECLARATION_http://dfpl.sejong.ac.kr/epcis/resource#dateTimeStamp": "1999-11-11T14:59:02.099+09:00",
+    "EXISTS_INNER_ERROR_DECLARATION_http://dfpl.sejong.ac.kr/epcis/resource#int": null
+}

@@ -1,0 +1,34 @@
+<soapenv:Envelope
+	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:query="urn:epcglobal:epcis-query:xsd:2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Header />
+	<soapenv:Body>
+		<query:Poll>
+			<queryName>SimpleEventQuery</queryName>
+			<params>
+				<param>
+					<name>EQ_minValue_CEL</name>
+					<value xsi:type="xsd:double">20.0</value>
+				</param>
+				<param>
+					<name>GT_minValue_CEL</name>
+					<value xsi:type="xsd:double">18.0</value>
+				</param>
+				<param>
+					<name>GE_minValue_FAH</name>
+					<value xsi:type="xsd:double">-50</value>
+				</param>
+				<param>
+					<name>LT_minValue_KEL</name>
+					<value xsi:type="xsd:double">525.0</value>
+				</param>
+				<param>
+					<name>LE_minValue_FAH</name>
+					<value xsi:type="xsd:double">100</value>
+				</param>
+			</params>
+		</query:Poll>
+	</soapenv:Body>
+</soapenv:Envelope>

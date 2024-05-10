@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE project>
+<epcis:AggregationEvent
+	xmlns:epcis="urn:epcglobal:epcis:xsd:2" schemaVersion="2.0"
+	creationDate="2022-11-11T14:59:02.099+09:00">
+	<eventTime>2022-11-12T14:59:02.099+09:00</eventTime>
+	<eventTimeZoneOffset>+09:00</eventTimeZoneOffset>
+	<parentID>urn:epc:id:sscc:0614141.1234567890</parentID>
+	<childEPCs>
+		<epc>urn:epc:id:sgtin:0614141.107346.2017</epc>
+	</childEPCs>
+	<action>DELETE</action>
+</epcis:AggregationEvent>

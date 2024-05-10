@@ -1,0 +1,106 @@
+{
+  "@context": ["https://gs1.github.io/EPCIS/epcis-context.jsonld",{"ext1": "http://ext.com/ext1",
+    "ext2": "http://ext.com/ext2",
+    "ext3": "http://ext.com/ext3"}],
+
+  "isA": "EPCISQueryDocument",
+
+  "epcisBody": {
+    "queryResults" : {
+      "queryName" : "SimpleEventQuery",
+      "subscriptionID" : "3",
+      "resultBody" : {
+        "eventList" : [
+          {
+            "isA": "AggregationEvent",
+            "eventTime": "2013-06-08T14:58:56.591Z",
+            "eventTimeZoneOffset": "+02:00",
+            "parentID": "urn:epc:id:sscc:0614141.1234567890",
+            "childEPCs": [ "urn:epc:id:sgtin:0614141.107346.2017" ],
+            "action": "ADD",
+            "bizStep": "urn:epcglobal:cbv:bizstep:receiving",
+            "disposition": "urn:epcglobal:cbv:disp:in_progress",
+            "readPoint": { "id": "urn:epc:id:sgln:0037000.00729.8202"},
+            "bizLocation": { "id" : "urn:epc:id:sgln:0037000.00729.8202"},
+            "bizTransactionList": [{"type": "urn:epcglobal:cbv:btt:po", "bizTransaction": "http://transaction.acme.com/po/12345678"}],
+            "childQuantityList": [{"epcClass": "urn:epc:class:lgtin:4012345.012345.998877","quantity": 200,"uom": "KGM"}],
+            "sourceList": [{"type": "urn:epcglobal:cbv:sdt:location","source": "urn:epc:id:sgln:4012345.00225.0"}],
+            "destinationList": [{"type": "urn:epcglobal:cbv:sdt:possessing_party","destination": "urn:epc:id:sgln:4012345.00001.0"}],
+            "sensorElementList": [
+              {
+                "sensorMetadata": {
+                  "time": "2019-04-02T14:05:00.000+01:00", "deviceID": "urn:epc:id:giai:4000001.111",
+                  "deviceMetadata": "https://id.gs1.org/giai/4000001111", "rawData": "https://example.org/giai/401234599999",
+                  "startTime": "2019-04-02T13:55:01.000+01:00", "endTime": "2019-04-02T14:55:00.000+01:00",
+                  "bizRules": "https://example.com/gdti/4012345000054987", "dataProcessingMethod": "https://example.com/gdti/4012345000054987",
+                  "ext1:someFurtherMetadata": "someText"
+                },
+                "sensorReport": [
+                  {
+                    "value": 26.0, "type": "gs1:Temperature", "component": "example:x", "stringValue": "SomeString",
+                    "booleanValue": true, "hexBinaryValue": "f0f0f0", "uriValue": "https://id.gs1.org/giai/4000001111",
+                    "uom": "CEL", "minValue": 26.0, "maxValue": 26.2, "sDev": 0.1, "chemicalSubstance": "urn:epcglobal:cbv:inchikey:CZMRCDWAGMRECN-UGDNZRGBSA-N",
+                    "microorganism": "https://www.ncbi.nlm.nih.gov/taxonomy/1126011", "deviceID": "urn:epc:id:giai:4000001.111",
+                    "deviceMetadata": "https://id.gs1.org/giai/4000001111", "rawData": "https://example.org/giai/401234599999",
+                    "time": "2019-07-19T14:00:00.000+01:00", "meanValue": 13.2, "percRank": 50, "percValue": 12.7,
+                    "dataProcessingMethod": "https://example.com/gdti/4012345000054987", "ext1:someFurtherReportData": "someText"
+                  }
+                ],
+                "ext1:int": 10,
+                "ext1:float": 20.0,
+                "ext1:time": "2013-06-08T14:58:56.591Z",
+                "ext1:boolean": true,
+                "ext1:string": "string",
+                "ext1:object": {
+                  "ext2:string": "stringInObject",
+                  "ext2:array" : [ 11, 21.0, "stringInArrayInObject"],
+                  "ext2:object": { "ext2:string": "stringInObjectInObject" }
+                },
+                "ext1:array": [
+                  12, 22.0, "2013-06-08T14:58:56.591Z", true, "stringInArray",
+                  {
+                    "ext2:object": {
+                      "ext3:int": 13,
+                      "ext3:string": "stringInObjectInArray",
+                      "ext3:array" : [ 14, 23.0, "stringInArrayInObjectInArray"],
+                      "ext3:object": {
+                        "ext3:string": "stringInObjectInObjectInArray"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "persistentDisposition": {
+              "unset": [ "urn:epcglobal:cbv:disp:completeness_inferred" ],
+              "set": [ "urn:epcglobal:cbv:disp:completeness_verified" ]
+            },
+            "ext1:int": 10,
+            "ext1:float": 20.0,
+            "ext1:time": "2013-06-08T14:58:56.591Z",
+            "ext1:boolean": true,
+            "ext1:string": "string",
+            "ext1:object": {
+              "ext2:string": "stringInObject",
+              "ext2:array" : [ 11, 21.0, "stringInArrayInObject"],
+              "ext2:object": { "ext2:string": "stringInObjectInObject" }
+            },
+            "ext1:array": [
+              12, 22.0, "2013-06-08T14:58:56.591Z", true, "stringInArray",
+              {
+                "ext2:object": {
+                  "ext3:int": 13,
+                  "ext3:string": "stringInObjectInArray",
+                  "ext3:array" : [ 14, 23.0, "stringInArrayInObjectInArray"],
+                  "ext3:object": {
+                    "ext3:string": "stringInObjectInObjectInArray"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
