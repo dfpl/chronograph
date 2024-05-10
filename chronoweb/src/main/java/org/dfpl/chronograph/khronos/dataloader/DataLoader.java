@@ -50,6 +50,25 @@ public class DataLoader {
 		Server.logger.debug("[EgoFacebook] read lines " + cnt + " completed ");
 		r.close();
 	}
+	
+	public static void CollegeMessageNetwork(FileUpload file, Graph graph, String label) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));
+
+		int cnt = 0;
+		while (true) {
+			String line = r.readLine();
+			if (line == null)
+				break;
+			String[] arr = line.split("\\s");
+			Edge e = graph.addEdge(graph.addVertex(arr[0]), graph.addVertex(arr[1]), label);
+			e.addEvent(Long.parseLong(arr[2]));
+			if (++cnt % 1000 == 0)
+				Server.logger.debug("[CollegeMsg] read lines " + cnt + " ... ");
+		}
+		Server.logger.debug("[CollegeMsg] read lines " + cnt + " completed ");
+		r.close();
+	}
+
 
 	public static void EUEmailCommunicationNetwork(FileUpload file, Graph graph, String label) throws IOException {
 		BufferedReader r = new BufferedReader(new FileReader(file.uploadedFileName()));

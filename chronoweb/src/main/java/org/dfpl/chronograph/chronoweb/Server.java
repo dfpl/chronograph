@@ -66,7 +66,7 @@ public class Server extends AbstractVerticle {
 	public static Pattern vtPattern = Pattern.compile("^[^|_]+_[+-]?[0-9]+$");
 	public static Pattern etPattern = Pattern.compile("^[^|_]+\\|[^|_]+\\|[^|_]+_[+-]?[0-9]+$");
 
-	public static List<String> datasetList = List.of("facebook_combined", "Email-EuAll", "sx-mathoverflow",
+	public static List<String> datasetList = List.of("facebook_combined", "CollegeMsg", "Email-EuAll", "sx-mathoverflow",
 			"tcp_sample");
 
 	private ManipulationRouter manipulationRouter;

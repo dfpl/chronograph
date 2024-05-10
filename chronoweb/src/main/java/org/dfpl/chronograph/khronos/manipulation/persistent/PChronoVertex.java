@@ -161,10 +161,52 @@ public class PChronoVertex extends PChronoElement implements Vertex {
 		}
 
 		PChronoGraph pg = (PChronoGraph) g;
-		return pg.vertexEvents.find(query).sort(new Document("_t", 1)).map(doc -> {
-			return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+		if (awareOutEvents == false && awareInEvents == false)
+			return pg.vertexEvents.find(query).projection(new Document("_t", 1).append("_id", -1))
+					.sort(new Document("_t", 1)).map(doc -> {
+						return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+					});
+
+		TreeSet<VertexEvent> set = new TreeSet<VertexEvent>(new Comparator<VertexEvent>() {
+			@Override
+			public int compare(VertexEvent o1, VertexEvent o2) {
+				return o1.getTime().compareTo(o2.getTime());
+			}
 		});
-		// TODO: awareOutEvents, awareInEvents
+		pg.vertexEvents.find(query).projection(new Document("_t", 1).append("_id", -1)).map(doc -> {
+			return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+		}).into(set);
+		if (awareOutEvents) {
+			query = new Document("_o", id);
+			if (tr.equals(TemporalRelation.isAfter)) {
+				query.append("_t", new Document("$gt", time));
+			} else if (tr.equals(TemporalRelation.isBefore)) {
+				query.append("_t", new Document("$lt", time));
+			} else if (tr.equals(TemporalRelation.cotemporal)) {
+				query.append("_t", time);
+			} else {
+				throw new IllegalArgumentException();
+			}
+			pg.edgeEvents.find(query).projection(new Document("_t", 1).append("_id", -1)).map(doc -> {
+				return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+			}).into(set);
+		}
+		if (awareInEvents) {
+			query = new Document("_i", id);
+			if (tr.equals(TemporalRelation.isAfter)) {
+				query.append("_t", new Document("$gt", time));
+			} else if (tr.equals(TemporalRelation.isBefore)) {
+				query.append("_t", new Document("$lt", time));
+			} else if (tr.equals(TemporalRelation.cotemporal)) {
+				query.append("_t", time);
+			} else {
+				throw new IllegalArgumentException();
+			}
+			pg.edgeEvents.find(query).projection(new Document("_t", 1).append("_id", -1)).map(doc -> {
+				return new PChronoVertexEvent(g, id, doc.getLong("_t"), ((PChronoGraph) g).vertexEvents);
+			}).into(set);
+		}
+		return set;
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class ManipulationRouter extends BaseRouter {
 	public ManipulationRouter(Graph graph) {
 		super(graph);
 	}
-	
+
 	public void registerPingRouter(Router router) {
 		router.get("/chronoweb").handler(routingContext -> {
 			routingContext.response().end();
@@ -655,6 +655,17 @@ public class ManipulationRouter extends BaseRouter {
 				try {
 					synchronized (graph) {
 						DataLoader.EgoFacebook(file, graph, label);
+					}
+					sendResult(routingContext, 200);
+					return;
+				} catch (IOException e) {
+					sendResult(routingContext, 500);
+					return;
+				}
+			} else if (fileName.equals("CollegeMsg")) {
+				try {
+					synchronized (graph) {
+						DataLoader.CollegeMessageNetwork(file, graph, label);
 					}
 					sendResult(routingContext, 200);
 					return;

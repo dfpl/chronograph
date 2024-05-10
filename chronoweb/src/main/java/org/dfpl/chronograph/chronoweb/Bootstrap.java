@@ -121,7 +121,7 @@ public class Bootstrap {
 			Server.gammaBaseDirectory = Server.configuration.getString("gamma_base_directory");
 			File base = new File(Server.gammaBaseDirectory);
 			if (!base.isDirectory()) {
-				System.out.println("Invalid gamma base directory. System Terminated.");
+				System.out.println("Invalid gamma base directory ( " + Server.gammaBaseDirectory + " ). System Terminated.");
 				System.exit(1);
 			}
 			org.apache.commons.io.FileUtils.cleanDirectory(base);
