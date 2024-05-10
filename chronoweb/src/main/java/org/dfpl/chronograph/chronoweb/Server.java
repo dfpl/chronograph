@@ -86,6 +86,13 @@ public class Server extends AbstractVerticle {
 		}
 		kairos = new KairosEngine(graph, eventBus, connectionString, gammaDBName);
 	}
+	
+	public void launchTPVis(Graph graph) {
+		MultiGraph g = new MultiGraph("g");
+		SwingViewer viewer = new SwingViewer(g, ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+		View view = viewer.addDefaultView(false);
+		new GraphPane(graph, g, viewer, view);
+	}
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
@@ -98,6 +105,7 @@ public class Server extends AbstractVerticle {
 		this.eventBus = vertx.eventBus();
 
 		setModules();
+		launchTPVis(graph);
 
 		registerManipulationRouter();
 		registerSubscriptionRouter();
@@ -138,10 +146,5 @@ public class Server extends AbstractVerticle {
 		Vertx.vertx().deployVerticle("org.dfpl.chronograph.chronoweb.Server",
 				new DeploymentOptions().setInstances(Server.numberOfVerticles));
 		System.setProperty("org.graphstream.ui", "swing");
-		
-		MultiGraph graph = new MultiGraph("g");
-		SwingViewer viewer = new SwingViewer(graph, ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-		View view = viewer.addDefaultView(false);
-		new GraphPane(graph, viewer, view);
 	}
 }

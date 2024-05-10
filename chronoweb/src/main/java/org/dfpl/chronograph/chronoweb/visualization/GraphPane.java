@@ -14,10 +14,20 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.swing_viewer.SwingViewer;
 import org.graphstream.ui.view.View;
 
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
+
 public class GraphPane extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public GraphPane(MultiGraph g, SwingViewer viewer, View view) {
+	private Graph modelGraph;
+	private MultiGraph visGraph;
+
+	public GraphPane(Graph graph, MultiGraph g, SwingViewer viewer, View view) {
+		this.modelGraph = graph;
+		this.visGraph = g;
 		Container container = getContentPane();
 		JComponent graphView = (JComponent) view;
 		container.add(graphView);
@@ -27,16 +37,21 @@ public class GraphPane extends JFrame {
 		JMenu connectMenu = new JMenu("Connect");
 		JMenuItem connectMenuItem = new JMenuItem("connect");
 		connectMenuItem.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(e);
+				for (Edge edge : modelGraph.getEdges()) {
+					Vertex out = edge.getVertex(Direction.OUT);
+					Vertex in = edge.getVertex(Direction.IN);
+					visGraph.addNode(out.toString());
+					visGraph.addNode(in.toString());
+					visGraph.addEdge(out.toString() + "|" + in.toString(), out.toString(), in.toString(), true);
+				}
 			}
 		});
 		connectMenu.add(connectMenuItem);
 		menuBar.add(connectMenu);
 		setJMenuBar(menuBar);
-		setTitle("Chronoweb - Graph Pane");
+		setTitle("Chronoweb - TPVis");
 		setSize(800, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
