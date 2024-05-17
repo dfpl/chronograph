@@ -100,7 +100,7 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 			byte[] fill = new byte[capacity * elementByteSize];
 			Arrays.fill(fill, gammaElementConverter.getDefaultByteValue());
 			gamma.write(fill);
-			gamma.seek(fromIdx);
+			gamma.seek(fromIdx * elementByteSize);
 			gamma.write(element.getBytes());
 			gammaMap.put(fromIdx, gamma);
 		} catch (Exception e) {
@@ -238,7 +238,7 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 	}
 
 	public void update(K check, Predicate<E> testCheck, E newCheckValue, Map<K, GammaElement<E>> updates,
-					   BiPredicate<E, E> testUpdate) {
+			BiPredicate<E, E> testUpdate) {
 
 		gammaWriteLock.lock();
 		int checkIdx = getID(check);
@@ -253,7 +253,7 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 				if (checkValue == null || testUpdate.test(checkValue, newCheckValue))
 					return;
 
-				for(Map.Entry<K, GammaElement<E>> update: updates.entrySet()){
+				for (Map.Entry<K, GammaElement<E>> update : updates.entrySet()) {
 					int updateIdx = getID(update.getKey());
 					long updatePos = getSeekPos(updateIdx);
 					if (testUpdate.test(getElement(updatePos, gamma), update.getValue().getElement())) {
@@ -366,7 +366,7 @@ public class FixedSizedGammaTable<K, E> implements GammaTable<K, E> {
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (K s : getSources()) {
 			stringBuilder.append(String.format("%s -> %s", s, getGamma(s).toMap(true)));

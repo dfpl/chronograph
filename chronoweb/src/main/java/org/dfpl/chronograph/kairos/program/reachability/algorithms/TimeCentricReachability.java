@@ -10,6 +10,7 @@ import org.dfpl.chronograph.kairos.gamma.GammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.FixedSizedGammaTable;
 import org.dfpl.chronograph.kairos.gamma.persistent.file.LongGammaElement;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ import java.nio.file.NotDirectoryException;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
@@ -97,17 +99,40 @@ public class TimeCentricReachability {
 			Boolean includeBaseTime) {
 		Comparator<Event> eventComparator = setEventComparator(tr);
 
-		return ((MChronoGraph) graph).getEdgeEvents().filter(edgeEvent -> edgeEvent.getLabel().equals(edgeLabel))
-				.filter(edgeEvent -> {
+		if(graph instanceof MChronoGraph) {
+			return ((MChronoGraph) graph).getEdgeEvents().filter(edgeEvent -> edgeEvent.getLabel().equals(edgeLabel))
+					.filter(edgeEvent -> {
 
-					if (baseTime.equals(edgeEvent.getTime()) && includeBaseTime)
-						return true;
-					else if (tr.equals(TemporalRelation.isAfter))
-						return IS_AFTER.test(edgeEvent.getTime(), baseTime);
-					else if (tr.equals(TemporalRelation.isBefore))
-						return IS_BEFORE.test(edgeEvent.getTime(), baseTime);
-					return false;
-				}).sorted(eventComparator);
+						if (baseTime.equals(edgeEvent.getTime()) && includeBaseTime)
+							return true;
+						else if (tr.equals(TemporalRelation.isAfter))
+							return IS_AFTER.test(edgeEvent.getTime(), baseTime);
+						else if (tr.equals(TemporalRelation.isBefore))
+							return IS_BEFORE.test(edgeEvent.getTime(), baseTime);
+						return false;
+					}).sorted(eventComparator);
+		}else {
+			PChronoGraph pGraph = (PChronoGraph) graph;
+			TreeSet<EdgeEvent> edgeEvents = new TreeSet<EdgeEvent>(new Comparator<EdgeEvent>() {
+
+				@Override
+				public int compare(EdgeEvent o1, EdgeEvent o2) {
+					return o1.getTime().compareTo(o2.getTime());
+				}
+			});
+			for(EdgeEvent edgeEvent: pGraph.getEdgeEvents()) {
+				if(!edgeEvent.getLabel().equals(edgeLabel))
+					continue;
+				if (baseTime.equals(edgeEvent.getTime()) && includeBaseTime)
+					edgeEvents.add(edgeEvent);
+				else if (tr.equals(TemporalRelation.isAfter) && IS_AFTER.test(edgeEvent.getTime(), baseTime))
+					edgeEvents.add(edgeEvent);
+				else if (tr.equals(TemporalRelation.isBefore) && IS_BEFORE.test(edgeEvent.getTime(), baseTime))
+					edgeEvents.add(edgeEvent);
+			}
+			return edgeEvents.stream();
+		}
+		
 	}
 
 	private Comparator<Event> setEventComparator(TemporalRelation tr) {
