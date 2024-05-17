@@ -32,6 +32,9 @@
 <script defer>
 		// Connection to the server
 		$(document).ready(() => {
+			
+			
+			
 			// Connection to the server
 			const href = window.location.href;
 			let hrefArr = href.split("/");
@@ -147,6 +150,16 @@
 		});
 </script>
 
+<script>
+function getStartTimesLocal(){
+	const href = window.location.href;
+	let hrefArr = href.split("/");
+	let baseURL = hrefArr[0] + "//" + hrefArr[2] + "/chronoweb";
+	getGammaTableStartTimes(baseURL+"/gammaTable", "gammaTablesStartTimes", "gammaTablesStartTimeMenuTitle", "gammaTablesPrograms" ,"gammaTablesProgramTitle", "gammaTablesSources" ,"gammaTablesSourceTitle" );
+}
+
+</script>
+
 <body id="page-top">
 	<!-- Page Wrapper -->
 	<div id="wrapper">
@@ -207,19 +220,39 @@
 									<div class="col-sm">
 										<div class="form-group row">
 											<button id="searchGammaTables" type="button"
-												class="btn btn-primary">Search</button>
-											<div class="dropdown invisible">
+												class="btn btn-primary" onclick="getStartTimesLocal()">Search</button>
+											<div class="dropdown">
 												<button class="btn btn-secondary dropdown-toggle"
-													type="button" id="gammaTablesMenuButton"
+													type="button" id="gammaTablesStartTimeMenuTitle"
 													data-toggle="dropdown" aria-haspopup="true"
-													aria-expanded="false">Select</button>
-												<div class="dropdown-menu" id="gammaTablesMenuItems"
-													aria-labelledby="dropdownMenuButton"></div>
+													aria-expanded="false">Start Time</button>
+												<div class="dropdown-menu" id="gammaTablesStartTimes"
+													aria-labelledby="dropdownMenuButton">
+													</div>
+											</div>
+											<div class="dropdown">
+												<button class="btn btn-secondary dropdown-toggle"
+													type="button" id="gammaTablesProgramTitle"
+													data-toggle="dropdown" aria-haspopup="true"
+													aria-expanded="false">Program</button>
+												<div class="dropdown-menu" id="gammaTablesPrograms"
+													aria-labelledby="dropdownMenuButton">
+													</div>
+											</div>
+											<div class="dropdown">
+												<button class="btn btn-secondary dropdown-toggle"
+													type="button" id="gammaTablesSourceTitle"
+													data-toggle="dropdown" aria-haspopup="true"
+													aria-expanded="false">Source</button>
+												<div class="dropdown-menu" id="gammaTablesSources"
+													aria-labelledby="dropdownMenuButton">
+													</div>
 											</div>
 											<button type="button" class="btn btn-primary invisible">Visualize</button>
 											<div id="serverEndpoint" class="text-xs"></div>
 											<div id="serverResp" class="rounded-circle bg-danger Blink2"
 												style="width: 15px; height: 15px;"></div>
+											
 										</div>
 									</div>
 								</div>
