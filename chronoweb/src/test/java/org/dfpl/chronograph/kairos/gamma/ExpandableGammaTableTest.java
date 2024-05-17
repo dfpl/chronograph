@@ -55,19 +55,19 @@ public class ExpandableGammaTableTest {
 
 	public void baseTest() {
 		gammaTable.clear();
-		gammaTable.set("1", "1", new PathGammaElement(List.of("1"), 0l));
-		gammaTable.set("2", "2", new PathGammaElement(List.of("2"), 0l));
-		gammaTable.set("3", "3", new PathGammaElement(List.of("3"), 0l));
-		gammaTable.set("4", "4", new PathGammaElement(List.of("4"), 0l));
-		gammaTable.set("5", "5", new PathGammaElement(List.of("5"), 0l));
+		gammaTable.set("1", "1", new PathGammaElement(List.of("1"), 0l, List.of(0l)));
+		gammaTable.set("2", "2", new PathGammaElement(List.of("2"), 0l, List.of(0l)));
+		gammaTable.set("3", "3", new PathGammaElement(List.of("3"), 0l, List.of(0l)));
+		gammaTable.set("4", "4", new PathGammaElement(List.of("4"), 0l, List.of(0l)));
+		gammaTable.set("5", "5", new PathGammaElement(List.of("5"), 0l, List.of(0l)));
 
-		gammaTable.append("1", sourceTest, "4", new PathGammaElement(List.of("4"), 1l), targetTest);
-		gammaTable.append("2", sourceTest, "3", new PathGammaElement(List.of("3"), 2l), targetTest);
-		gammaTable.append("1", sourceTest, "2", new PathGammaElement(List.of("2"), 3l), targetTest);
-		gammaTable.append("4", sourceTest, "2", new PathGammaElement(List.of("2"), 4l), targetTest);
-		gammaTable.append("4", sourceTest, "3", new PathGammaElement(List.of("3"), 5l), targetTest);
-		gammaTable.append("3", sourceTest, "5", new PathGammaElement(List.of("5"), 6l), targetTest);
-		gammaTable.append("2", sourceTest, "3", new PathGammaElement(List.of("3"), 7l), targetTest);
+		gammaTable.append("1", sourceTest, "4", new PathGammaElement(List.of("4"), 1l, List.of(1l)), targetTest);
+		gammaTable.append("2", sourceTest, "3", new PathGammaElement(List.of("3"), 2l, List.of(2l)), targetTest);
+		gammaTable.append("1", sourceTest, "2", new PathGammaElement(List.of("2"), 3l, List.of(3l)), targetTest);
+		gammaTable.append("4", sourceTest, "2", new PathGammaElement(List.of("2"), 4l, List.of(4l)), targetTest);
+		gammaTable.append("4", sourceTest, "3", new PathGammaElement(List.of("3"), 5l, List.of(5l)), targetTest);
+		gammaTable.append("3", sourceTest, "5", new PathGammaElement(List.of("5"), 6l, List.of(6l)), targetTest);
+		gammaTable.append("2", sourceTest, "3", new PathGammaElement(List.of("3"), 7l, List.of(7l)), targetTest);
 
 		for (int i = 1; i <= 5; i++) {
 			System.out.println(gammaTable.getGamma(String.valueOf(i)).toMap(true));

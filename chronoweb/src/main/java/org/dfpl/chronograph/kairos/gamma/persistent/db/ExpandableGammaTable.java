@@ -129,6 +129,8 @@ public class ExpandableGammaTable implements GammaTable<String, Document> {
 				checkPathList.add(update);
 				Document newPath = (Document) newValue.getElement();
 				checkPath.put("time", newPath.getLong("time"));
+				List<Long> checkTimes = checkPath.getList("times", Long.class);
+				checkTimes.add(newPath.getLong("time"));
 				col.replaceOne(new Document("_id", update), new Document("_id", update).append("_g", checkPath),
 						new ReplaceOptions().upsert(true));
 			}

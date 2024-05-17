@@ -51,7 +51,7 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 		synchronized (gammaTable) {
 			for (Vertex s : sources) {
 				String id = s.getId();
-				gammaTable.set(id, id, new PathGammaElement(List.of(id), startTime));
+				gammaTable.set(id, id, new PathGammaElement(List.of(id), startTime, List.of(startTime)));
 			}
 
 			if (graph instanceof MChronoGraph mg) {
@@ -60,7 +60,8 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 					String out = event.getVertex(Direction.OUT).getId();
 					String in = event.getVertex(Direction.IN).getId();
 					gammaTable.append(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()), out,
-							sourceTest, in, new PathGammaElement(List.of(in), event.getTime()), targetTest);
+							sourceTest, in,
+							new PathGammaElement(List.of(in), event.getTime(), List.of(event.getTime())), targetTest);
 					gammaTable.print();
 				});
 			} else if (graph instanceof PChronoGraph pg) {
@@ -69,7 +70,8 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 					String out = event.getVertex(Direction.OUT).getId();
 					String in = event.getVertex(Direction.IN).getId();
 					gammaTable.append(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()), out,
-							sourceTest, in, new PathGammaElement(List.of(in), event.getTime()), targetTest);
+							sourceTest, in,
+							new PathGammaElement(List.of(in), event.getTime(), List.of(event.getTime())), targetTest);
 					gammaTable.print();
 				});
 			}
@@ -81,7 +83,8 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 		synchronized (gammaTable) {
 			String out = addedEvent.getVertex(Direction.OUT).getId();
 			String in = addedEvent.getVertex(Direction.IN).getId();
-			gammaTable.update(out, sourceTest, in, new PathGammaElement(List.of(in), addedEvent.getTime()), targetTest);
+			gammaTable.update(out, sourceTest, in,
+					new PathGammaElement(List.of(in), addedEvent.getTime(), List.of(addedEvent.getTime())), targetTest);
 			gammaTable.print();
 		}
 	}

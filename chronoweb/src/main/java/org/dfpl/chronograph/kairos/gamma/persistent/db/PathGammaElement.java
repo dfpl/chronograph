@@ -9,10 +9,11 @@ public class PathGammaElement implements GammaElement<Document> {
 
 	private Document element;
 
-	public PathGammaElement(List<String> path, Long minimumVisitedTime) {
+	public PathGammaElement(List<String> path, Long minimumVisitedTime, List<Long> visitedTime) {
 		element = new Document();
 		element.put("path", path);
 		element.put("time", minimumVisitedTime);
+		element.put("times", visitedTime);
 	}
 
 	@Override
