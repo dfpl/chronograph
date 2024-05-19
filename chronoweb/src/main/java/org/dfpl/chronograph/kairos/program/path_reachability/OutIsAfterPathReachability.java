@@ -62,9 +62,10 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 					gammaTable.append(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()), out,
 							sourceTest, in,
 							new PathGammaElement(List.of(in), event.getTime(), List.of(event.getTime())), targetTest);
-					gammaTable.print();
+					// gammaTable.print();
 				});
 			} else if (graph instanceof PChronoGraph pg) {
+				
 				pg.getEdgeEvents().forEach(event -> {
 					System.out.println("\t\t" + event);
 					String out = event.getVertex(Direction.OUT).getId();
@@ -72,7 +73,7 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 					gammaTable.append(sources.parallelStream().map(v -> v.getId()).collect(Collectors.toSet()), out,
 							sourceTest, in,
 							new PathGammaElement(List.of(in), event.getTime(), List.of(event.getTime())), targetTest);
-					gammaTable.print();
+					// gammaTable.print();
 				});
 			}
 		}

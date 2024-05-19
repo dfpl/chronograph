@@ -150,17 +150,17 @@
 		$("#footer").load("footer.html");
 	</script>
 
-	<script src="js/epcis-modules.js"></script>
+	<script src="js/chronoweb.js"></script>
 	<script defer>
 		// Connection to the server
-		$(document).ready(() => {
+		$(document).ready(() => {	
 			// Connection to the server
 			const href = window.location.href;
 			let hrefArr = href.split("/");
 			let baseURL = hrefArr[0] + "//" + hrefArr[2] + "/chronoweb";
 
-			serverConn(baseURL, $("#serverEndpoint"), $("#serverResp"));
-			setInterval(serverConn.bind(baseURL, $("#serverEndpoint"), $("#serverResp")), 3000);
+			serverConn(baseURL, "#serverResp");
+			setInterval(serverConn.bind(baseURL, "#serverResp"), 3000);
 		});
 	</script>
 </body>
