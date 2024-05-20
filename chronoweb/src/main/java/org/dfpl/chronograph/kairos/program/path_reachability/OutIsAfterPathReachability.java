@@ -86,7 +86,7 @@ public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> 
 			String in = addedEvent.getVertex(Direction.IN).getId();
 			gammaTable.update(out, sourceTest, in,
 					new PathGammaElement(List.of(in), addedEvent.getTime(), List.of(addedEvent.getTime())), targetTest);
-			gammaTable.print();
+			// gammaTable.print();
 		}
 	}
 

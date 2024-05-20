@@ -20,68 +20,93 @@ function serverConn(url, circle) {
 	});
 }
 
-function getData(gammas){
-	
+function getData(gammas) {
+
 	nodeSet = new Set();
 	edgeSet = new Set();
-	
-	for(let gamma in gammas ){
+
+	for (let gamma in gammas) {
 		let path = gammas[gamma]['path'];
 		let times = gamma['times'];
-		for(let i = 0 ; i < path.length ; i++){
+		for (let i = 0; i < path.length; i++) {
 			nodeSet.add(path[i]);
-			if(i != 0){
-				edgeSet.add(path[i-1] + "," + path[i]);
+			if (i != 0) {
+				edgeSet.add(path[i - 1] + "," + path[i]);
 			}
 		}
 	}
-	
+
 	node = [];
-	for(let n of nodeSet){
-		node.push({id: n, group: 1});
+	for (let n of nodeSet) {
+		node.push({ id: n, group: 1 });
 	}
 	edge = [];
-	for(let e of edgeSet){
-		earr =	e.split(',');
-		edge.push({source: earr[0], target: earr[1], value: 1});
+	for (let e of edgeSet) {
+		earr = e.split(',');
+		edge.push({ source: earr[0], target: earr[1], value: 1 });
 	}
-	
+
 	data = {};
 	data.nodes = node;
-	data.links = edge; 
+	data.links = edge;
 	return data;
 }
 
-function getData2(source, gammas){
-	data = {};
-	data.source = null;
+function prepareTPVisData(source, gammas) {
 	
-	for(let gamma in gammas ){
+	tpvisData = {};
+	tpvisData.source = null;
+
+	nodeSet = new Set();
+	
+	for (let gamma in gammas) {
 		let path = gammas[gamma]['path'];
-		let times = gamma['times'];
-		for(let i = 0 ; i < path.length ; i++){
+		for (let i = 0; i < path.length; i++) {
 			nodeSet.add(path[i]);
-			if(i != 0){
-				edgeSet.add(path[i-1] + "," + path[i]);
-			}
 		}
 	}
+
+	for (let n of nodeSet) {
+		tpvisData[n] = null;
+	}
+
+	for (let gamma in gammas) {
+		let path = gammas[gamma]['path'];
+		let times = gammas[gamma]['times'];
+		let source = path[path.length-1];
+		
+		let p = [];
+		for (let i = 0; i < path.length; i++) {
+			if (i != 0){
+				let pp = {};
+				pp.source_id = path[i-1];
+				pp.target_id = path[i];				
+				pp.time = times[i];
+				p.push(pp);
+			}
+		}
+		tpvisData[source] = p;
+	}
+	return tpvisData;
 }
 
-function visualize(url, containerID) {
+function visualize(url, sourceID, containerID) {
 
 	$.ajax({
 		type: "GET",
 		url: url,
 		crossOrigin: true,
 	}).done((result) => {
-		
+
 		data = getData(result["gamma"]);
-		
+
+		tpvisData = prepareTPVisData($("#"+sourceID).text(),result["gamma"]);
+
+
 		$("#" + containerID).html("");
 
 		// Specify the dimensions of the chart.
-		const width = 928;
+		const width = 1800;
 		const height = 600;
 		// Specify the color scale.
 		const color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -203,7 +228,7 @@ function getGammaTableSources(url, sourceContainerID, sourceMenuID, visualizeBut
 				$("#" + sourceMenuID).text($(this).text());
 				$("#" + visualizeButtonID).removeClass('invisible');
 				$("#" + visualizeButtonID).click(function() {
-					visualize(url + "/" + result['gammaSources'][key], containerID);
+					visualize(url + "/" + result['gammaSources'][key], sourceMenuID, containerID);
 				});
 				// getGammaTablePrograms(url, programContainerID, programMenuID);
 			});
