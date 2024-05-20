@@ -89,8 +89,9 @@ public class SubscriptionRouter extends BaseRouter {
 			}
 
 			String edgeLabel = routingContext.pathParam("edgeLabel");
-			if (edgeLabel == null){
-				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+			if (edgeLabel == null) {
+				sendResult(routingContext, "application/json",
+						MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
 				return;
 			}
 
@@ -126,7 +127,8 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 406);
 						return;
 					} else {
-						kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterReachability(graph, gammaTable));
+						kairos.addSubscription(v, ve.getTime(), edgeLabel,
+								new OutIsAfterReachability(graph, gammaTable, edgeLabel));
 						sendResult(routingContext, 200);
 						return;
 					}
@@ -136,7 +138,8 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 406);
 						return;
 					} else {
-						kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterPathReachability(graph, gammaTable));
+						kairos.addSubscription(v, ve.getTime(), edgeLabel,
+								new OutIsAfterPathReachability(graph, gammaTable, edgeLabel));
 						sendResult(routingContext, 200);
 						return;
 					}
@@ -146,7 +149,8 @@ public class SubscriptionRouter extends BaseRouter {
 				}
 			} else {
 				if (kairosProgram.equals("OutIsAfterReachability")) {
-					String subDirectoryName = Server.gammaBaseDirectory + "\\" + ve.getTime() + "_" + kairosProgram + "_" + edgeLabel;
+					String subDirectoryName = Server.gammaBaseDirectory + "\\" + ve.getTime() + "_" + kairosProgram
+							+ "_" + edgeLabel;
 					File subDirectory = new File(subDirectoryName);
 					if (!subDirectory.exists())
 						subDirectory.mkdirs();
@@ -157,13 +161,16 @@ public class SubscriptionRouter extends BaseRouter {
 						sendResult(routingContext, 500);
 						return;
 					}
-					kairos.addSubscription(v, ve.getTime(), edgeLabel, new OutIsAfterReachability(graph, gammaTable));
+					kairos.addSubscription(v, ve.getTime(), edgeLabel,
+							new OutIsAfterReachability(graph, gammaTable, edgeLabel));
 					sendResult(routingContext, 200);
 					return;
 				} else if (kairosProgram.equals("OutIsAfterPathReachability")) {
 					ExpandableGammaTable gammaTable = null;
-					gammaTable = new ExpandableGammaTable(kairos.getGammaClient(), time + "_" + kairosProgram);
-					kairos.addSubscription(v, ve.getTime(), edgeLabel,  new OutIsAfterPathReachability(graph, gammaTable));
+					gammaTable = new ExpandableGammaTable(kairos.getGammaClient(),
+							time + "_" + kairosProgram + "_" + edgeLabel);
+					kairos.addSubscription(v, ve.getTime(), edgeLabel,
+							new OutIsAfterPathReachability(graph, gammaTable, edgeLabel));
 					sendResult(routingContext, 200);
 					return;
 				} else {
@@ -230,8 +237,9 @@ public class SubscriptionRouter extends BaseRouter {
 			}
 
 			String edgeLabel = routingContext.pathParam("edgeLabel");
-			if (edgeLabel == null){
-				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+			if (edgeLabel == null) {
+				sendResult(routingContext, "application/json",
+						MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
 				return;
 			}
 
@@ -282,8 +290,9 @@ public class SubscriptionRouter extends BaseRouter {
 			}
 
 			String edgeLabel = routingContext.pathParam("edgeLabel");
-			if (edgeLabel == null){
-				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+			if (edgeLabel == null) {
+				sendResult(routingContext, "application/json",
+						MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
 				return;
 			}
 
@@ -336,8 +345,9 @@ public class SubscriptionRouter extends BaseRouter {
 			}
 
 			String edgeLabel = routingContext.pathParam("edgeLabel");
-			if (edgeLabel == null){
-				sendResult(routingContext, "application/json", MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
+			if (edgeLabel == null) {
+				sendResult(routingContext, "application/json",
+						MessageBuilder.getMissingRequiredURLParameterException("edgeLabel"), 400);
 				return;
 			}
 
@@ -373,8 +383,8 @@ public class SubscriptionRouter extends BaseRouter {
 				result.put("source", sourceID);
 				result.put("destination", destinationID);
 
-				Object gammaElement = kairos.getProgram(time, kairosProgram, edgeLabel).getGammaTable().getGamma(sourceID)
-						.getElement(destinationID);
+				Object gammaElement = kairos.getProgram(time, kairosProgram, edgeLabel).getGammaTable()
+						.getGamma(sourceID).getElement(destinationID);
 				result.put("gammaElement", gammaElement);
 
 				sendResult(routingContext, "application/json", result.toString(), 200);

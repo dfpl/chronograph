@@ -41,8 +41,8 @@ public class OutIsAfterReachability extends AbstractKairosProgram<Long> {
 	public static final BiPredicate<Long, Long> IS_AFTER = (t, u) -> u < t;
 	private final static BiPredicate<Long, Long> IS_COTEMPORAL = (t, u) -> Objects.equals(u, t);
 
-	public OutIsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable) {
-		super(graph, gammaTable, "OutIsAfterReachability");
+	public OutIsAfterReachability(Graph graph, GammaTable<String, Long> gammaTable, String edgeLabel) {
+		super(graph, gammaTable, "OutIsAfterReachability", edgeLabel);
 	}
 
 	@Override

@@ -7,14 +7,18 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
 
+import org.bson.Document;
 import org.dfpl.chronograph.chronoweb.Server;
 import org.dfpl.chronograph.common.EdgeEvent;
 import org.dfpl.chronograph.common.VertexEvent;
 import org.dfpl.chronograph.kairos.gamma.GammaTable;
+import org.dfpl.chronograph.kairos.gamma.persistent.db.ExpandableGammaTable;
+import org.dfpl.chronograph.kairos.program.path_reachability.OutIsAfterPathReachability;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
@@ -23,7 +27,9 @@ import com.tinkerpop.blueprints.Vertex;
 import io.vertx.core.eventbus.EventBus;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoEdgeEvent;
 import org.dfpl.chronograph.khronos.manipulation.memory.MChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.memory.MChronoVertex;
 import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoGraph;
+import org.dfpl.chronograph.khronos.manipulation.persistent.PChronoVertex;
 
 @SuppressWarnings("unused")
 public class KairosEngine {
@@ -135,7 +141,7 @@ public class KairosEngine {
 					Edge e = graph.getEdge(arr[0]);
 					EdgeEvent removedEdgeEvent = null;
 					if (graph instanceof MChronoGraph)
-					 	removedEdgeEvent = new MChronoEdgeEvent(e, Long.parseLong(arr[1])) ;
+						removedEdgeEvent = new MChronoEdgeEvent(e, Long.parseLong(arr[1]));
 					else if (graph instanceof PChronoGraph) {
 						// TODO
 					}
@@ -148,6 +154,43 @@ public class KairosEngine {
 			Server.logger.debug("kairos cleared");
 		});
 
+		loadExistingSubscriptions();
+
+	}
+
+	public void loadExistingSubscriptions() {
+		// TODO
+		MongoCursor<Document> databaseCursor = this.getGammaClient().listDatabases().iterator();
+		while (databaseCursor.hasNext()) {
+			Document database = databaseCursor.next();
+			String databaseName = database.getString("name");
+			String[] arr = databaseName.split("\\_");
+			if (arr.length != 3)
+				continue;
+			Long startTime = null;
+			try {
+				startTime = Long.parseLong(arr[0]);
+			} catch (Exception e) {
+				continue;
+			}
+			String edgeLabel = arr[2];
+			if (arr[1].equals("OutIsAfterPathReachability")) {
+				ExpandableGammaTable gammaTable = new ExpandableGammaTable(this.getGammaClient(), databaseName);
+				MongoCursor<String> sourceIDCursor = this.getGammaClient().getDatabase(databaseName)
+						.listCollectionNames().iterator();
+				while (sourceIDCursor.hasNext()) {
+					String sourceID = sourceIDCursor.next();
+					Vertex v = null;
+					if (Server.backendType.equals("memory"))
+						v = new MChronoVertex(graph, sourceID);
+					else {
+						v = new PChronoVertex(graph, sourceID, ((PChronoGraph) graph).getVertexCollection());
+					}
+					this.addExistingSubscription(v, startTime, edgeLabel,
+							new OutIsAfterPathReachability(graph, gammaTable, edgeLabel));
+				}
+			}
+		}
 	}
 
 	public Set<Long> getTimes() {
@@ -194,6 +237,18 @@ public class KairosEngine {
 			programs.add(program);
 		}
 		program.onInitialization(Set.of(source), startTime, edgeLabel);
+	}
+
+	public void addExistingSubscription(Vertex source, Long startTime, String edgeLabel,
+			AbstractKairosProgram<?> program) {
+		HashSet<AbstractKairosProgram<?>> programs = kairosPrograms.get(startTime);
+		if (programs == null) {
+			programs = new HashSet<>();
+			programs.add(program);
+			kairosPrograms.put(startTime, programs);
+		} else {
+			programs.add(program);
+		}
 	}
 
 }

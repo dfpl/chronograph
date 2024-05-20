@@ -22,8 +22,8 @@ import com.tinkerpop.blueprints.Vertex;
 
 public class OutIsAfterPathReachability extends AbstractKairosProgram<Document> {
 
-	public OutIsAfterPathReachability(Graph graph, GammaTable<String, Document> gammaTable) {
-		super(graph, gammaTable, "OutIsAfterPathReachability");
+	public OutIsAfterPathReachability(Graph graph, GammaTable<String, Document> gammaTable, String edgeLabel) {
+		super(graph, gammaTable, "OutIsAfterPathReachability", edgeLabel);
 	}
 
 	Predicate<Document> sourceTest = new Predicate<Document>() {

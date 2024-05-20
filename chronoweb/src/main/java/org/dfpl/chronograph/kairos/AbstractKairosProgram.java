@@ -39,10 +39,11 @@ public abstract class AbstractKairosProgram<E> {
 	 * @param gammaTable the gamma table to set
 	 * @param name       the name of the program
 	 */
-	public AbstractKairosProgram(Graph graph, GammaTable<String, E> gammaTable, String name) {
+	public AbstractKairosProgram(Graph graph, GammaTable<String, E> gammaTable, String name, String edgeLabel) {
 		this.graph = graph;
 		this.gammaTable = gammaTable;
 		this.name = name;
+		this.edgeLabel = edgeLabel;
 	}
 
 	/**
